@@ -314,8 +314,7 @@
         <button class="footer-btn" onclick="toggleTheme()">🌓</button>
         <button class="footer-btn" onclick="toggleSidebar()">☰</button>
         <button class="footer-btn" id="muteBtn">🔊</button>
-        <!-- 🌐 Switch to English – now reloads safely because the page is hosted -->
-        <button class="footer-btn" id="revertLangBtn" onclick="revertLanguage()" title="Switch to English">🌐</button>
+        <!-- REMOVED: Switch to English button (🌐) as requested -->
     </div>
     <p>© 2026 MultiTool Pro · Ultimate toolkit</p>
     <div class="footer-love-line">
@@ -1809,9 +1808,11 @@
 })();
 </script>
 
-<!-- Language detection + external translation -->
+<!-- Language detection + translate using the hosted page URL -->
 <script>
 (function() {
+    const PAGE_URL = 'https://boussedraoui.github.io/Multitool-Pro-Full-Complete/';
+
     const langBanner = document.getElementById('langBanner');
     const langMsg = document.getElementById('langMsg');
     const langTranslateBtn = document.getElementById('langTranslateBtn');
@@ -1844,12 +1845,14 @@
     langMsg.textContent = `Your language: ${langName}. Translate app?`;
     langBanner.style.display = 'flex';
 
+    // Translate button: hide banner, save dismissal, load translated page
     langTranslateBtn.onclick = function() {
-        const currentUrl = window.location.href || 'about:blank';
-        const translateUrl = `https://translate.google.com/translate?hl=${browserLang}&sl=en&u=${encodeURIComponent(currentUrl)}`;
-        window.open(translateUrl, '_blank');
+        langBanner.style.display = 'none';
+        localStorage.setItem('langBannerDismissed', 'true');
+        window.location.href = `https://translate.google.com/translate?hl=${browserLang}&sl=en&u=${encodeURIComponent(PAGE_URL)}`;
     };
 
+    // Close button: hide banner and save dismissal
     langCloseBtn.onclick = function() {
         langBanner.style.display = 'none';
         localStorage.setItem('langBannerDismissed', 'true');
@@ -1857,12 +1860,5 @@
 })();
 </script>
 
-<script>
-// "Switch to English" – now reloads the original page (safe because page is hosted)
-window.revertLanguage = function() {
-    localStorage.removeItem('langBannerDismissed'); // allow banner to show again later
-    location.reload();
-};
-</script>
 </body>
 </html>
