@@ -1917,7 +1917,7 @@
     const STORAGE_KEY = 'gtProtectionPopupShown';
     const PAGE_LOAD_KEY = 'gtProtectionPageLoad';
 
-    // Multi-language messages
+    // Multi-language messages – updated French message with green Google Translate note
     const messages = {
         en: {
             title: '🛡️ Google Translate Notice',
@@ -1933,7 +1933,7 @@
         },
         fr: {
             title: '🛡️ Avis Google Translate',
-            message: 'Ce message de Google Translate est normal et apparaît pour votre protection. Vous pouvez continuer à naviguer dans votre langue traduite ou revenir à la page originale en anglais.',
+            message: 'Ce message de Google Translate est normal et apparaît pour votre protection. <span style="color:#2ecc71;">Message de Google Translate : Cette page a été traduite automatiquement.</span> Vous pouvez continuer à naviguer dans votre langue traduite ou revenir à la page originale en anglais.',
             continue: 'Continuer',
             returnOriginal: 'Retour à l\'original'
         },
@@ -2018,7 +2018,6 @@
     function getLocalizedMessages() {
         const lang = getBrowserLanguage();
         if (messages[lang]) return messages[lang];
-        // Try base language for regional variants (e.g., pt-BR -> pt)
         if (lang.includes('-')) {
             const base = lang.split('-')[0];
             if (messages[base]) return messages[base];
@@ -2027,58 +2026,30 @@
     }
 
     function isGoogleTranslateActive() {
-        // Method 1: Check document.referrer
-        if (document.referrer && document.referrer.indexOf('translate.google.com') !== -1) {
-            return true;
-        }
-        // Method 2: Check for Google Translate cookie
-        if (document.cookie.indexOf('googtrans=') !== -1) {
-            return true;
-        }
-        // Method 3: Check for Google Translate injected elements
+        if (document.referrer && document.referrer.indexOf('translate.google.com') !== -1) return true;
+        if (document.cookie.indexOf('googtrans=') !== -1) return true;
         if (document.querySelector('.goog-te-banner-frame') ||
             document.querySelector('.goog-te-banner') ||
             document.querySelector('.goog-te-menu-frame') ||
             document.querySelector('#goog-gt-') ||
             document.querySelector('[class*="goog-te-"]') ||
-            document.querySelector('[id*="goog-te-"]')) {
-            return true;
-        }
-        // Method 4: Check if window.google.translate is available
-        if (typeof window.google !== 'undefined' && window.google.translate) {
-            return true;
-        }
-        // Method 5: Check if body has google translate classes
-        if (document.body && (
-            document.body.classList.contains('translated-ltr') ||
-            document.body.classList.contains('translated-rtl')
-        )) {
-            return true;
-        }
-        // Method 6: Check URL for translate parameters
-        if (window.location.search.indexOf('googtrans') !== -1 ||
-            window.location.hash.indexOf('googtrans') !== -1) {
-            return true;
-        }
+            document.querySelector('[id*="goog-te-"]')) return true;
+        if (typeof window.google !== 'undefined' && window.google.translate) return true;
+        if (document.body && (document.body.classList.contains('translated-ltr') || document.body.classList.contains('translated-rtl'))) return true;
+        if (window.location.search.indexOf('googtrans') !== -1 || window.location.hash.indexOf('googtrans') !== -1) return true;
         return false;
     }
 
     function showProtectionPopup() {
-        // Prevent showing multiple times in the same session
         if (sessionStorage.getItem(STORAGE_KEY) === 'true') return;
         sessionStorage.setItem(STORAGE_KEY, 'true');
 
         const localized = getLocalizedMessages();
-
-        // Remove any existing popup
         const existing = document.querySelector('.gt-protection-overlay');
         if (existing) existing.remove();
 
-        // Create overlay
         const overlay = document.createElement('div');
         overlay.className = 'gt-protection-overlay';
-
-        // Create popup
         overlay.innerHTML = `
             <div class="gt-protection-popup">
                 <button class="gt-close-x" id="gtCloseX">✕</button>
@@ -2091,65 +2062,33 @@
                 </div>
             </div>
         `;
-
         document.body.appendChild(overlay);
 
-        // Close (X) button
-        overlay.querySelector('#gtCloseX').addEventListener('click', function() {
-            overlay.remove();
-        });
-
-        // Continue button
-        overlay.querySelector('#gtContinueBtn').addEventListener('click', function() {
-            overlay.remove();
-        });
-
-        // Return to original button
-        overlay.querySelector('#gtReturnBtn').addEventListener('click', function() {
-            window.location.href = ORIGINAL_PAGE_URL;
-        });
-
-        // Close on overlay click (outside popup)
-        overlay.addEventListener('click', function(e) {
-            if (e.target === overlay) {
-                overlay.remove();
-            }
-        });
+        overlay.querySelector('#gtCloseX').addEventListener('click', function() { overlay.remove(); });
+        overlay.querySelector('#gtContinueBtn').addEventListener('click', function() { overlay.remove(); });
+        overlay.querySelector('#gtReturnBtn').addEventListener('click', function() { window.location.href = ORIGINAL_PAGE_URL; });
+        overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
     }
 
     function checkAndShowPopup() {
-        if (isGoogleTranslateActive()) {
-            showProtectionPopup();
-        }
+        if (isGoogleTranslateActive()) showProtectionPopup();
     }
 
-    // Check on page load with multiple delays (Google Translate injects elements after page load)
     function scheduleChecks() {
-        // Immediate check
         checkAndShowPopup();
-
-        // Check after 500ms
         setTimeout(checkAndShowPopup, 500);
-
-        // Check after 1500ms
         setTimeout(checkAndShowPopup, 1500);
-
-        // Check after 3000ms
         setTimeout(checkAndShowPopup, 3000);
-
-        // Check after 5000ms (Google Translate sometimes takes a while)
         setTimeout(checkAndShowPopup, 5000);
     }
 
-    // Use MutationObserver to detect Google Translate elements being added
     function setupMutationObserver() {
         const observer = new MutationObserver(function(mutations) {
             for (const mutation of mutations) {
                 if (mutation.type === 'childList') {
                     for (const node of mutation.addedNodes) {
-                        if (node.nodeType === 1) { // Element node
+                        if (node.nodeType === 1) {
                             const el = node;
-                            // Check the element itself
                             if (el.classList && (
                                 el.classList.contains('goog-te-banner-frame') ||
                                 el.classList.contains('goog-te-banner') ||
@@ -2160,7 +2099,6 @@
                                 observer.disconnect();
                                 return;
                             }
-                            // Check if element contains Google Translate elements
                             if (el.querySelector && (
                                 el.querySelector('.goog-te-banner-frame') ||
                                 el.querySelector('.goog-te-banner') ||
@@ -2174,7 +2112,6 @@
                         }
                     }
                 }
-                // Also check for class changes on body
                 if (mutation.type === 'attributes' && mutation.target === document.body) {
                     if (document.body.classList.contains('translated-ltr') ||
                         document.body.classList.contains('translated-rtl')) {
@@ -2185,17 +2122,9 @@
                 }
             }
         });
-
-        // Observe the entire document body and its descendants
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true,
-            attributes: true,
-            attributeFilter: ['class']
-        });
+        observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
     }
 
-    // Initialize
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
             scheduleChecks();
