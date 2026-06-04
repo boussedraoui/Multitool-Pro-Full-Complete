@@ -528,100 +528,99 @@
 (function() { const PAGE_URL = 'https://boussedraoui.github.io/Multitool-Pro-Full-Complete/'; const langBanner = document.getElementById('langBanner'); const langMsg = document.getElementById('langMsg'); const langTranslateBtn = document.getElementById('langTranslateBtn'); const langCloseBtn = document.getElementById('langCloseBtn'); const langNames = { 'ar': 'العربية', 'es': 'Español', 'fr': 'Français', 'de': 'Deutsch', 'it': 'Italiano', 'pt': 'Português', 'ru': 'Русский', 'zh': '中文', 'ja': '日本語', 'ko': '한국어', 'hi': 'हिन्दी', 'tr': 'Türkçe', 'nl': 'Nederlands', 'pl': 'Polski', 'sv': 'Svenska', 'da': 'Dansk', 'fi': 'Suomi', 'no': 'Norsk', 'cs': 'Čeština', 'hu': 'Magyar', 'el': 'Ελληνικά', 'he': 'עברית', 'th': 'ไทย', 'vi': 'Tiếng Việt', 'id': 'Bahasa Indonesia', 'ms': 'Bahasa Melayu', 'fa': 'فارسی', 'ur': 'اردو', 'bn': 'বাংলা', 'ro': 'Română', 'uk': 'Українська' }; function getBrowserLanguage() { return (navigator.language || navigator.browserLanguage || 'en').split('-')[0].toLowerCase(); } if (localStorage.getItem('langBannerDismissed') === 'true') { langBanner.style.display = 'none'; return; } const browserLang = getBrowserLanguage(); if (browserLang === 'en') return; const langName = langNames[browserLang] || browserLang.toUpperCase(); langMsg.textContent = `Your language: ${langName}. Translate app?`; langBanner.style.display = 'flex'; langTranslateBtn.addEventListener('click', function() { window.location.href = `https://translate.google.com/translate?hl=${browserLang}&sl=en&u=${encodeURIComponent(PAGE_URL)}`; }); langCloseBtn.addEventListener('click', function() { langBanner.style.display = 'none'; localStorage.setItem('langBannerDismissed', 'true'); }); })();
 </script>
 
-<!-- ============ FINAL CORRECTED PROTECTION POPUP ============ -->
+<!-- ============ FINAL EXACT PROTECTION POPUP ============ -->
 <script>
 (function() {
     const ORIGINAL_PAGE_URL = 'https://boussedraoui.github.io/Multitool-Pro-Full-Complete/';
     const STORAGE_KEY = 'gtProtectionPopupShown';
-
     const messages = {
         ar: {
             title: '😌 لا تقلق، إنه أمر طبيعي',
-            message: 'الرسالة التي تظهر أعلاه "Google ترجمة" هي رسالة عادية تحسيسية من أجل حمايتك. 🤍\n\nهذا التطبيق شامل، وفيه ميزة أوتوماتيكية للحفاظ عليك وعلى بياناتك وكل شيء... داخل وخارج التطبيق. 🛡️✨\n\nلذا استرخِ واستمتع بالتطبيق. 🎉😌\n\nيمكنك المتابعة بلغة جهازك، أي لغة تريد.\nأو بلغة التطبيق الأصلية الإنجليزية. 🌐💬',
+            message: 'الرسالة التي تظهر اعلاه "ترجمة Google" هي رسالة عادية تحسيسية من اجل حمايتك. \n\nهذا التطبيق شامل، وفيه ميزة اتوماتيكية للحفاظ عليك وعلى بياناتك وكل شيء... داخل وخارج التطبيق.\n\nلذا استرخ واستمتع بالتطبيق.\n\nيمكنك المتابعة بلغة جهازك، اي لغة تريد.\nاو بلغة التطبيق الاصلية الانجليزية.',
             continue: 'متابعة',
             returnOriginal: 'العودة إلى الأصل'
         },
         en: {
             title: '😌 Don\'t Worry, It\'s Normal',
-            message: 'The message that appears above "Google Translate" is a normal awareness message for your protection. 🤍\n\nThis app is comprehensive, and it has automatic features to protect you and your data... inside and outside the app. 🛡️✨\n\nSo relax and enjoy the app. 🎉😌\n\nYou can continue in your device\'s language, any language you want.\nOr in the app\'s original English language. 🌐💬',
+            message: 'The message that appears above "Google Translate" is a normal awareness message for your protection. \n\nThis app is comprehensive, and it has automatic features to protect you and your data... inside and outside the app.\n\nSo relax and enjoy the app.\n\nYou can continue in your device\'s language, any language you want.\nOr in the app\'s original English language.',
             continue: 'Continue',
             returnOriginal: 'Return to Original'
         },
         fr: {
             title: '😌 Ne vous inquiétez pas, c\'est normal',
-            message: 'Le message qui apparaît ci-dessus "Google Traduction" est un message de sensibilisation normal pour votre protection. 🤍\n\nCette application est complète et dispose de fonctions automatiques pour vous protéger, vous et vos données... à l\'intérieur comme à l\'extérieur de l\'application. 🛡️✨\n\nAlors détendez-vous et profitez de l\'application. 🎉😌\n\nVous pouvez continuer dans la langue de votre appareil, n\'importe quelle langue.\nOu dans la langue originale anglaise de l\'application. 🌐💬',
+            message: 'Le message qui apparaît ci-dessus "Google Traduction" est un message de sensibilisation normal pour votre protection. \n\nCette application est complète et dispose de fonctions automatiques pour vous protéger, vous et vos données... à l\'intérieur comme à l\'extérieur de l\'application.\n\nAlors détendez-vous et profitez de l\'application.\n\nVous pouvez continuer dans la langue de votre appareil, n\'importe quelle langue.\nOu dans la langue originale anglaise de l\'application.',
             continue: 'Continuer',
             returnOriginal: 'Revenir à l\'original'
         },
         es: {
             title: '😌 No te preocupes, es normal',
-            message: 'El mensaje que aparece arriba "Google Traductor" es un mensaje de concienciación normal para tu protección. 🤍\n\nEsta aplicación es completa y tiene funciones automáticas para protegerte a ti y a tus datos... dentro y fuera de la aplicación. 🛡️✨\n\nAsí que relájate y disfruta de la aplicación. 🎉😌\n\nPuedes continuar en el idioma de tu dispositivo, cualquier idioma que quieras.\nO en el idioma inglés original de la aplicación. 🌐💬',
+            message: 'El mensaje que aparece arriba "Google Traductor" es un mensaje de concienciación normal para tu protección. \n\nEsta aplicación es completa y tiene funciones automáticas para protegerte a ti y a tus datos... dentro y fuera de la aplicación.\n\nAsí que relájate y disfruta de la aplicación.\n\nPuedes continuar en el idioma de tu dispositivo, cualquier idioma que quieras.\nO en el idioma inglés original de la aplicación.',
             continue: 'Continuar',
             returnOriginal: 'Volver al original'
         },
         de: {
             title: '😌 Keine Sorge, das ist normal',
-            message: 'Die oben angezeigte Meldung "Google Übersetzer" ist ein normaler Hinweis zu Ihrem Schutz. 🤍\n\nDiese App ist umfassend und verfügt über automatische Funktionen, um Sie und Ihre Daten zu schützen... innerhalb und außerhalb der App. 🛡️✨\n\nAlso entspannen Sie sich und genießen Sie die App. 🎉😌\n\nSie können in der Sprache Ihres Geräts fortfahren, jede gewünschte Sprache.\nOder in der englischen Originalsprache der App. 🌐💬',
+            message: 'Die oben angezeigte Meldung "Google Übersetzer" ist ein normaler Hinweis zu Ihrem Schutz. \n\nDiese App ist umfassend und verfügt über automatische Funktionen, um Sie und Ihre Daten zu schützen... innerhalb und außerhalb der App.\n\nAlso entspannen Sie sich und genießen Sie die App.\n\nSie können in der Sprache Ihres Geräts fortfahren, jede gewünschte Sprache.\nOder in der englischen Originalsprache der App.',
             continue: 'Fortfahren',
             returnOriginal: 'Zurück zum Original'
         },
         it: {
             title: '😌 Non preoccuparti, è normale',
-            message: 'Il messaggio che appare sopra "Google Traduttore" è un normale messaggio di sensibilizzazione per la tua protezione. 🤍\n\nQuesta app è completa e ha funzioni automatiche per proteggere te e i tuoi dati... dentro e fuori dall\'app. 🛡️✨\n\nQuindi rilassati e goditi l\'app. 🎉😌\n\nPuoi continuare nella lingua del tuo dispositivo, qualsiasi lingua tu voglia.\nOppure nella lingua inglese originale dell\'app. 🌐💬',
+            message: 'Il messaggio che appare sopra "Google Traduttore" è un normale messaggio di sensibilizzazione per la tua protezione. \n\nQuesta app è completa e ha funzioni automatiche per proteggere te e i tuoi dati... dentro e fuori dall\'app.\n\nQuindi rilassati e goditi l\'app.\n\nPuoi continuare nella lingua del tuo dispositivo, qualsiasi lingua tu voglia.\nOppure nella lingua inglese originale dell\'app.',
             continue: 'Continua',
             returnOriginal: 'Torna all\'originale'
         },
         pt: {
             title: '😌 Não se preocupe, é normal',
-            message: 'A mensagem que aparece acima "Google Tradutor" é uma mensagem normal de conscientização para sua proteção. 🤍\n\nEste aplicativo é abrangente e possui funções automáticas para proteger você e seus dados... dentro e fora do aplicativo. 🛡️✨\n\nEntão relaxe e aproveite o aplicativo. 🎉😌\n\nVocê pode continuar no idioma do seu dispositivo, qualquer idioma que quiser.\nOu no idioma inglês original do aplicativo. 🌐💬',
+            message: 'A mensagem que aparece acima "Google Tradutor" é uma mensagem normal de conscientização para sua proteção. \n\nEste aplicativo é abrangente e possui funções automáticas para proteger você e seus dados... dentro e fora do aplicativo.\n\nEntão relaxe e aproveite o aplicativo.\n\nVocê pode continuar no idioma do seu dispositivo, qualquer idioma que quiser.\nOu no idioma inglês original do aplicativo.',
             continue: 'Continuar',
             returnOriginal: 'Voltar ao original'
         },
         ru: {
             title: '😌 Не волнуйтесь, это нормально',
-            message: 'Сообщение, которое появляется выше "Google Переводчик", является обычным предупреждением для вашей защиты. 🤍\n\nЭто приложение является всеобъемлющим и имеет автоматические функции для защиты вас и ваших данных... внутри и вне приложения. 🛡️✨\n\nТак что расслабьтесь и наслаждайтесь приложением. 🎉😌\n\nВы можете продолжать на языке вашего устройства, на любом языке.\nИли на исходном английском языке приложения. 🌐💬',
+            message: 'Сообщение, которое появляется выше "Google Переводчик", является обычным предупреждением для вашей защиты. \n\nЭто приложение является всеобъемлющим и имеет автоматические функции для защиты вас и ваших данных... внутри и вне приложения.\n\nТак что расслабьтесь и наслаждайтесь приложением.\n\nВы можете продолжать на языке вашего устройства, на любом языке.\nИли на исходном английском языке приложения.',
             continue: 'Продолжить',
             returnOriginal: 'Вернуться к оригиналу'
         },
         zh: {
             title: '😌 别担心，这是正常的',
-            message: '上面显示的“谷歌翻译”消息是保护您的正常提醒。🤍\n\n这个应用程序是全面的，并且具有自动功能来保护您和您的数据……无论在应用内部还是外部。🛡️✨\n\n所以请放松，享受这个应用程序。🎉😌\n\n您可以使用您的设备语言，任何您想要的语言继续。\n或者使用应用程序的原始英语语言。🌐💬',
+            message: '上面显示的“谷歌翻译”消息是保护您的正常提醒。\n\n这个应用程序是全面的，并且具有自动功能来保护您和您的数据……无论在应用内部还是外部。\n\n所以请放松，享受这个应用程序。\n\n您可以使用您的设备语言，任何您想要的语言继续。\n或者使用应用程序的原始英语语言。',
             continue: '继续',
             returnOriginal: '返回原文'
         },
         ja: {
             title: '😌 心配しないで、これは正常です',
-            message: '上に表示されている「Google翻訳」のメッセージは、あなたを保護するための通常の注意喚起です。🤍\n\nこのアプリは包括的であり、あなたとあなたのデータを保護する自動機能を備えています…アプリの内外を問わず。🛡️✨\n\nリラックスしてアプリをお楽しみください。🎉😌\n\nお使いのデバイスの言語、または希望する任意の言語で続行できます。\nまたは、アプリの元の英語で続行してください。🌐💬',
+            message: '上に表示されている「Google翻訳」のメッセージは、あなたを保護するための通常の注意喚起です。\n\nこのアプリは包括的であり、あなたとあなたのデータを保護する自動機能を備えています…アプリの内外を問わず。\n\nリラックスしてアプリをお楽しみください。\n\nお使いのデバイスの言語、または希望する任意の言語で続行できます。\nまたは、アプリの元の英語で続行してください。',
             continue: '続ける',
             returnOriginal: '元のページに戻る'
         },
         ko: {
             title: '😌 걱정하지 마세요, 정상입니다',
-            message: '위에 표시된 "Google 번역" 메시지는 사용자 보호를 위한 일반적인 인식 메시지입니다. 🤍\n\n이 앱은 포괄적이며 앱 내부와 외부에서 사용자와 데이터를 보호하는 자동 기능을 갖추고 있습니다. 🛡️✨\n\n편안히 앱을 즐기세요. 🎉😌\n\n기기 언어 또는 원하는 어떤 언어로든 계속할 수 있습니다.\n또는 앱의 원래 영어로 계속하세요. 🌐💬',
+            message: '위에 표시된 "Google 번역" 메시지는 사용자 보호를 위한 일반적인 인식 메시지입니다. \n\n이 앱은 포괄적이며 앱 내부와 외부에서 사용자와 데이터를 보호하는 자동 기능을 갖추고 있습니다.\n\n편안히 앱을 즐기세요.\n\n기기 언어 또는 원하는 어떤 언어로든 계속할 수 있습니다.\n또는 앱의 원래 영어로 계속하세요.',
             continue: '계속하기',
             returnOriginal: '원본으로 돌아가기'
         },
         hi: {
             title: '😌 चिंता न करें, यह सामान्य है',
-            message: 'ऊपर दिखाई देने वाला "Google अनुवाद" संदेश आपकी सुरक्षा के लिए एक सामान्य जागरूकता संदेश है। 🤍\n\nयह ऐप व्यापक है, और इसमें आपकी और आपके डेटा की सुरक्षा के लिए स्वचालित विशेषताएं हैं... ऐप के अंदर और बाहर। 🛡️✨\n\nतो आराम करें और ऐप का आनंद लें। 🎉😌\n\nआप अपने डिवाइस की भाषा, अपनी इच्छानुसार किसी भी भाषा में जारी रख सकते हैं।\nया ऐप की मूल अंग्रेजी भाषा में। 🌐💬',
+            message: 'ऊपर दिखाई देने वाला "Google अनुवाद" संदेश आपकी सुरक्षा के लिए एक सामान्य जागरूकता संदेश है। \n\nयह ऐप व्यापक है, और इसमें आपकी और आपके डेटा की सुरक्षा के लिए स्वचालित विशेषताएं हैं... ऐप के अंदर और बाहर।\n\nतो आराम करें और ऐप का आनंद लें।\n\nआप अपने डिवाइस की भाषा, अपनी इच्छानुसार किसी भी भाषा में जारी रख सकते हैं।\nया ऐप की मूल अंग्रेजी भाषा में।',
             continue: 'जारी रखें',
             returnOriginal: 'मूल पर वापस जाएं'
         },
         tr: {
             title: '😌 Endişelenmeyin, bu normal',
-            message: 'Yukarıda görünen "Google Çeviri" mesajı, korumanız için normal bir bilinçlendirme mesajıdır. 🤍\n\nBu uygulama kapsamlıdır ve sizi ve verilerinizi korumak için otomatik özelliklere sahiptir... uygulamanın içinde ve dışında. 🛡️✨\n\nRahatlayın ve uygulamanın tadını çıkarın. 🎉😌\n\nCihazınızın dilinde, istediğiniz herhangi bir dilde devam edebilirsiniz.\nYa da uygulamanın orijinal İngilizce dilinde. 🌐💬',
+            message: 'Yukarıda görünen "Google Çeviri" mesajı, korumanız için normal bir bilinçlendirme mesajıdır. \n\nBu uygulama kapsamlıdır ve sizi ve verilerinizi korumak için otomatik özelliklere sahiptir... uygulamanın içinde ve dışında.\n\nRahatlayın ve uygulamanın tadını çıkarın.\n\nCihazınızın dilinde, istediğiniz herhangi bir dilde devam edebilirsiniz.\nYa da uygulamanın orijinal İngilizce dilinde.',
             continue: 'Devam Et',
             returnOriginal: 'Orijinale Dön'
         },
         nl: {
             title: '😌 Geen zorgen, het is normaal',
-            message: 'Het bericht dat hierboven verschijnt "Google Vertaling" is een normale bewustwordingsboodschap voor uw bescherming. 🤍\n\nDeze app is uitgebreid en heeft automatische functies om u en uw gegevens te beschermen... binnen en buiten de app. 🛡️✨\n\nOntspan dus en geniet van de app. 🎉😌\n\nU kunt doorgaan in de taal van uw apparaat, elke gewenste taal.\nOf in de oorspronkelijke Engelse taal van de app. 🌐💬',
+            message: 'Het bericht dat hierboven verschijnt "Google Vertaling" is een normale bewustwordingsboodschap voor uw bescherming. \n\nDeze app is uitgebreid en heeft automatische functies om u en uw gegevens te beschermen... binnen en buiten de app.\n\nOntspan dus en geniet van de app.\n\nU kunt doorgaan in de taal van uw apparaat, elke gewenste taal.\nOf in de oorspronkelijke Engelse taal van de app.',
             continue: 'Doorgaan',
             returnOriginal: 'Terug naar origineel'
         },
         pl: {
             title: '😌 Nie martw się, to normalne',
-            message: 'Komunikat wyświetlany powyżej „Tłumacz Google” jest zwykłym komunikatem ostrzegawczym dla Twojej ochrony. 🤍\n\nTa aplikacja jest wszechstronna i posiada automatyczne funkcje chroniące Ciebie i Twoje dane... wewnątrz i na zewnątrz aplikacji. 🛡️✨\n\nZrelaksuj się więc i ciesz się aplikacją. 🎉😌\n\nMożesz kontynuować w języku swojego urządzenia, w dowolnym języku.\nLub w oryginalnym języku angielskim aplikacji. 🌐💬',
+            message: 'Komunikat wyświetlany powyżej „Tłumacz Google” jest zwykłym komunikatem ostrzegawczym dla Twojej ochrony. \n\nTa aplikacja jest wszechstronna i posiada automatyczne funkcje chroniące Ciebie i Twoje dane... wewnątrz i na zewnątrz aplikacji.\n\nZrelaksuj się więc i ciesz się aplikacją.\n\nMożesz kontynuować w języku swojego urządzenia, w dowolnym języku.\nLub w oryginalnym języku angielskim aplikacji.',
             continue: 'Kontynuuj',
             returnOriginal: 'Powrót do oryginału'
         }
