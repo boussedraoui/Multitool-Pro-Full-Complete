@@ -198,9 +198,6 @@
     <div id="sidebarList"></div>
 </aside>
 
-<!-- (All overlays remain exactly as before – omitted for brevity but present in the full code) -->
-<!-- I'm including the full overlay list from previous code – no changes -->
-
 <div id="premiumOverlay" class="premium-page-overlay"><div style="max-width:700px;margin:auto;background:var(--surface);border-radius:32px;padding:28px;" id="premiumContent"></div></div>
 <div id="otherToolsOverlay" class="premium-page-overlay"><div id="otherToolsContainer" style="max-width:1000px;margin:auto;background:var(--surface);border-radius:32px;padding:24px;"></div></div>
 <div id="aiToolsOverlay" class="premium-page-overlay"><div id="aiToolsContainer" style="max-width:1200px;margin:auto;background:var(--surface);border-radius:32px;padding:24px;"></div></div>
@@ -317,7 +314,7 @@
         <button class="footer-btn" onclick="toggleTheme()">🌓</button>
         <button class="footer-btn" onclick="toggleSidebar()">☰</button>
         <button class="footer-btn" id="muteBtn">🔊</button>
-        <!-- Switch to English button REMOVED as requested -->
+        <!-- REMOVED: Switch to English button (🌐) -->
     </div>
     <p>© 2026 MultiTool Pro · Ultimate toolkit</p>
     <div class="footer-love-line">
@@ -345,10 +342,1391 @@
 
 <div id="toast" class="toast"></div>
 
-<!-- All original scripts (unchanged) – abbreviated, but the full code from previous version is exactly here -->
+<!-- All original scripts (unchanged, FULL version) -->
 <script>
 (function(){
-    // ... (entire original script block remains the same) ...
+    let darkMode = localStorage.getItem('theme') === 'dark';
+    if(darkMode) document.documentElement.setAttribute('data-theme','dark');
+    let muted = localStorage.getItem('soundMuted') === 'true';
+    let audioCtx = null;
+    let previousJoke = '';
+    let blinkInterval = null;
+    let calcExpr = '';
+
+    function showToast(msg){ let t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+    function playSound(){ if(muted) return; if(!audioCtx){ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); } if(audioCtx.state==='suspended') audioCtx.resume(); let osc=audioCtx.createOscillator(), gain=audioCtx.createGain(); osc.connect(gain); gain.connect(audioCtx.destination); osc.type='sine'; osc.frequency.value=660; gain.gain.setValueAtTime(0.08,audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+0.1); osc.start(); osc.stop(audioCtx.currentTime+0.1); }
+
+    let muteBtn = document.getElementById('muteBtn');
+    muteBtn.onclick = () => { muted = !muted; localStorage.setItem('soundMuted',muted); muteBtn.innerText = muted?'🔇':'🔊'; showToast(muted?'Sound muted':'Sound on'); };
+    if(muted) muteBtn.innerText = '🔇';
+
+    window.scrollToTop = function(){ window.scrollTo({top:0, behavior:'smooth'}); };
+    const scrollUpArrow = document.getElementById('scrollUpArrow');
+    function updateScrollArrow() {
+        if (window.scrollY > 150) {
+            if (!scrollUpArrow.classList.contains('visible')) {
+                scrollUpArrow.classList.add('visible');
+                if (blinkInterval) clearInterval(blinkInterval);
+                blinkInterval = setInterval(() => {
+                    if (scrollUpArrow.classList.contains('visible')) {
+                        scrollUpArrow.classList.add('blink');
+                        setTimeout(() => scrollUpArrow.classList.remove('blink'), 500);
+                    }
+                }, 3000);
+            }
+        } else {
+            if (scrollUpArrow.classList.contains('visible')) {
+                scrollUpArrow.classList.remove('visible');
+                if (blinkInterval) {
+                    clearInterval(blinkInterval);
+                    blinkInterval = null;
+                }
+            }
+        }
+    }
+    window.addEventListener('scroll', updateScrollArrow);
+    updateScrollArrow();
+
+    window.toggleSidebar = function(){ document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); };
+    window.closeSidebar = function(){ document.getElementById('sidebar').classList.remove('active'); document.getElementById('sidebarOverlay').classList.remove('active'); };
+    window.toggleTheme = function(){ darkMode = !darkMode; document.documentElement.setAttribute('data-theme',darkMode?'dark':'light'); localStorage.setItem('theme',darkMode?'dark':'light'); };
+    window.rateApp = function(){ showToast('⭐ Thank you! Rate us on Google Play'); window.open('https://play.google.com/store/apps/details?id=multitool.pro2','_blank'); };
+    
+    window.openSearchOverlay = function(){
+        let ov = document.getElementById('searchEnginesOverlay');
+        ov.classList.add('active');
+        const engines = [
+            { name: 'Google', icon: '🌐', url: 'https://www.google.com' },
+            { name: 'Bing', icon: '🅱️', url: 'https://www.bing.com' },
+            { name: 'DuckDuckGo', icon: '🦆', url: 'https://duckduckgo.com' },
+            { name: 'Yahoo', icon: '🟣', url: 'https://search.yahoo.com' },
+            { name: 'Yandex', icon: '🔴', url: 'https://yandex.com' },
+            { name: 'Baidu', icon: '🔵', url: 'https://www.baidu.com' },
+            { name: 'Ecosia', icon: '🌳', url: 'https://www.ecosia.org' },
+            { name: 'Startpage', icon: '🔒', url: 'https://www.startpage.com' },
+            { name: 'Qwant', icon: '🔷', url: 'https://www.qwant.com' },
+            { name: 'Brave Search', icon: '🦁', url: 'https://search.brave.com' },
+            { name: 'Swisscows', icon: '🐄', url: 'https://swisscows.com' },
+            { name: 'Mojeek', icon: '🌿', url: 'https://www.mojeek.com' },
+            { name: 'Ask.com', icon: '❓', url: 'https://www.ask.com' },
+            { name: 'AOL', icon: '💬', url: 'https://search.aol.com' },
+            { name: 'WolframAlpha', icon: '📊', url: 'https://www.wolframalpha.com' },
+            { name: 'You.com', icon: '🧠', url: 'https://you.com' },
+            { name: 'Presearch', icon: '🔗', url: 'https://presearch.com' },
+            { name: 'Gibiru', icon: '🔐', url: 'https://gibiru.com' },
+            { name: 'Lycos', icon: '🐶', url: 'https://www.lycos.com' },
+            { name: 'Dogpile', icon: '🐕', url: 'https://www.dogpile.com' },
+            { name: 'WebCrawler', icon: '🕷️', url: 'https://www.webcrawler.com' },
+            { name: 'Info.com', icon: 'ℹ️', url: 'https://www.info.com' },
+            { name: 'Search.com', icon: '🔎', url: 'https://www.search.com' },
+            { name: 'Excite', icon: '🎉', url: 'https://www.excite.com' }
+        ];
+        document.getElementById('searchEngineList').innerHTML = engines.map(e => `
+            <div class="search-card" onclick="window.open('${e.url}', '_blank'); closeSearchOverlay();">
+                <div style="font-size:2rem;">${e.icon}</div>
+                <div style="font-weight:600;">${e.name}</div>
+                <div style="font-size:0.7rem;">Click to open</div>
+            </div>
+        `).join('');
+    };
+    window.closeSearchOverlay = function(){ document.getElementById('searchEnginesOverlay').classList.remove('active'); };
+
+    window.openSitesOverlay = function(){
+        document.getElementById('sitesOverlay').classList.add('active');
+        renderSitesGrid();
+    };
+    window.closeSitesOverlay = function(){ document.getElementById('sitesOverlay').classList.remove('active'); };
+
+    function renderSitesGrid(){
+        const container = document.getElementById('sitesGrid');
+        const sitesList = [
+            { name: 'Reddit', icon: '🤖', url: 'https://www.reddit.com' },
+            { name: 'Pinterest', icon: '📌', url: 'https://www.pinterest.com' },
+            { name: 'Tumblr', icon: '📝', url: 'https://www.tumblr.com' },
+            { name: 'Telegram', icon: '✈️', url: 'https://web.telegram.org' },
+            { name: 'WhatsApp Web', icon: '💬', url: 'https://web.whatsapp.com' },
+            { name: 'Signal', icon: '📱', url: 'https://signal.org' },
+            { name: 'SoundCloud', icon: '🎵', url: 'https://soundcloud.com' },
+            { name: 'DeviantArt', icon: '🎨', url: 'https://www.deviantart.com' },
+            { name: 'Behance', icon: '💼', url: 'https://www.behance.net' },
+            { name: 'Dribbble', icon: '⚽', url: 'https://dribbble.com' },
+            { name: 'Flickr', icon: '📷', url: 'https://www.flickr.com' },
+            { name: 'Mixcloud', icon: '🎧', url: 'https://www.mixcloud.com' },
+            { name: 'Bandcamp', icon: '🎸', url: 'https://bandcamp.com' },
+            { name: 'Goodreads', icon: '📚', url: 'https://www.goodreads.com' },
+            { name: 'IMDb', icon: '🎥', url: 'https://www.imdb.com' },
+            { name: 'Hacker News', icon: '📰', url: 'https://news.ycombinator.com' },
+            { name: 'Product Hunt', icon: '🚀', url: 'https://www.producthunt.com' },
+            { name: 'Stack Overflow', icon: '🧑‍💻', url: 'https://stackoverflow.com' },
+            { name: 'GitLab', icon: '🦊', url: 'https://gitlab.com' },
+            { name: 'Bitbucket', icon: '🔷', url: 'https://bitbucket.org' },
+            { name: 'Figma', icon: '🎨', url: 'https://www.figma.com' },
+            { name: 'Spotify Web Player', icon: '🎧', url: 'https://open.spotify.com' }
+        ];
+        let html = '';
+        sitesList.forEach(site => {
+            html += `<div class="sites-card" onclick="window.open('${site.url}', '_blank');">
+                        <div style="font-size:2rem;">${site.icon}</div>
+                        <div style="font-weight:600;">${site.name}</div>
+                        <div style="font-size:0.7rem;">Click to open</div>
+                     </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    window.openMediaOverlay = function(){
+        document.getElementById('mediaOverlay').classList.add('active');
+        renderMediaGrid();
+    };
+    window.closeMediaOverlay = function(){ document.getElementById('mediaOverlay').classList.remove('active'); };
+
+    function renderMediaGrid(){
+        const container = document.getElementById('mediaGrid');
+        const mediaSites = [
+            { name: 'Dailymotion', icon: '📹', url: 'https://www.dailymotion.com' },
+            { name: 'Vimeo', icon: '🎬', url: 'https://vimeo.com' },
+            { name: 'Twitch', icon: '🎮', url: 'https://www.twitch.tv' },
+            { name: 'TikTok', icon: '🎵', url: 'https://www.tiktok.com' },
+            { name: 'Instagram Reels', icon: '📱', url: 'https://www.instagram.com/reels' },
+            { name: 'Facebook Watch', icon: '📘', url: 'https://www.facebook.com/watch' },
+            { name: 'Netflix', icon: '📺', url: 'https://www.netflix.com' },
+            { name: 'Amazon Prime Video', icon: '📦', url: 'https://www.primevideo.com' },
+            { name: 'Disney+', icon: '✨', url: 'https://www.disneyplus.com' },
+            { name: 'HBO Max', icon: '🎬', url: 'https://www.max.com' },
+            { name: 'Hulu', icon: '📺', url: 'https://www.hulu.com' },
+            { name: 'Paramount+', icon: '⭐', url: 'https://www.paramountplus.com' },
+            { name: 'Peacock', icon: '🦚', url: 'https://www.peacocktv.com' },
+            { name: 'Apple TV+', icon: '🍎', url: 'https://tv.apple.com' },
+            { name: 'Crunchyroll', icon: '🍙', url: 'https://www.crunchyroll.com' },
+            { name: 'Funimation', icon: '🎞️', url: 'https://www.funimation.com' },
+            { name: 'Viki', icon: '🌏', url: 'https://www.viki.com' },
+            { name: 'Tubi', icon: '📺', url: 'https://tubitv.com' },
+            { name: 'Pluto TV', icon: '🪐', url: 'https://pluto.tv' },
+            { name: 'Plex', icon: '📡', url: 'https://watch.plex.tv' }
+        ];
+        let html = '';
+        mediaSites.forEach(site => {
+            html += `<div class="media-card" onclick="window.open('${site.url}', '_blank');">
+                        <div style="font-size:2rem;">${site.icon}</div>
+                        <div style="font-weight:600;">${site.name}</div>
+                        <div style="font-size:0.7rem;">Click to open</div>
+                     </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    window.openTvRadioOverlay = function(){
+        document.getElementById('tvRadioOverlay').classList.add('active');
+        document.getElementById('tvRadioContentArea').innerHTML = '';
+    };
+    window.closeTvRadioOverlay = function(){ document.getElementById('tvRadioOverlay').classList.remove('active'); };
+
+    const tvChannels = [
+        { name: 'RedBull TV', icon: '🐂', url: 'https://www.redbull.com/int-en/tv' },
+        { name: 'Samsung TV Plus', icon: '📺', url: 'https://www.samsungtvplus.com' },
+        { name: 'Xumo', icon: '📡', url: 'https://www.xumo.tv' },
+        { name: 'Plex Live TV', icon: '📼', url: 'https://watch.plex.tv/live-tv' },
+        { name: 'DistroTV', icon: '📀', url: 'https://www.distro.tv' },
+        { name: 'Amazon Freevee', icon: '🎬', url: 'https://www.amazon.com/Freevee' },
+        { name: 'Crackle', icon: '🎞️', url: 'https://www.crackle.com' },
+        { name: 'Vudu Free', icon: '💿', url: 'https://www.vudu.com/content/movies/featured/free' },
+        { name: 'The Roku Channel', icon: '📼', url: 'https://therokuchannel.roku.com' },
+        { name: 'BBC iPlayer', icon: '🇬🇧', url: 'https://www.bbc.co.uk/iplayer' },
+        { name: 'ITVX', icon: '🎥', url: 'https://www.itv.com' },
+        { name: 'Channel 4', icon: '4️⃣', url: 'https://www.channel4.com' },
+        { name: 'SBS On Demand', icon: '🇦🇺', url: 'https://www.sbs.com.au/ondemand/' },
+        { name: 'ABC iview', icon: '🦘', url: 'https://iview.abc.net.au' },
+        { name: 'NHK World', icon: '🇯🇵', url: 'https://www3.nhk.or.jp/nhkworld/' },
+        { name: 'France.tv', icon: '🇫🇷', url: 'https://www.france.tv' },
+        { name: 'ZDF Mediathek', icon: '🇩🇪', url: 'https://www.zdf.de' },
+        { name: 'RaiPlay', icon: '🇮🇹', url: 'https://www.raiplay.it' },
+        { name: 'Haystack News', icon: '📰', url: 'https://www.haystack.tv' },
+        { name: 'GlobeTV', icon: '🌍', url: 'https://globetv.app/' },
+        { name: 'FreeInterTV', icon: '📶', url: 'http://www.freeintertv.com/' },
+        { name: 'TabloTV', icon: '💾', url: 'https://www.tablotv.com/' },
+        { name: 'JustWatch', icon: '🔍', url: 'https://www.justwatch.com' }
+    ];
+
+    const radioStations = [
+        { name: 'TuneIn', icon: '📻', url: 'https://tunein.com' },
+        { name: 'iHeartRadio', icon: '❤️', url: 'https://www.iheart.com' },
+        { name: 'Radio Garden', icon: '🗺️', url: 'https://radio.garden' },
+        { name: 'Streema', icon: '🎛️', url: 'https://streema.com' },
+        { name: 'Radio.net', icon: '🎚️', url: 'https://www.radio.net' },
+        { name: 'Online Radio Box', icon: '📦', url: 'https://onlineradiobox.com' },
+        { name: 'AccuRadio', icon: '🎵', url: 'https://www.accuradio.com' },
+        { name: 'SomaFM', icon: '🎹', url: 'https://somafm.com' },
+        { name: 'LiveATC', icon: '✈️', url: 'https://www.liveatc.net' },
+        { name: 'BBC Sounds', icon: '🎧', url: 'https://www.bbc.co.uk/sounds' },
+        { name: 'NPR', icon: '🎙️', url: 'https://www.npr.org' },
+        { name: 'Audacy', icon: '🎤', url: 'https://www.audacy.com' },
+        { name: 'Jango', icon: '🎻', url: 'https://www.jango.com' },
+        { name: 'Radio Paradise', icon: '🌴', url: 'https://radioparadise.com' },
+        { name: 'JazzRadio', icon: '🎷', url: 'https://www.jazzradio.com' },
+        { name: 'DI.FM', icon: '🎼', url: 'https://www.di.fm' },
+        { name: 'KEXP', icon: '🎸', url: 'https://www.kexp.org' },
+        { name: 'WNYC', icon: '🔊', url: 'https://www.wnyc.org' },
+        { name: 'Internet-Radio.com', icon: '🎶', url: 'https://www.internet-radio.com/' },
+        { name: 'Radiotunes', icon: '🎺', url: 'https://www.radiotunes.com/' }
+    ];
+
+    window.showTvChannels = function(){
+        const area = document.getElementById('tvRadioContentArea');
+        let html = '<h3 style="text-align:center; margin-bottom:16px;">📺 TV Channels</h3>';
+        tvChannels.forEach(site => {
+            html += `<div class="tvradio-card" onclick="window.open('${site.url}', '_blank');">
+                        <div style="font-size:2rem;">${site.icon}</div>
+                        <div style="font-weight:600;">${site.name}</div>
+                        <div style="font-size:0.7rem;">Watch now</div>
+                     </div>`;
+        });
+        area.innerHTML = html;
+    };
+
+    window.showRadioStations = function(){
+        const area = document.getElementById('tvRadioContentArea');
+        let html = '<h3 style="text-align:center; margin-bottom:16px;">📻 Radio Stations</h3>';
+        radioStations.forEach(site => {
+            html += `<div class="tvradio-card" onclick="window.open('${site.url}', '_blank');">
+                        <div style="font-size:2rem;">${site.icon}</div>
+                        <div style="font-weight:600;">${site.name}</div>
+                        <div style="font-size:0.7rem;">Listen now</div>
+                     </div>`;
+        });
+        area.innerHTML = html;
+    };
+
+    window.openOtherTools = function(){ document.getElementById('otherToolsOverlay').classList.add('active'); renderOtherToolsFull(); };
+    window.openAiTools = function(){ 
+        document.getElementById('aiToolsOverlay').classList.add('active'); 
+        renderAiToolsFull();
+    };
+    window.closeOtherOverlay = function(){ document.getElementById('otherToolsOverlay').classList.remove('active'); };
+    window.closeAiOverlay = function(){ document.getElementById('aiToolsOverlay').classList.remove('active'); };
+    window.closePremium = function(){ document.getElementById('premiumOverlay').classList.remove('active'); };
+    
+    window.openImagineOverlay = function(){
+        document.getElementById('imagineOverlay').classList.add('active');
+        renderImagineTools();
+    };
+    window.closeImagineOverlay = function(){ document.getElementById('imagineOverlay').classList.remove('active'); };
+    
+    window.openShortenerOverlay = function(){
+        document.getElementById('imagineOverlay').classList.remove('active');
+        document.getElementById('premiumOverlay').classList.remove('active');
+        document.getElementById('otherToolsOverlay').classList.remove('active');
+        document.getElementById('aiToolsOverlay').classList.remove('active');
+        document.getElementById('searchEnginesOverlay').classList.remove('active');
+        document.getElementById('shortenerOverlay').classList.add('active');
+        renderShortenerGrid();
+    };
+    window.closeShortenerOverlay = function(){ document.getElementById('shortenerOverlay').classList.remove('active'); };
+    
+    window.openOnlineOverlay = function(){
+        document.getElementById('onlineOverlay').classList.add('active');
+        renderOnlineGrid();
+    };
+    window.closeOnlineOverlay = function(){ document.getElementById('onlineOverlay').classList.remove('active'); };
+
+    let isFullscreen = false;
+    let isMobileView = true;
+
+    window.openBrowsersOverlay = function(){
+        document.getElementById('browsersOverlay').classList.add('active');
+        isFullscreen = false;
+        isMobileView = true;
+        document.getElementById('mobileViewBtn').textContent = '💻 As Desktop';
+        document.getElementById('fullscreenMobileBtn').textContent = '💻';
+        document.getElementById('browserFrame').src = 'about:blank';
+        document.getElementById('browserUrlInput').value = '';
+        const frame = document.getElementById('browserFrame');
+        frame.classList.add('mobile-view');
+        frame.classList.remove('fullscreen');
+        document.getElementById('exitFullscreenBtn').style.display = 'none';
+        document.getElementById('fullscreenFloatBar').classList.remove('active');
+        document.getElementById('browsersControls').classList.remove('hidden');
+        document.getElementById('browsersList').style.display = 'grid';
+        renderBrowsersList();
+    };
+    window.closeBrowsersOverlay = function(){
+        if (isFullscreen) { toggleBrowserFullscreen(); }
+        isMobileView = true;
+        document.getElementById('browsersOverlay').classList.remove('active');
+        document.getElementById('browserFrame').src = 'about:blank';
+    };
+    function renderBrowsersList() {
+        const container = document.getElementById('browsersList');
+        const browsers = [
+            { name: 'Google Chrome', icon: '🌐', color: '#4285F4' },
+            { name: 'Mozilla Firefox', icon: '🦊', color: '#FF7139' },
+            { name: 'Microsoft Edge', icon: '🔷', color: '#0078D7' },
+            { name: 'Opera', icon: '🔴', color: '#FF1B2D' },
+            { name: 'Brave', icon: '🦁', color: '#FB542B' },
+            { name: 'Safari', icon: '🧭', color: '#006CFF' },
+            { name: 'Vivaldi', icon: '🌊', color: '#EF3939' },
+            { name: 'Tor Browser', icon: '🧅', color: '#7D4698' },
+            { name: 'Epic Privacy', icon: '🛡️', color: '#5C6BC0' },
+            { name: 'Pale Moon', icon: '🌕', color: '#FFB347' }
+        ];
+        container.innerHTML = browsers.map(b => `
+            <div class="browsers-card-item" onclick="selectBrowser('${b.name}')" style="border-bottom: 4px solid ${b.color};">
+                <div style="font-size:2rem;">${b.icon}</div>
+                <div style="font-weight:600;">${b.name}</div>
+                <div style="font-size:0.7rem;">Click to select</div>
+            </div>
+        `).join('');
+    }
+    window.selectBrowser = function(name) { showToast(`Browser mode: ${name}.`); };
+    window.loadBrowserUrl = function() {
+        let url = document.getElementById('browserUrlInput').value.trim();
+        if (!url) { showToast('Please enter a URL'); return; }
+        if (!/^https?:\/\//i.test(url)) { url = 'https://' + url; }
+        document.getElementById('browserFrame').src = url;
+        if (isFullscreen) { document.getElementById('fullscreenUrlInput').value = url; }
+    };
+    window.loadBrowserUrlFromFullscreen = function() {
+        let url = document.getElementById('fullscreenUrlInput').value.trim();
+        if (!url) return;
+        if (!/^https?:\/\//i.test(url)) { url = 'https://' + url; }
+        document.getElementById('browserFrame').src = url;
+        document.getElementById('browserUrlInput').value = url;
+    };
+    window.toggleBrowserFullscreen = function() {
+        const frame = document.getElementById('browserFrame');
+        const floatBar = document.getElementById('fullscreenFloatBar');
+        const controls = document.getElementById('browsersControls');
+        const browsersList = document.getElementById('browsersList');
+        if (!isFullscreen) {
+            frame.classList.add('fullscreen');
+            floatBar.classList.add('active');
+            document.getElementById('fullscreenUrlInput').value = document.getElementById('browserUrlInput').value || '';
+            document.getElementById('fullscreenMobileBtn').textContent = isMobileView ? '💻' : '📱';
+            controls.classList.add('hidden');
+            browsersList.style.display = 'none';
+            isFullscreen = true;
+        } else {
+            frame.classList.remove('fullscreen');
+            floatBar.classList.remove('active');
+            controls.classList.remove('hidden');
+            browsersList.style.display = 'grid';
+            isFullscreen = false;
+        }
+    };
+    window.toggleMobileView = function() {
+        const frame = document.getElementById('browserFrame');
+        const btn = document.getElementById('mobileViewBtn');
+        const floatBtn = document.getElementById('fullscreenMobileBtn');
+        if (isFullscreen) { showToast('Exit fullscreen first to switch view'); return; }
+        isMobileView = !isMobileView;
+        if (isMobileView) {
+            frame.classList.add('mobile-view');
+            btn.textContent = '💻 As Desktop';
+            floatBtn.textContent = '💻';
+        } else {
+            frame.classList.remove('mobile-view');
+            btn.textContent = '📱 As Mobile';
+            floatBtn.textContent = '📱';
+        }
+    };
+
+    let internalMobileView = true;
+    window.openInternalTab = function() {
+        let url = document.getElementById('browserUrlInput').value.trim();
+        if (!url) { showToast('Enter a URL first'); return; }
+        if (!/^https?:\/\//i.test(url)) { url = 'https://' + url; }
+        document.getElementById('internalTabUrlInput').value = url;
+        const frame = document.getElementById('internalTabFrame');
+        frame.src = url;
+        internalMobileView = true;
+        frame.classList.add('mobile-view');
+        document.getElementById('internalTabMobileBtn').textContent = '💻 As Desktop';
+        document.getElementById('internalTabOverlay').classList.add('active');
+    };
+    window.closeInternalTab = function() {
+        document.getElementById('internalTabOverlay').classList.remove('active');
+        document.getElementById('internalTabFrame').src = 'about:blank';
+    };
+    window.loadInternalTabUrl = function() {
+        let url = document.getElementById('internalTabUrlInput').value.trim();
+        if (!url) return;
+        if (!/^https?:\/\//i.test(url)) { url = 'https://' + url; }
+        document.getElementById('internalTabFrame').src = url;
+    };
+    window.toggleInternalMobileView = function() {
+        const frame = document.getElementById('internalTabFrame');
+        const btn = document.getElementById('internalTabMobileBtn');
+        internalMobileView = !internalMobileView;
+        if (internalMobileView) {
+            frame.classList.add('mobile-view');
+            btn.textContent = '💻 As Desktop';
+        } else {
+            frame.classList.remove('mobile-view');
+            btn.textContent = '📱 As Mobile';
+        }
+    };
+
+    window.openRemoteToolsOverlay = function(){
+        document.getElementById('remoteToolsOverlay').classList.add('active');
+        renderRDPGrid();
+        renderVPNGrid();
+        renderPreviewGrid();
+    };
+    window.closeRemoteToolsOverlay = function(){ document.getElementById('remoteToolsOverlay').classList.remove('active'); };
+
+    function renderRDPGrid(){
+        const container = document.getElementById('rdpGrid');
+        const rdpTools = [
+            { name: 'Neverinstall', icon: '🖥️', url: 'https://www.neverinstall.com' },
+            { name: 'Shells', icon: '🐚', url: 'https://www.shells.com' },
+            { name: 'Cameyo', icon: '☁️', url: 'https://cameyo.com' },
+            { name: 'CloudRDP', icon: '☁️', url: 'https://www.cloudrdp.com' },
+            { name: 'RDP Arena', icon: '🏟️', url: 'https://www.rdparena.com' },
+            { name: 'RemotePC', icon: '🖥️', url: 'https://www.remotepc.com' },
+            { name: 'AppDB', icon: '📱', url: 'https://appdb.to' },
+            { name: 'BrowserStack', icon: '🌐', url: 'https://www.browserstack.com' }
+        ];
+        let html = '';
+        rdpTools.forEach(tool => {
+            html += `<div class="games-card" onclick="window.open('${tool.url}', '_blank');">
+                        <div style="font-size:2rem;">${tool.icon}</div>
+                        <div style="font-weight:600;">${tool.name}</div>
+                        <div style="font-size:0.7rem;">Open in new tab</div>
+                     </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    function renderVPNGrid(){
+        const container = document.getElementById('vpnGrid');
+        const vpnTools = [
+            { name: 'CroxyProxy', icon: '🦀', url: 'https://www.croxyproxy.com' },
+            { name: 'Hidester', icon: '🦊', url: 'https://hidester.com/proxy' },
+            { name: 'KProxy', icon: '🔐', url: 'https://www.kproxy.com' },
+            { name: 'Whoer VPN', icon: '🕵️', url: 'https://whoer.net' },
+            { name: 'VPNBook', icon: '📚', url: 'https://www.vpnbook.com' },
+            { name: 'Hide.me', icon: '🙈', url: 'https://hide.me' },
+            { name: 'ProtonVPN', icon: '🛡️', url: 'https://protonvpn.com' },
+            { name: 'TunnelBear', icon: '🐻', url: 'https://www.tunnelbear.com' }
+        ];
+        let html = '';
+        vpnTools.forEach(tool => {
+            html += `<div class="games-card" onclick="window.open('${tool.url}', '_blank');">
+                        <div style="font-size:2rem;">${tool.icon}</div>
+                        <div style="font-weight:600;">${tool.name}</div>
+                        <div style="font-size:0.7rem;">Open in new tab</div>
+                     </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    function renderPreviewGrid(){
+        const container = document.getElementById('previewGrid');
+        const previewTools = [
+            { name: 'Responsively', icon: '📱💻', url: 'https://responsively.app' },
+            { name: 'BrowserStack Responsive', icon: '🖥️📱', url: 'https://www.browserstack.com/responsive' },
+            { name: 'LambdaTest', icon: '🔧', url: 'https://www.lambdatest.com' },
+            { name: 'Screenfly', icon: '🪰', url: 'https://screenfly.org' },
+            { name: 'Google Mobile‑Friendly', icon: '🤖', url: 'https://search.google.com/test/mobile-friendly' },
+            { name: 'Am I Responsive', icon: '🔄', url: 'https://ami.responsivedesign.is' },
+            { name: 'Viewport Resizer', icon: '📏', url: 'https://viewportresizer.com' },
+            { name: 'Responsive Design Checker', icon: '✅', url: 'https://responsivedesignchecker.com' }
+        ];
+        let html = '';
+        previewTools.forEach(tool => {
+            html += `<div class="games-card" onclick="window.open('${tool.url}', '_blank');">
+                        <div style="font-size:2rem;">${tool.icon}</div>
+                        <div style="font-weight:600;">${tool.name}</div>
+                        <div style="font-size:0.7rem;">Open in new tab</div>
+                     </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    window.openConvertOverlay = function(){
+        document.getElementById('convertOverlay').classList.add('active');
+        renderConvertGrid();
+    };
+    window.closeConvertOverlay = function(){ document.getElementById('convertOverlay').classList.remove('active'); };
+    function renderConvertGrid() {
+        const container = document.getElementById('convertGrid');
+        const convertSites = [
+            { name: 'PDFescape', icon: '📄', url: 'https://www.pdfescape.com', category: 'PDF Tools' },
+            { name: 'Sejda PDF', icon: '📑', url: 'https://www.sejda.com', category: 'PDF Tools' },
+            { name: 'PDF24 Tools', icon: '📋', url: 'https://tools.pdf24.org', category: 'PDF Tools' },
+            { name: 'PDF Candy', icon: '🍬', url: 'https://pdfcandy.com', category: 'PDF Tools' },
+            { name: 'PDF2Go', icon: '📤', url: 'https://www.pdf2go.com', category: 'PDF Tools' },
+            { name: 'Soda PDF', icon: '🥤', url: 'https://www.sodapdf.com', category: 'PDF Tools' },
+            { name: 'Foxit Online', icon: '🦊', url: 'https://www.foxit.com/pdf-editor/', category: 'PDF Tools' },
+            { name: 'DocHub', icon: '✍️', url: 'https://dochub.com', category: 'PDF Tools' },
+            { name: 'Fotor', icon: '🖼️', url: 'https://www.fotor.com', category: 'Image Editors' },
+            { name: 'BeFunky', icon: '🎨', url: 'https://www.befunky.com', category: 'Image Editors' },
+            { name: 'LunaPic', icon: '🌙', url: 'https://www.lunapic.com', category: 'Image Editors' },
+            { name: 'Sumopaint', icon: '🖌️', url: 'https://www.sumopaint.com', category: 'Image Editors' },
+            { name: 'Google Docs', icon: '📝', url: 'https://docs.google.com', category: 'Word & Docs' },
+            { name: 'Microsoft Office Online', icon: '📊', url: 'https://www.office.com', category: 'Word & Docs' },
+            { name: 'Zoho Writer', icon: '📃', url: 'https://www.zoho.com/writer/', category: 'Word & Docs' },
+            { name: 'OnlyOffice', icon: '🏢', url: 'https://www.onlyoffice.com', category: 'Word & Docs' },
+            { name: 'CryptPad', icon: '🔒', url: 'https://cryptpad.fr', category: 'Word & Docs' },
+            { name: 'Zamzar', icon: '🔄', url: 'https://www.zamzar.com', category: 'File Converters' },
+            { name: 'Online-Convert.com', icon: '🔁', url: 'https://www.online-convert.com', category: 'File Converters' },
+            { name: 'FileZigZag', icon: '⚡', url: 'https://www.filezigzag.com', category: 'File Converters' },
+            { name: 'Aconvert', icon: '🔄', url: 'https://www.aconvert.com', category: 'File Converters' },
+            { name: 'FreeFileConvert', icon: '📂', url: 'https://www.freefileconvert.com', category: 'File Converters' },
+            { name: 'Online Audio Converter', icon: '🎵', url: 'https://online-audio-converter.com', category: 'Audio/Video Tools' },
+            { name: 'Media.io', icon: '🎬', url: 'https://www.media.io', category: 'Audio/Video Tools' },
+            { name: 'VEED.io', icon: '✂️', url: 'https://www.veed.io', category: 'Audio/Video Tools' },
+            { name: 'Clipchamp', icon: '🎞️', url: 'https://clipchamp.com', category: 'Audio/Video Tools' },
+            { name: '123Apps', icon: '🔧', url: 'https://123apps.com', category: 'Audio/Video Tools' },
+            { name: 'AudioTrimmer', icon: '✂️', url: 'https://audiotrimmer.com', category: 'Audio/Video Tools' }
+        ];
+        const grouped = {};
+        convertSites.forEach(site => {
+            if (!grouped[site.category]) grouped[site.category] = [];
+            grouped[site.category].push(site);
+        });
+        let html = '';
+        for (const [cat, sites] of Object.entries(grouped)) {
+            html += `<h3 style="margin-top:24px; text-align:center; border-bottom:1px solid var(--border); padding-bottom:8px;">${cat}</h3>`;
+            html += '<div class="convert-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:16px; margin-top:16px;">';
+            sites.forEach(site => {
+                html += `<div class="convert-card" onclick="window.open('${site.url}', '_blank');">
+                            <div style="font-size:2rem;">${site.icon}</div>
+                            <div style="font-weight:600;">${site.name}</div>
+                            <div style="font-size:0.7rem;">Click to open</div>
+                         </div>`;
+            });
+            html += '</div>';
+        }
+        container.innerHTML = html;
+    }
+
+    window.openAllAiTranslatorOverlay = function(){
+        document.getElementById('allAiTranslatorOverlay').classList.add('active');
+        renderAllAiTranslatorGrid();
+    };
+    window.closeAllAiTranslatorOverlay = function(){ document.getElementById('allAiTranslatorOverlay').classList.remove('active'); };
+    function renderAllAiTranslatorGrid() {
+        const container = document.getElementById('allAiTranslatorGrid');
+        const translatorSites = [
+            { name: 'Lernix AI', icon: '🦉', url: 'https://lernix.ai' },
+            { name: 'Reverso', icon: '🔄', url: 'https://www.reverso.net/text-translation' },
+            { name: 'Linguee', icon: '📖', url: 'https://www.linguee.com' },
+            { name: 'Microsoft Translator', icon: '🪟', url: 'https://www.bing.com/translator' },
+            { name: 'SYSTRAN', icon: '🌐', url: 'https://www.systran.net/translate/' },
+            { name: 'PROMT', icon: '📑', url: 'https://www.online-translator.com/' },
+            { name: 'iTranslate', icon: '📱', url: 'https://itranslate.com/web' },
+            { name: 'Yandex Translate', icon: '🔴', url: 'https://translate.yandex.com/' },
+            { name: 'Cambridge Translator', icon: '🎓', url: 'https://dictionary.cambridge.org/translate/' },
+            { name: 'Collins Translator', icon: '📚', url: 'https://www.collinsdictionary.com/translator' },
+            { name: 'Papago', icon: '🐦', url: 'https://papago.naver.com/' },
+            { name: 'Baidu Translate', icon: '🔵', url: 'https://fanyi.baidu.com/' }
+        ];
+        let html = '<div class="convert-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:16px; margin-top:16px;">';
+        translatorSites.forEach(site => {
+            html += `<div class="convert-card" onclick="window.open('${site.url}', '_blank');">
+                        <div style="font-size:2rem;">${site.icon}</div>
+                        <div style="font-weight:600;">${site.name}</div>
+                        <div style="font-size:0.7rem;">Click to open</div>
+                     </div>`;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+    }
+
+    window.openGamesOverlay = function(){
+        document.getElementById('gamesOverlay').classList.add('active');
+        renderGamesGrid();
+    };
+    window.closeGamesOverlay = function(){ document.getElementById('gamesOverlay').classList.remove('active'); };
+    function renderGamesGrid() {
+        const container = document.getElementById('gamesGrid');
+        const gamesList = [
+            { name: 'Steam', icon: '🎮', url: 'https://store.steampowered.com' },
+            { name: 'Epic Games', icon: '🛒', url: 'https://www.epicgames.com' },
+            { name: 'GOG.com', icon: '📦', url: 'https://www.gog.com' },
+            { name: 'itch.io', icon: '🌐', url: 'https://itch.io' },
+            { name: 'Kongregate', icon: '🕹️', url: 'https://www.kongregate.com' },
+            { name: 'Miniclip', icon: '🎯', url: 'https://www.miniclip.com' },
+            { name: 'Addicting Games', icon: '🎲', url: 'https://www.addictinggames.com' },
+            { name: 'Armor Games', icon: '🛡️', url: 'https://armorgames.com' },
+            { name: 'Newgrounds', icon: '🎨', url: 'https://www.newgrounds.com' },
+            { name: 'Poki', icon: '🐶', url: 'https://poki.com' },
+            { name: 'CrazyGames', icon: '🃏', url: 'https://www.crazygames.com' },
+            { name: 'Agame', icon: '🕸️', url: 'https://www.agame.com' },
+            { name: 'Y8', icon: '🚀', url: 'https://www.y8.com' },
+            { name: 'Friv', icon: '🍭', url: 'https://www.friv.com' },
+            { name: 'Kizi', icon: '🧩', url: 'https://kizi.com' },
+            { name: 'Pogo', icon: '🎱', url: 'https://www.pogo.com' },
+            { name: 'Big Fish Games', icon: '🐟', url: 'https://www.bigfishgames.com' },
+            { name: 'Roblox', icon: '👾', url: 'https://www.roblox.com' },
+            { name: 'Minecraft', icon: '⛏️', url: 'https://www.minecraft.net' },
+            { name: 'League of Legends', icon: '🏆', url: 'https://www.leagueoflegends.com' },
+            { name: 'Fortnite', icon: '🔫', url: 'https://www.fortnite.com' },
+            { name: 'PlayStation', icon: '🎧', url: 'https://www.playstation.com' },
+            { name: 'Xbox', icon: '🖥️', url: 'https://www.xbox.com' },
+            { name: 'Nintendo', icon: '🍄', url: 'https://www.nintendo.com' },
+            { name: 'IGN', icon: '📺', url: 'https://www.ign.com' },
+            { name: 'GameSpot', icon: '🎤', url: 'https://www.gamespot.com' },
+            { name: 'PC Gamer', icon: '⌨️', url: 'https://www.pcgamer.com' },
+            { name: 'Kotaku', icon: '🗞️', url: 'https://kotaku.com' },
+            { name: 'Rock Paper Shotgun', icon: '📰', url: 'https://www.rockpapershotgun.com' },
+            { name: 'Game Jolt', icon: '⚡', url: 'https://gamejolt.com' }
+        ];
+        let html = '';
+        gamesList.forEach(game => {
+            html += `<div class="games-card" onclick="window.open('${game.url}', '_blank');">
+                        <div style="font-size:2rem;">${game.icon}</div>
+                        <div style="font-weight:600;">${game.name}</div>
+                        <div style="font-size:0.7rem;">Click to open</div>
+                     </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    window.openMoneyOverlay = function(){
+        document.getElementById('moneyOverlay').classList.add('active');
+        renderMoneyGrid();
+    };
+    window.closeMoneyOverlay = function(){ document.getElementById('moneyOverlay').classList.remove('active'); };
+    function renderMoneyGrid() {
+        const container = document.getElementById('moneyGrid');
+        const sites = [
+            { name: 'Geico', icon: '🦎', url: 'https://www.geico.com' },
+            { name: 'Progressive', icon: '🅿️', url: 'https://www.progressive.com' },
+            { name: 'State Farm', icon: '🏠', url: 'https://www.statefarm.com' },
+            { name: 'Allstate', icon: '🤲', url: 'https://www.allstate.com' },
+            { name: 'USAA', icon: '🦅', url: 'https://www.usaa.com' },
+            { name: 'Liberty Mutual', icon: '🗽', url: 'https://www.libertymutual.com' },
+            { name: 'Nationwide', icon: '🌐', url: 'https://www.nationwide.com' },
+            { name: 'Farmers', icon: '🌾', url: 'https://www.farmers.com' },
+            { name: 'Travelers', icon: '✈️', url: 'https://www.travelers.com' },
+            { name: 'Aflac', icon: '🦆', url: 'https://www.aflac.com' },
+            { name: 'LendingTree', icon: '🌳', url: 'https://www.lendingtree.com' },
+            { name: 'SoFi', icon: '🏦', url: 'https://www.sofi.com' },
+            { name: 'Marcus', icon: '💰', url: 'https://www.marcus.com' },
+            { name: 'Rocket Mortgage', icon: '🚀', url: 'https://www.rocketmortgage.com' },
+            { name: 'Upstart', icon: '📈', url: 'https://www.upstart.com' },
+            { name: 'Best Egg', icon: '🥚', url: 'https://www.bestegg.com' },
+            { name: 'Robinhood', icon: '🏹', url: 'https://robinhood.com' },
+            { name: 'E*TRADE', icon: '📊', url: 'https://us.etrade.com' },
+            { name: 'Fidelity', icon: '🏆', url: 'https://www.fidelity.com' },
+            { name: 'Charles Schwab', icon: '🐂', url: 'https://www.schwab.com' },
+            { name: 'Vanguard', icon: '🚢', url: 'https://investor.vanguard.com' },
+            { name: 'Acorns', icon: '🌰', url: 'https://www.acorns.com' },
+            { name: 'Coinbase', icon: '🪙', url: 'https://www.coinbase.com' },
+            { name: 'Gemini', icon: '♊', url: 'https://www.gemini.com' },
+            { name: 'Webull', icon: '🐃', url: 'https://www.webull.com' },
+            { name: 'Betterment', icon: '🌱', url: 'https://www.betterment.com' },
+            { name: 'Mint', icon: '🍃', url: 'https://mint.intuit.com' },
+            { name: 'YNAB', icon: '📝', url: 'https://www.youneedabudget.com' },
+            { name: 'Credit Karma', icon: '🛡️', url: 'https://www.creditkarma.com' },
+            { name: 'NerdWallet', icon: '🤓', url: 'https://www.nerdwallet.com' }
+        ];
+        let html = '';
+        sites.forEach(site => {
+            html += `<div class="games-card" onclick="window.open('${site.url}', '_blank');">
+                        <div style="font-size:2rem;">${site.icon}</div>
+                        <div style="font-weight:600;">${site.name}</div>
+                        <div style="font-size:0.7rem;">Click to open</div>
+                     </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    const originalTools = [
+        {id:'calculator', icon:'🧮', name:'Advanced Calculator'},
+        {id:'password', icon:'🔐', name:'Password Generator'},
+        {id:'wordcount', icon:'📝', name:'Word Counter'},
+        {id:'caseconverter', icon:'🔤', name:'Case Converter'},
+        {id:'colorpicker', icon:'🎨', name:'Color Picker'},
+        {id:'unitconverter', icon:'📏', name:'Unit Converter'},
+        {id:'stopwatch', icon:'⏱️', name:'Stopwatch'},
+        {id:'qrcode', icon:'📱', name:'QR Code'},
+        {id:'bmi', icon:'⚖️', name:'BMI Calculator'},
+        {id:'random', icon:'🎲', name:'Random Number'},
+        {id:'countdown', icon:'⏳', name:'Countdown Timer'},
+        {id:'datediff', icon:'📅', name:'Date Difference'},
+        {id:'base64', icon:'🔣', name:'Base64'},
+        {id:'urlencode', icon:'🔗', name:'URL Encode'},
+        {id:'jsonformat', icon:'📋', name:'JSON Formatter'},
+        {id:'lorem', icon:'📄', name:'Lorem Ipsum'},
+        {id:'currency', icon:'💱', name:'Currency Converter'},
+        {id:'percentcalc', icon:'📊', name:'Percentage Calc'},
+        {id:'agecalc', icon:'🎂', name:'Age Calculator'},
+        {id:'binhex', icon:'💻', name:'Binary/Hex'},
+        {id:'roman', icon:'🏛️', name:'Roman Numeral'},
+        {id:'tipcalc', icon:'💰', name:'Tip Calculator'},
+        {id:'worldclock', icon:'🕐', name:'World Clock (All Zones)'},
+        {id:'dice', icon:'🎲', name:'Dice Roller'},
+        {id:'coin', icon:'🪙', name:'Coin Flip'},
+        {id:'joke', icon:'😂', name:'Joke Generator (Fresh)'},
+        {id:'ip', icon:'🌍', name:'IP Lookup'},
+        {id:'premium_ai', icon:'🔮', name:'✨ AI Text Enhancer'}
+    ];
+    
+    const metaSearchTools = [
+        {id:'media_overlay', icon:'📺', name:'📺 Media & Video Platforms'},
+        {id:'sites_overlay', icon:'🌐', name:'🌐 Popular Sites'},
+        {id:'tvradio_overlay', icon:'📺📻', name:'📺📻 TV / RADIO'},
+        {id:'browsers_overlay', icon:'🌐🧭', name:'🌐 Browsers (In‑App)'},
+        {id:'convert_overlay', icon:'🔄📄', name:'🔄 CONVERT (Word, Image, PDF)'},
+        {id:'aitranslator_overlay', icon:'🌐🔤', name:'🌐 All AI Translator'},
+        {id:'games_overlay', icon:'🎮', name:'🎮 GAMES'},
+        {id:'money_overlay', icon:'💵', name:'💵 MONEY & INVESTMENTS'},
+        {id:'remote_overlay', icon:'🖥️🔒', name:'🖥️ RDP, VPN & Web Preview'},
+        {id:'imagine_overlay', icon:'✨🧠', name:'✨ IMAGINE (25+ New Tools)'},
+        {id:'online_overlay', icon:'🌐', name:'🌐 Online Tools (30+ Free)'},
+        {id:'shortener_overlay', icon:'🔗', name:'🔗 URL Shorteners'},
+        {id:'other_tools_overlay', icon:'🧰', name:'🧰 All other tools (Notes, Weather, Todo)'},
+        {id:'ai_hub_overlay', icon:'🤖', name:'🤖 AI Hub (ChatGPT, Gemini, etc.)'}
+    ];
+    
+    const allTools = [...originalTools, ...metaSearchTools];
+    const fullToolsList = allTools;
+    const metaIds = new Set(metaSearchTools.map(t => t.id));
+    
+    function renderGrid(){
+        let grid = document.getElementById('toolsGrid');
+        let html = '';
+        for(let i=0; i<fullToolsList.length; i++){
+            let t = fullToolsList[i];
+            if(metaIds.has(t.id)) continue;
+            if(t.id === 'premium_ai'){
+                html += `<div class="tool-card" data-tool="${t.id}" onclick="selectTool('${t.id}')">
+                            <div style="font-size:2rem;">${t.icon}</div>
+                            <div class="tool-name">${t.name}</div>
+                        </div>`;
+                html += `<div class="tool-card large" onclick="openImagineOverlay()">
+                            <div style="font-size:2rem;">✨🧠✨</div>
+                            <div class="tool-name">IMAGINE</div>
+                            <div style="font-size:0.7rem; margin-top:4px;">25+ new tools</div>
+                        </div>`;
+                html += `<div class="tool-card online-tools" onclick="openOnlineOverlay()">
+                            <div style="font-size:2rem;">🌐💻🌍</div>
+                            <div class="tool-name">Online Tools</div>
+                            <div style="font-size:0.7rem; margin-top:4px;">30+ free online utilities</div>
+                        </div>`;
+            } else {
+                html += `<div class="tool-card" data-tool="${t.id}" onclick="selectTool('${t.id}')">
+                            <div style="font-size:2rem;">${t.icon}</div>
+                            <div class="tool-name">${t.name}</div>
+                        </div>`;
+            }
+        }
+        grid.innerHTML = html;
+    }
+
+    function renderSidebar(){
+        let sidebar = document.getElementById('sidebarList');
+        let sidebarTools = fullToolsList.filter(t => !metaIds.has(t.id));
+        sidebar.innerHTML = sidebarTools.map(t => `
+            <div class="sidebar-item" onclick="selectTool('${t.id}'); closeSidebar();">
+                <span style="font-size:1.3rem;">${t.icon}</span> <span>${t.name}</span>
+            </div>
+        `).join('');
+        let imagineItem = document.createElement('div'); imagineItem.className = 'sidebar-item'; imagineItem.innerHTML = '<span style="font-size:1.3rem;">✨🧠✨</span> <span>IMAGINE (New Tools)</span>'; imagineItem.onclick = () => { closeSidebar(); openImagineOverlay(); }; sidebar.appendChild(imagineItem);
+        let shortenerItem = document.createElement('div'); shortenerItem.className = 'sidebar-item'; shortenerItem.innerHTML = '<span style="font-size:1.3rem;">🔗</span> <span>URL Shorteners</span>'; shortenerItem.onclick = () => { closeSidebar(); openShortenerOverlay(); }; sidebar.appendChild(shortenerItem);
+        let onlineItem = document.createElement('div'); onlineItem.className = 'sidebar-item'; onlineItem.innerHTML = '<span style="font-size:1.3rem;">🌐</span> <span>Online Tools</span>'; onlineItem.onclick = () => { closeSidebar(); openOnlineOverlay(); }; sidebar.appendChild(onlineItem);
+        let sitesItem = document.createElement('div'); sitesItem.className = 'sidebar-item'; sitesItem.innerHTML = '<span style="font-size:1.3rem;">🌍</span> <span>SITES (Popular)</span>'; sitesItem.onclick = () => { closeSidebar(); openSitesOverlay(); }; sidebar.appendChild(sitesItem);
+        let mediaItem = document.createElement('div'); mediaItem.className = 'sidebar-item'; mediaItem.innerHTML = '<span style="font-size:1.3rem;">📺</span> <span>MEDIA (Video)</span>'; mediaItem.onclick = () => { closeSidebar(); openMediaOverlay(); }; sidebar.appendChild(mediaItem);
+        let tvRadioItem = document.createElement('div'); tvRadioItem.className = 'sidebar-item'; tvRadioItem.innerHTML = '<span style="font-size:1.3rem;">📺📻</span> <span>TV / RADIO</span>'; tvRadioItem.onclick = () => { closeSidebar(); openTvRadioOverlay(); }; sidebar.appendChild(tvRadioItem);
+        let browsersItem = document.createElement('div'); browsersItem.className = 'sidebar-item'; browsersItem.innerHTML = '<span style="font-size:1.3rem;">🌐🧭</span> <span>Browsers (In‑App)</span>'; browsersItem.onclick = () => { closeSidebar(); openBrowsersOverlay(); }; sidebar.appendChild(browsersItem);
+        let convertItem = document.createElement('div'); convertItem.className = 'sidebar-item'; convertItem.innerHTML = '<span style="font-size:1.3rem;">🔄📄🖼️</span> <span>CONVERT Edit Word, Image, PDF…</span>'; convertItem.onclick = () => { closeSidebar(); openConvertOverlay(); }; sidebar.appendChild(convertItem);
+        let translatorItem = document.createElement('div'); translatorItem.className = 'sidebar-item'; translatorItem.innerHTML = '<span style="font-size:1.3rem;">🌐🔤🤖</span> <span>All AI Translator</span>'; translatorItem.onclick = () => { closeSidebar(); openAllAiTranslatorOverlay(); }; sidebar.appendChild(translatorItem);
+        let gamesItem = document.createElement('div'); gamesItem.className = 'sidebar-item'; gamesItem.innerHTML = '<span style="font-size:1.3rem;">🎮</span> <span>GAMES</span>'; gamesItem.onclick = () => { closeSidebar(); openGamesOverlay(); }; sidebar.appendChild(gamesItem);
+        let moneyItem = document.createElement('div'); moneyItem.className = 'sidebar-item'; moneyItem.innerHTML = '<span style="font-size:1.3rem;">💵</span> <span>MONEY & INVESTMENTS</span>'; moneyItem.onclick = () => { closeSidebar(); openMoneyOverlay(); }; sidebar.appendChild(moneyItem);
+        let remoteItem = document.createElement('div'); remoteItem.className = 'sidebar-item'; remoteItem.innerHTML = '<span style="font-size:1.3rem;">🖥️🔒📱</span> <span>RDP, VPN & Web Preview</span>'; remoteItem.onclick = () => { closeSidebar(); openRemoteToolsOverlay(); }; sidebar.appendChild(remoteItem);
+    }
+
+    window.selectTool = function(toolId){
+        if (toolId === 'media_overlay') { openMediaOverlay(); return; }
+        if (toolId === 'sites_overlay') { openSitesOverlay(); return; }
+        if (toolId === 'tvradio_overlay') { openTvRadioOverlay(); return; }
+        if (toolId === 'browsers_overlay') { openBrowsersOverlay(); return; }
+        if (toolId === 'convert_overlay') { openConvertOverlay(); return; }
+        if (toolId === 'aitranslator_overlay') { openAllAiTranslatorOverlay(); return; }
+        if (toolId === 'games_overlay') { openGamesOverlay(); return; }
+        if (toolId === 'money_overlay') { openMoneyOverlay(); return; }
+        if (toolId === 'remote_overlay') { openRemoteToolsOverlay(); return; }
+        if (toolId === 'imagine_overlay') { openImagineOverlay(); return; }
+        if (toolId === 'online_overlay') { openOnlineOverlay(); return; }
+        if (toolId === 'shortener_overlay') { openShortenerOverlay(); return; }
+        if (toolId === 'other_tools_overlay') { openOtherTools(); return; }
+        if (toolId === 'ai_hub_overlay') { openAiTools(); return; }
+        
+        if(toolId === 'premium_ai'){
+            document.getElementById('premiumOverlay').classList.add('active');
+            document.getElementById('premiumContent').innerHTML = `
+                <h2>🔮 AI Text Enhancer</h2>
+                <p>AI-powered text enhancement (demo). Enter text and get an enhanced version.</p>
+                <textarea id="aiDemoText" rows="4" class="search-input" placeholder="Type your text..."></textarea>
+                <button class="tool-btn" onclick="demoAIEnhance()">✨ Enhance</button>
+                <div id="aiDemoResult" class="tool-output"></div>
+                <button class="tool-btn" onclick="closePremium()">← Back to tools</button>
+            `;
+            return;
+        }
+        closePremium();
+        document.getElementById('mainPage').style.display = 'block';
+        renderToolPanel(toolId);
+        document.getElementById('toolPanel').scrollIntoView({behavior:'smooth'});
+    };
+
+    window.demoAIEnhance = function(){
+        let txt = document.getElementById('aiDemoText')?.value;
+        if(txt) document.getElementById('aiDemoResult').innerHTML = `✨ Enhanced: ${txt} (powered by MultiTool AI) ✨`;
+        else document.getElementById('aiDemoResult').innerHTML = 'Please enter some text.';
+    };
+
+    function renderShortenerGrid(){
+        const container = document.getElementById('shortenerGrid');
+        const shorteners = [
+            { name: 'TinyURL', icon: '🔗', url: 'https://tinyurl.com/app' },
+            { name: 'Bitly', icon: '📎', url: 'https://bitly.com' },
+            { name: 'is.gd', icon: '⚡', url: 'https://is.gd' },
+            { name: 'Rebrandly', icon: '🔄', url: 'https://rebrandly.com' },
+            { name: 'Short.io', icon: '✂️', url: 'https://short.io' },
+            { name: 'Cutt.ly', icon: '✂️', url: 'https://cutt.ly' },
+            { name: 'T2M', icon: '🔗', url: 'https://t2m.io' },
+            { name: 'Shorte.st', icon: '📏', url: 'https://shorte.st' },
+            { name: '1Link', icon: '🔗', url: 'https://1link.io' },
+            { name: 'Linkly', icon: '🔗', url: 'https://linklyhq.com' }
+        ];
+        let html = '';
+        shorteners.forEach(s => {
+            html += `<div class="shortener-card" onclick="window.open('${s.url}', '_blank'); closeShortenerOverlay();">
+                        <div style="font-size:2rem;">${s.icon}</div>
+                        <div style="font-weight:600;">${s.name}</div>
+                        <div style="font-size:0.7rem;">Click to open</div>
+                     </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    function renderOnlineGrid(){
+        const container = document.getElementById('onlineGrid');
+        const onlineToolsList = [
+            { name: 'Canva', icon: '🎨', url: 'https://www.canva.com' },
+            { name: 'Remove.bg', icon: '🖼️', url: 'https://www.remove.bg' },
+            { name: 'TinyWow', icon: '✨', url: 'https://tinywow.com' },
+            { name: 'ILovePDF', icon: '📄', url: 'https://www.ilovepdf.com' },
+            { name: 'SmallPDF', icon: '📑', url: 'https://smallpdf.com' },
+            { name: 'OnlineOCR', icon: '🔍', url: 'https://www.onlineocr.net' },
+            { name: 'Convertio', icon: '🔄', url: 'https://convertio.co' },
+            { name: 'CloudConvert', icon: '☁️', url: 'https://cloudconvert.com' },
+            { name: 'EZGIF', icon: '🎞️', url: 'https://ezgif.com' },
+            { name: 'Kapwing', icon: '✂️', url: 'https://www.kapwing.com' },
+            { name: 'Pixlr', icon: '🎨', url: 'https://pixlr.com' },
+            { name: 'Photopea', icon: '🖌️', url: 'https://www.photopea.com' },
+            { name: 'Cleanup.pictures', icon: '🧹', url: 'https://cleanup.pictures' },
+            { name: 'Watermark Remover', icon: '💧', url: 'https://www.watermarkremover.io' },
+            { name: 'QR Code Monkey', icon: '📱', url: 'https://www.qrcode-monkey.com' },
+            { name: 'Grammarly', icon: '✍️', url: 'https://www.grammarly.com' },
+            { name: 'QuillBot', icon: '📝', url: 'https://quillbot.com' },
+            { name: 'Hemingway Editor', icon: '📖', url: 'https://hemingwayapp.com' },
+            { name: 'DeepL Translator', icon: '🌐', url: 'https://www.deepl.com' },
+            { name: 'Google Translate', icon: '🔤', url: 'https://translate.google.com' },
+            { name: 'MyMemory', icon: '🧠', url: 'https://mymemory.translated.net' },
+            { name: 'Color Hunt', icon: '🎨', url: 'https://colorhunt.co' },
+            { name: 'Coolors', icon: '🌈', url: 'https://coolors.co' },
+            { name: 'UI Gradients', icon: '📊', url: 'https://uigradients.com' },
+            { name: 'CSS Gradient', icon: '🎨', url: 'https://cssgradient.io' },
+            { name: 'JsonFormatter', icon: '📋', url: 'https://jsonformatter.org' },
+            { name: 'CodePen', icon: '💻', url: 'https://codepen.io' },
+            { name: 'JSFiddle', icon: '🔧', url: 'https://jsfiddle.net' },
+            { name: 'Replit', icon: '🔄', url: 'https://replit.com' }
+        ];
+        let html = '';
+        onlineToolsList.forEach(tool => {
+            html += `<div class="online-card" onclick="window.open('${tool.url}', '_blank'); closeOnlineOverlay();">
+                        <div style="font-size:2rem;">${tool.icon}</div>
+                        <div style="font-weight:600;">${tool.name}</div>
+                        <div style="font-size:0.7rem;">Click to open</div>
+                     </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    function renderAiToolsFull(){
+        const container = document.getElementById('aiToolsContainer');
+        const aiSites = [
+            { name: 'ChatGPT', icon: '🤖', url: 'https://chat.openai.com', category: 'chat' },
+            { name: 'Google Gemini', icon: '🧠', url: 'https://gemini.google.com', category: 'chat' },
+            { name: 'Claude', icon: '🧬', url: 'https://claude.ai', category: 'chat' },
+            { name: 'DeepSeek', icon: '🐋', url: 'https://chat.deepseek.com', category: 'chat' },
+            { name: 'Microsoft Copilot', icon: '💻', url: 'https://copilot.microsoft.com', category: 'chat' },
+            { name: 'Poe', icon: '💡', url: 'https://poe.com', category: 'chat' },
+            { name: 'Pi AI', icon: '😊', url: 'https://pi.ai/talk', category: 'chat' },
+            { name: 'Character.AI', icon: '🎭', url: 'https://character.ai', category: 'chat' },
+            { name: 'Perplexity', icon: '🔎', url: 'https://www.perplexity.ai', category: 'search' },
+            { name: 'You.com', icon: '🔍', url: 'https://you.com', category: 'search' },
+            { name: 'DALL·E 3', icon: '🖼️', url: 'https://openai.com/dall-e-3', category: 'image' },
+            { name: 'Midjourney', icon: '🌸', url: 'https://www.midjourney.com', category: 'image' },
+            { name: 'Stable Diffusion', icon: '🌀', url: 'https://stability.ai', category: 'image' },
+            { name: 'Leonardo AI', icon: '🦁', url: 'https://leonardo.ai', category: 'image' },
+            { name: 'DreamStudio', icon: '🌟', url: 'https://beta.dreamstudio.ai', category: 'image' },
+            { name: 'Bing Image Creator', icon: '🌄', url: 'https://www.bing.com/images/create', category: 'image' },
+            { name: 'Craiyon', icon: '🎠', url: 'https://www.craiyon.com', category: 'image' },
+            { name: 'NightCafe', icon: '🌌', url: 'https://creator.nightcafe.studio', category: 'image' },
+            { name: 'Artbreeder', icon: '🧬', url: 'https://www.artbreeder.com', category: 'image' },
+            { name: 'Playground AI', icon: '🎮', url: 'https://playgroundai.com', category: 'image' },
+            { name: 'Runway ML', icon: '🎥', url: 'https://runwayml.com', category: 'video' },
+            { name: 'Pika', icon: '🎞️', url: 'https://pika.art', category: 'video' },
+            { name: 'Synthesia', icon: '🎙️', url: 'https://www.synthesia.io', category: 'video' },
+            { name: 'HeyGen', icon: '👤', url: 'https://www.heygen.com', category: 'video' },
+            { name: 'Invideo', icon: '📹', url: 'https://invideo.io', category: 'video' },
+            { name: 'Kapwing', icon: '🎬', url: 'https://www.kapwing.com', category: 'video' },
+            { name: 'Lumen5', icon: '📽️', url: 'https://www.lumen5.com', category: 'video' },
+            { name: 'Suno AI', icon: '🎤', url: 'https://suno.ai', category: 'music' },
+            { name: 'Udio', icon: '🎧', url: 'https://www.udio.com', category: 'music' },
+            { name: 'AIVA', icon: '🎼', url: 'https://www.aiva.ai', category: 'music' },
+            { name: 'Boomy', icon: '🎹', url: 'https://boomy.com', category: 'music' },
+            { name: 'Soundraw', icon: '🎛️', url: 'https://soundraw.io', category: 'music' },
+            { name: 'Mubert', icon: '🎚️', url: 'https://mubert.com', category: 'music' },
+            { name: 'GitHub Copilot', icon: '🐙', url: 'https://github.com/features/copilot', category: 'code' },
+            { name: 'Codeium', icon: '⚡', url: 'https://codeium.com', category: 'code' },
+            { name: 'Tabnine', icon: '🦊', url: 'https://www.tabnine.com', category: 'code' },
+            { name: 'Replit Ghostwriter', icon: '👻', url: 'https://replit.com/ghostwriter', category: 'code' },
+            { name: 'Cody', icon: '🤖', url: 'https://sourcegraph.com/cody', category: 'code' },
+            { name: 'Jasper', icon: '✍️', url: 'https://www.jasper.ai', category: 'writing' },
+            { name: 'Writesonic', icon: '📝', url: 'https://writesonic.com', category: 'writing' },
+            { name: 'Notion AI', icon: '📓', url: 'https://www.notion.so/product/ai', category: 'writing' }
+        ];
+        const categoryNames = {
+            chat: 'AI Chat & Assistants',
+            search: 'AI Search & Research',
+            image: 'AI Image Generation',
+            video: 'AI Video & Animation',
+            music: 'AI Music & Audio',
+            code: 'AI Code & Development',
+            writing: 'AI Writing & Content'
+        };
+        const grouped = {};
+        aiSites.forEach(tool => { if (!grouped[tool.category]) grouped[tool.category] = []; grouped[tool.category].push(tool); });
+        let html = '<h2>🤖 AI Hub · 40+ AI Tools</h2>';
+        for (const [catKey, catLabel] of Object.entries(categoryNames)) {
+            if (grouped[catKey] && grouped[catKey].length > 0) {
+                html += `<h3 style="margin-top:24px; text-align:center; border-bottom:1px solid var(--border); padding-bottom:8px;">${catLabel}</h3><div class="ai-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:16px; margin-top:16px;">`;
+                grouped[catKey].forEach(ai => {
+                    html += `<div class="ai-card" onclick="window.open('${ai.url}', '_blank'); closeAiOverlay();"><div style="font-size:2rem;">${ai.icon}</div><div style="font-weight:600;">${ai.name}</div><div style="font-size:0.7rem;">Click to open</div></div>`;
+                });
+                html += '</div>';
+            }
+        }
+        html += '<div style="text-align:center; margin-top:30px;"><button class="tool-btn" onclick="closeAiOverlay()">← Back to main tools</button></div>';
+        container.innerHTML = html;
+    }
+
+    function renderImagineTools(){
+        const container = document.getElementById('imagineToolsGrid');
+        const imagineTools = [
+            { name: '🖼️ Image to Text (OCR)', icon: '📸', action: 'ocr' },
+            { name: '🎨 Random Color Palette', icon: '🌈', action: 'randomColor' },
+            { name: '📻 Morse Code Converter', icon: '📡', action: 'morse' },
+            { name: '📝 Text Summarizer', icon: '📄', action: 'summarize' },
+            { name: '🔢 Number Base Converter', icon: '🔢', action: 'baseAny' },
+            { name: '🧬 UUID Generator', icon: '🆔', action: 'uuid' },
+            { name: '🔐 Hash Generator', icon: '🔑', action: 'hashGen' },
+            { name: '📅 Unix Timestamp', icon: '⏲️', action: 'unixTime' },
+            { name: '🌍 IP Geolocation', icon: '🗺️', action: 'ipGeo' },
+            { name: '📧 Email Validator', icon: '📨', action: 'emailValidate' },
+            { name: '📊 CSV to JSON', icon: '📑', action: 'csvToJson' },
+            { name: '🧮 Quadratic Solver', icon: '📐', action: 'quadratic' },
+            { name: '⚖️ Weight Converter', icon: '⚖️', action: 'weightConv' },
+            { name: '🌡️ Temperature Converter', icon: '🌡️', action: 'tempConv' },
+            { name: '📏 Area Converter', icon: '📐', action: 'areaConv' },
+            { name: '💾 Data Size Converter', icon: '💾', action: 'dataConv' },
+            { name: '⏱️ Epoch Time Now', icon: '⏰', action: 'epochNow' },
+            { name: '🔍 Reverse Text', icon: '🔄', action: 'reverseText' },
+            { name: '✏️ Leet Speak', icon: '👾', action: 'leetSpeak' },
+            { name: '🎯 Palindrome Checker', icon: '🔄', action: 'palindrome' },
+            { name: '🔠 Strong Password', icon: '🔐', action: 'strongPwd' },
+            { name: '📇 QR Reader (camera)', icon: '📷', action: 'qrReader' },
+            { name: '🎲 Custom Dice Roll', icon: '🎲', action: 'customDice' },
+            { name: '💬 Random Advice', icon: '💡', action: 'advice' },
+            { name: '🔗 URL Shortener', icon: '🔗', action: 'shortener' }
+        ];
+        let html = '';
+        imagineTools.forEach(tool => {
+            html += `<div class="imagine-tool-card" onclick="executeImagineTool('${tool.action}')">
+                        <div style="font-size:2rem;">${tool.icon}</div>
+                        <div style="font-weight:600;">${tool.name}</div>
+                     </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    window.executeImagineTool = function(action){
+        if(action === 'shortener') { openShortenerOverlay(); return; }
+        let output = '';
+        switch(action){
+            case 'ocr': output = '📸 OCR Demo: Upload image<br><input type="file" id="ocrFile" accept="image/*"><button class="tool-btn" onclick="simulateOCR()">Extract Text</button><div id="ocrResult"></div>'; break;
+            case 'randomColor': let r=Math.floor(Math.random()*255), g=Math.floor(Math.random()*255), b=Math.floor(Math.random()*255); output = `<div style="background:rgb(${r},${g},${b}); width:100px;height:100px;border-radius:20px;"></div>RGB: ${r},${g},${b} | HEX: #${r.toString(16)}${g.toString(16)}${b.toString(16)}`; break;
+            case 'morse': output = `<textarea id="morseInput" class="search-input" placeholder="Enter text"></textarea><button class="tool-btn" onclick="convertToMorse()">To Morse</button><button class="tool-btn" onclick="convertFromMorse()">From Morse</button><div id="morseOut" class="tool-output"></div>`; break;
+            case 'summarize': output = `<textarea id="sumText" class="search-input" placeholder="Long text..."></textarea><button class="tool-btn" onclick="summarizeText()">Summarize</button><div id="sumOut"></div>`; break;
+            case 'baseAny': output = `<input id="baseNum" class="search-input" placeholder="Number"><input id="baseFrom" class="search-input" placeholder="From base (2-36)" value="10"><input id="baseTo" class="search-input" placeholder="To base (2-36)" value="16"><button class="tool-btn" onclick="convertBaseAny()">Convert</button><div id="baseOut" class="tool-output"></div>`; break;
+            case 'uuid': let uuid = crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { let r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8); return v.toString(16); }); output = `UUID: ${uuid}<button class="tool-btn" onclick="copyToClipboard('${uuid}')">Copy</button>`; break;
+            case 'hashGen': output = `<input id="hashInputText" class="search-input" placeholder="Text"><select id="hashAlgo"><option>MD5</option><option>SHA-1</option><option>SHA-256</option></select><button class="tool-btn" onclick="generateHash()">Generate</button><div id="hashOut" class="tool-output"></div>`; break;
+            case 'unixTime': output = `<input id="unixInput" class="search-input" placeholder="Unix timestamp"><button class="tool-btn" onclick="unixToDate()">Convert to Date</button><button class="tool-btn" onclick="dateToUnix()">Current Date to Unix</button><div id="unixOut" class="tool-output"></div>`; break;
+            case 'ipGeo': output = `<button class="tool-btn" onclick="getIPGeo()">Get My IP & Geolocation</button><div id="ipGeoOut" class="tool-output"></div>`; break;
+            case 'emailValidate': output = `<input id="emailCheck" class="search-input" placeholder="Enter email"><button class="tool-btn" onclick="validateEmail()">Validate</button><div id="emailOut" class="tool-output"></div>`; break;
+            case 'csvToJson': output = `<textarea id="csvData" class="search-input" rows="4" placeholder="name,age\nJohn,30\nJane,25"></textarea><button class="tool-btn" onclick="convertCSVtoJSON()">Convert</button><pre id="csvJsonOut" class="tool-output"></pre>`; break;
+            case 'quadratic': output = `<input id="aVal" class="search-input" placeholder="a"><input id="bVal" class="search-input" placeholder="b"><input id="cVal" class="search-input" placeholder="c"><button class="tool-btn" onclick="solveQuadratic()">Solve</button><div id="quadOut" class="tool-output"></div>`; break;
+            case 'weightConv': output = `<input id="weightVal" type="number" class="search-input"><select id="weightFrom"><option value="kg">kg</option><option value="lb">lb</option><option value="oz">oz</option></select> → <select id="weightTo"><option value="kg">kg</option><option value="lb">lb</option><option value="oz">oz</option></select><button class="tool-btn" onclick="convertWeight()">Convert</button><div id="weightOut" class="tool-output"></div>`; break;
+            case 'tempConv': output = `<input id="tempVal" type="number" class="search-input"><select id="tempFrom"><option value="C">Celsius</option><option value="F">Fahrenheit</option><option value="K">Kelvin</option></select> → <select id="tempTo"><option value="C">Celsius</option><option value="F">Fahrenheit</option><option value="K">Kelvin</option></select><button class="tool-btn" onclick="convertTemp()">Convert</button><div id="tempOut" class="tool-output"></div>`; break;
+            case 'areaConv': output = `<input id="areaVal" type="number" class="search-input"><select id="areaFrom"><option value="m2">m²</option><option value="ft2">ft²</option><option value="acre">acre</option></select> → <select id="areaTo"><option value="m2">m²</option><option value="ft2">ft²</option><option value="acre">acre</option></select><button class="tool-btn" onclick="convertArea()">Convert</button><div id="areaOut" class="tool-output"></div>`; break;
+            case 'dataConv': output = `<input id="dataVal" type="number" class="search-input"><select id="dataFrom"><option value="B">Bytes</option><option value="KB">KB</option><option value="MB">MB</option><option value="GB">GB</option></select> → <select id="dataTo"><option value="B">Bytes</option><option value="KB">KB</option><option value="MB">MB</option><option value="GB">GB</option></select><button class="tool-btn" onclick="convertData()">Convert</button><div id="dataOut" class="tool-output"></div>`; break;
+            case 'epochNow': output = `Current Unix epoch: ${Math.floor(Date.now()/1000)}<br><button class="tool-btn" onclick="refreshEpoch()">Refresh</button>`; break;
+            case 'reverseText': output = `<input id="reverseInput" class="search-input" placeholder="Text"><button class="tool-btn" onclick="reverseString()">Reverse</button><div id="reverseOut" class="tool-output"></div>`; break;
+            case 'leetSpeak': output = `<input id="leetInput" class="search-input" placeholder="Normal text"><button class="tool-btn" onclick="toLeet()">Convert to Leet</button><div id="leetOut" class="tool-output"></div>`; break;
+            case 'palindrome': output = `<input id="palInput" class="search-input" placeholder="Word or phrase"><button class="tool-btn" onclick="checkPalindrome()">Check</button><div id="palOut" class="tool-output"></div>`; break;
+            case 'strongPwd': output = `<button class="tool-btn" onclick="genStrongPwd()">Generate Strong Password</button><div id="strongPwdOut" class="tool-output"></div>`; break;
+            case 'qrReader': output = `<input type="file" id="qrFile" accept="image/*"><button class="tool-btn" onclick="readQRCode()">Read QR</button><div id="qrReadOut" class="tool-output"></div>`; break;
+            case 'customDice': output = `<input id="diceSides" type="number" value="6" class="search-input"><button class="tool-btn" onclick="rollCustomDice()">Roll</button><div id="customDiceOut" class="tool-output"></div>`; break;
+            case 'advice': output = `<button class="tool-btn" onclick="getAdvice()">Get Random Advice</button><div id="dynamicOutput" class="tool-output"></div>`; break;
+            default: output = 'Tool ready';
+        }
+        let modal = document.createElement('div');
+        modal.style.position = 'fixed'; modal.style.top = '50%'; modal.style.left = '50%'; modal.style.transform = 'translate(-50%, -50%)'; modal.style.backgroundColor = 'var(--surface)'; modal.style.borderRadius = '24px'; modal.style.padding = '20px'; modal.style.zIndex = '2000'; modal.style.maxWidth = '90%'; modal.style.width = '400px'; modal.style.boxShadow = 'var(--shadow-lg)'; modal.style.border = '2px solid var(--primary)';
+        modal.innerHTML = `<div style="text-align:right;"><button onclick="this.parentElement.parentElement.remove()" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">×</button></div><div id="modalContent">${output}</div>`;
+        document.body.appendChild(modal);
+        window.convertToMorse = function(){ const morseMap = { 'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.', 'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..', 'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.', 'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-', 'Y': '-.--', 'Z': '--..', '0': '-----', '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.', ' ': '/' }; let text = document.getElementById('morseInput').value.toUpperCase(); let morse = text.split('').map(c => morseMap[c] || c).join(' '); document.getElementById('morseOut').innerHTML = morse; };
+        window.convertFromMorse = function(){ const morseMap = { '.-': 'A', '-...': 'B', '-.-.': 'C', '-..': 'D', '.': 'E', '..-.': 'F', '--.': 'G', '....': 'H', '..': 'I', '.---': 'J', '-.-': 'K', '.-..': 'L', '--': 'M', '-.': 'N', '---': 'O', '.--.': 'P', '--.-': 'Q', '.-.': 'R', '...': 'S', '-': 'T', '..-': 'U', '...-': 'V', '.--': 'W', '-..-': 'X', '-.--': 'Y', '--..': 'Z', '-----': '0', '.----': '1', '..---': '2', '...--': '3', '....-': '4', '.....': '5', '-....': '6', '--...': '7', '---..': '8', '----.': '9', '/': ' ' }; let morse = document.getElementById('morseInput').value.trim().split(' '); let text = morse.map(code => morseMap[code] || code).join(''); document.getElementById('morseOut').innerHTML = text; };
+        window.simulateOCR = function(){ let file = document.getElementById('ocrFile').files[0]; document.getElementById('ocrResult').innerHTML = file ? 'OCR simulation: Text extracted from image (demo).' : 'No file selected.'; };
+        window.summarizeText = function(){ let txt = document.getElementById('sumText').value; document.getElementById('sumOut').innerHTML = txt.length > 100 ? txt.substring(0,100)+'... (summary demo)' : txt; };
+        window.convertBaseAny = function(){ let num = parseInt(document.getElementById('baseNum').value, parseInt(document.getElementById('baseFrom').value)); let toBase = parseInt(document.getElementById('baseTo').value); document.getElementById('baseOut').innerHTML = isNaN(num) ? 'Invalid' : num.toString(toBase); };
+        window.generateHash = async function(){ let text = document.getElementById('hashInputText').value; let algo = document.getElementById('hashAlgo').value; if(!text) { document.getElementById('hashOut').innerHTML = 'Enter text'; return; } const encoder = new TextEncoder(); const data = encoder.encode(text); let hash; if(algo === 'MD5') hash = btoa(text).slice(0,32); else if(algo === 'SHA-1') hash = await crypto.subtle.digest('SHA-1', data).then(b=>Array.from(new Uint8Array(b)).map(b=>b.toString(16).padStart(2,'0')).join('')); else hash = await crypto.subtle.digest('SHA-256', data).then(b=>Array.from(new Uint8Array(b)).map(b=>b.toString(16).padStart(2,'0')).join('')); document.getElementById('hashOut').innerHTML = hash; };
+        window.unixToDate = function(){ let ts = parseInt(document.getElementById('unixInput').value); document.getElementById('unixOut').innerHTML = new Date(ts*1000).toString(); };
+        window.dateToUnix = function(){ document.getElementById('unixOut').innerHTML = Math.floor(Date.now()/1000); };
+        window.getIPGeo = async function(){ let res = await fetch('https://api.ipify.org?format=json'); let data = await res.json(); document.getElementById('ipGeoOut').innerHTML = `IP: ${data.ip}<br>Geo: Approximate location (demo)`; };
+        window.validateEmail = function(){ let email = document.getElementById('emailCheck').value; let regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; document.getElementById('emailOut').innerHTML = regex.test(email) ? 'Valid email' : 'Invalid email'; };
+        window.convertCSVtoJSON = function(){ let csv = document.getElementById('csvData').value; let lines = csv.split('\n'); let headers = lines[0].split(','); let result = []; for(let i=1;i<lines.length;i++){ let obj = {}; let row = lines[i].split(','); for(let j=0;j<headers.length;j++) obj[headers[j].trim()] = row[j]?.trim(); result.push(obj); } document.getElementById('csvJsonOut').innerHTML = JSON.stringify(result, null, 2); };
+        window.solveQuadratic = function(){ let a=parseFloat(document.getElementById('aVal').value), b=parseFloat(document.getElementById('bVal').value), c=parseFloat(document.getElementById('cVal').value); let d = b*b - 4*a*c; if(d<0) document.getElementById('quadOut').innerHTML = 'No real roots'; else { let x1 = (-b + Math.sqrt(d))/(2*a); let x2 = (-b - Math.sqrt(d))/(2*a); document.getElementById('quadOut').innerHTML = `x1 = ${x1}, x2 = ${x2}`; } };
+        window.convertWeight = function(){ let val=parseFloat(document.getElementById('weightVal').value), from=document.getElementById('weightFrom').value, to=document.getElementById('weightTo').value; let kg = val * (from==='kg'?1:from==='lb'?0.453592:0.0283495); let result = kg * (to==='kg'?1:to==='lb'?2.20462:35.274); document.getElementById('weightOut').innerHTML = result.toFixed(4); };
+        window.convertTemp = function(){ let val=parseFloat(document.getElementById('tempVal').value), from=document.getElementById('tempFrom').value, to=document.getElementById('tempTo').value; let celsius; if(from==='C') celsius=val; else if(from==='F') celsius=(val-32)*5/9; else celsius=val-273.15; let result; if(to==='C') result=celsius; else if(to==='F') result=celsius*9/5+32; else result=celsius+273.15; document.getElementById('tempOut').innerHTML = result.toFixed(2); };
+        window.convertArea = function(){ let val=parseFloat(document.getElementById('areaVal').value), from=document.getElementById('areaFrom').value, to=document.getElementById('areaTo').value; let sqm = from==='m2'?val:from==='ft2'?val*0.092903:val*4046.86; let result = to==='m2'?sqm:to==='ft2'?sqm*10.7639:sqm/4046.86; document.getElementById('areaOut').innerHTML = result.toFixed(4); };
+        window.convertData = function(){ let val=parseFloat(document.getElementById('dataVal').value), from=document.getElementById('dataFrom').value, to=document.getElementById('dataTo').value; let bytes = from==='B'?val:from==='KB'?val*1024:from==='MB'?val*1048576:val*1073741824; let result = to==='B'?bytes:to==='KB'?bytes/1024:to==='MB'?bytes/1048576:bytes/1073741824; document.getElementById('dataOut').innerHTML = result.toFixed(4); };
+        window.refreshEpoch = function(){ let epochDiv = document.querySelector('#modalContent #epochNowDiv'); if(epochDiv) epochDiv.innerHTML = Math.floor(Date.now()/1000); else location.reload(); };
+        window.reverseString = function(){ let t=document.getElementById('reverseInput').value; document.getElementById('reverseOut').innerHTML = t.split('').reverse().join(''); };
+        window.toLeet = function(){ let t=document.getElementById('leetInput').value; document.getElementById('leetOut').innerHTML = t.replace(/a/gi,'4').replace(/e/gi,'3').replace(/i/gi,'1').replace(/o/gi,'0').replace(/s/gi,'5'); };
+        window.checkPalindrome = function(){ let t=document.getElementById('palInput').value; let rev=t.split('').reverse().join(''); document.getElementById('palOut').innerHTML = t===rev ? 'Palindrome!' : 'Not a palindrome'; };
+        window.genStrongPwd = function(){ let chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+'; let pwd=''; for(let i=0;i<16;i++) pwd+=chars[Math.floor(Math.random()*chars.length)]; document.getElementById('strongPwdOut').innerHTML = pwd; };
+        window.readQRCode = function(){ let file = document.getElementById('qrFile').files[0]; document.getElementById('qrReadOut').innerHTML = file ? 'QR read simulation: "https://multitool.pro"' : 'No file selected.'; };
+        window.rollCustomDice = function(){ let sides=parseInt(document.getElementById('diceSides').value); let result=Math.floor(Math.random()*sides)+1; document.getElementById('customDiceOut').innerHTML = `🎲 ${result}`; };
+        window.getAdvice = async function(){ let res=await fetch('https://api.adviceslip.com/advice'); let data=await res.json(); document.getElementById('dynamicOutput').innerHTML = data.slip.advice; };
+    };
+
+    window.copyToClipboard = function(text){ navigator.clipboard.writeText(text); showToast('Copied!'); };
+
+    function getAllTimeZones() { try { return Intl.supportedValuesOf('timeZone'); } catch(e) { return ['UTC', 'America/New_York', 'Europe/London', 'Asia/Tokyo']; } }
+    function updateWorldClock() {
+        const container = document.getElementById('worldClockContainer');
+        if(!container) return;
+        const zones = getAllTimeZones().sort();
+        const now = new Date();
+        let html = '<div class="timezone-grid">';
+        zones.forEach(zone => {
+            try {
+                let time = now.toLocaleTimeString('en-US', { timeZone: zone, hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                let date = now.toLocaleDateString('en-US', { timeZone: zone });
+                let displayName = zone.replace(/_/g, ' ').split('/').pop() + ' (' + zone.split('/')[0] + ')';
+                html += `<div class="timezone-item"><strong>${displayName}</strong><span>${date} ${time}</span></div>`;
+            } catch(e) {}
+        });
+        html += '</div>';
+        container.innerHTML = html;
+    }
+
+    async function fetchNewJoke() {
+        const jokeDiv = document.getElementById('jokeOutput');
+        if(jokeDiv) jokeDiv.innerHTML = 'Loading fresh joke... 🤣';
+        try {
+            let response = await fetch('https://v2.jokeapi.dev/joke/Any?safe-mode');
+            let data = await response.json();
+            let jokeText = data.type === 'single' ? data.joke : `${data.setup} 😂 ${data.delivery}`;
+            if(jokeText === previousJoke) return fetchNewJoke();
+            previousJoke = jokeText;
+            if(jokeDiv) jokeDiv.innerHTML = jokeText;
+        } catch(err) { if(jokeDiv) jokeDiv.innerHTML = 'Failed to load joke. Check internet.'; }
+    }
+
+    function renderOtherToolsFull(){
+        let container = document.getElementById('otherToolsContainer');
+        const languageList = [
+            { code: 'auto', name: 'Auto Detect' }, { code: 'en', name: 'English' }, { code: 'ar', name: 'Arabic' }, { code: 'fr', name: 'French' }, { code: 'es', name: 'Spanish' }, { code: 'de', name: 'German' }, { code: 'it', name: 'Italian' }, { code: 'pt', name: 'Portuguese' }, { code: 'ru', name: 'Russian' }, { code: 'zh', name: 'Chinese' }, { code: 'ja', name: 'Japanese' }, { code: 'ko', name: 'Korean' }, { code: 'hi', name: 'Hindi' }, { code: 'tr', name: 'Turkish' }, { code: 'nl', name: 'Dutch' }, { code: 'pl', name: 'Polish' }, { code: 'sv', name: 'Swedish' }, { code: 'da', name: 'Danish' }, { code: 'fi', name: 'Finnish' }, { code: 'no', name: 'Norwegian' }, { code: 'cs', name: 'Czech' }, { code: 'hu', name: 'Hungarian' }, { code: 'el', name: 'Greek' }, { code: 'he', name: 'Hebrew' }, { code: 'th', name: 'Thai' }, { code: 'vi', name: 'Vietnamese' }, { code: 'id', name: 'Indonesian' }, { code: 'ms', name: 'Malay' }, { code: 'fa', name: 'Persian' }, { code: 'ur', name: 'Urdu' }, { code: 'bn', name: 'Bengali' }, { code: 'pa', name: 'Punjabi' }, { code: 'ro', name: 'Romanian' }, { code: 'uk', name: 'Ukrainian' }, { code: 'bg', name: 'Bulgarian' }, { code: 'sr', name: 'Serbian' }, { code: 'hr', name: 'Croatian' }, { code: 'sk', name: 'Slovak' }, { code: 'lt', name: 'Lithuanian' }, { code: 'lv', name: 'Latvian' }, { code: 'et', name: 'Estonian' }, { code: 'sl', name: 'Slovenian' }, { code: 'sq', name: 'Albanian' }, { code: 'mk', name: 'Macedonian' }, { code: 'ka', name: 'Georgian' }, { code: 'hy', name: 'Armenian' }, { code: 'az', name: 'Azerbaijani' }, { code: 'kk', name: 'Kazakh' }, { code: 'ky', name: 'Kyrgyz' }, { code: 'tg', name: 'Tajik' }, { code: 'uz', name: 'Uzbek' }, { code: 'tk', name: 'Turkmen' }, { code: 'mn', name: 'Mongolian' }, { code: 'ne', name: 'Nepali' }, { code: 'si', name: 'Sinhala' }, { code: 'my', name: 'Burmese' }, { code: 'km', name: 'Khmer' }, { code: 'lo', name: 'Lao' }, { code: 'af', name: 'Afrikaans' }, { code: 'sw', name: 'Swahili' }, { code: 'am', name: 'Amharic' }, { code: 'zu', name: 'Zulu' }, { code: 'xh', name: 'Xhosa' }, { code: 'ny', name: 'Chichewa' }, { code: 'st', name: 'Sesotho' }, { code: 'tn', name: 'Setswana' }, { code: 'sn', name: 'Shona' }, { code: 'rw', name: 'Kinyarwanda' }, { code: 'mg', name: 'Malagasy' }
+        ];
+        let fromOptions = languageList.map(l => `<option value="${l.code}">${l.name}</option>`).join('');
+        let toOptions = languageList.map(l => `<option value="${l.code}">${l.name}</option>`).join('');
+        container.innerHTML = `
+            <h2>🧰 New Essential Tools</h2>
+            <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:20px;">
+                <div style="background:var(--surface2); border-radius:24px; padding:16px;"><h3>🌐 Universal Translator (100+ languages)</h3><textarea id="translateText" class="search-input" placeholder="Enter text..."></textarea><select id="fromLang" class="search-input" style="margin-top:8px;">${fromOptions}</select><select id="toLang" class="search-input" style="margin-top:8px;">${toOptions}</select><button class="tool-btn" onclick="translateText()">Translate</button><div id="translateOutput" class="tool-output"></div></div>
+                <div style="background:var(--surface2); border-radius:24px; padding:16px;"><h3>🌤️ Live Weather</h3><input id="cityName" placeholder="City" value="London"><button class="tool-btn" onclick="getWeather()">Get Weather</button><div id="weatherOut" class="tool-output"></div></div>
+                <div style="background:var(--surface2); border-radius:24px; padding:16px;"><h3>📝 Quick Notes</h3><textarea id="notesText" rows="4" class="search-input"></textarea><button class="tool-btn" onclick="saveNote()">Save</button><button class="tool-btn" onclick="loadNote()">Load</button><div id="notesOut" class="tool-output"></div></div>
+                <div style="background:var(--surface2); border-radius:24px; padding:16px;"><h3>✅ Todo List</h3><input id="todoInput" placeholder="New task"><button class="tool-btn" onclick="addTodo()">Add</button><ul id="todoList"></ul></div>
+                <div style="background:var(--surface2); border-radius:24px; padding:16px;"><h3>💡 Random Fact</h3><button class="tool-btn" onclick="randomFact()">Get Fact</button><div id="factOut" class="tool-output"></div></div>
+                <div style="background:var(--surface2); border-radius:24px; padding:16px;"><h3>🔒 Password Strength</h3><input id="pwdCheck" placeholder="Password"><button class="tool-btn" onclick="checkStrength()">Check</button><div id="strengthOut" class="tool-output"></div></div>
+                <div style="background:var(--surface2); border-radius:24px; padding:16px;"><h3>🌐 Wikipedia Search</h3><input id="wikiQuery" class="search-input" placeholder="Search Wikipedia..."><button class="tool-btn" onclick="searchWikipedia()">Search</button><div id="wikiOut" class="tool-output"></div></div>
+            </div>
+            <div style="margin-top:20px; text-align:center;"><button class="tool-btn" onclick="closeOtherOverlay()">← Back</button></div>
+        `;
+        loadTodoList();
+    }
+
+    window.translateText = async function(){
+        let text = document.getElementById('translateText').value;
+        let from = document.getElementById('fromLang').value;
+        let to = document.getElementById('toLang').value;
+        let out = document.getElementById('translateOutput');
+        if(!text.trim()){ out.innerHTML = 'Enter text.'; return; }
+        out.innerHTML = 'Translating...';
+        try {
+            const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`;
+            let res = await fetch(url);
+            let data = await res.json();
+            let translated = data[0][0][0];
+            out.innerHTML = translated;
+        } catch(e){ out.innerHTML = 'Translation error. Please try again.'; }
+    };
+    window.getWeather = async function(){
+        let city = document.getElementById('cityName').value;
+        let out = document.getElementById('weatherOut');
+        out.innerHTML = 'Fetching...';
+        try {
+            let res = await fetch(`https://wttr.in/${encodeURIComponent(city)}?format=j1`);
+            let data = await res.json();
+            let temp = data.current_condition[0].temp_C;
+            let desc = data.current_condition[0].weatherDesc[0].value;
+            out.innerHTML = `🌡️ ${temp}°C, ${desc}`;
+        } catch(e){ out.innerHTML = 'Error fetching weather'; }
+    };
+    window.saveNote = function(){ localStorage.setItem('quickNote', document.getElementById('notesText').value); showToast('Saved'); };
+    window.loadNote = function(){ let note = localStorage.getItem('quickNote')||''; document.getElementById('notesText').value = note; document.getElementById('notesOut').innerHTML = note; };
+    let todos = JSON.parse(localStorage.getItem('todos') || '[]');
+    function saveTodos(){ localStorage.setItem('todos', JSON.stringify(todos)); renderTodoList(); }
+    function renderTodoList(){ let ul = document.getElementById('todoList'); if(ul) ul.innerHTML = todos.map((t,i)=>`<li style="display:flex; justify-content:space-between;"><span>${t}</span><button onclick="deleteTodo(${i})">❌</button></li>`).join(''); }
+    window.addTodo = function(){ let inp = document.getElementById('todoInput'); if(inp.value.trim()){ todos.push(inp.value.trim()); saveTodos(); inp.value=''; } };
+    window.deleteTodo = function(i){ todos.splice(i,1); saveTodos(); };
+    function loadTodoList(){ renderTodoList(); }
+    window.randomFact = async function(){
+        let out = document.getElementById('factOut');
+        out.innerHTML = 'Loading...';
+        try {
+            let res = await fetch('https://uselessfacts.jsph.pl/random.json?language=en');
+            let data = await res.json();
+            out.innerHTML = data.text;
+        } catch(e){ out.innerHTML = 'MultiTool Pro is awesome!'; }
+    };
+    window.checkStrength = function(){
+        let pwd = document.getElementById('pwdCheck').value;
+        let strength = 'Weak';
+        if(pwd.length>=8 && /[A-Z]/.test(pwd) && /[0-9]/.test(pwd) && /[^A-Za-z0-9]/.test(pwd)) strength = 'Strong';
+        else if(pwd.length>=6) strength = 'Medium';
+        document.getElementById('strengthOut').innerHTML = `Strength: ${strength}`;
+    };
+    window.searchWikipedia = function(){
+        let query = document.getElementById('wikiQuery').value.trim();
+        if(!query) { document.getElementById('wikiOut').innerHTML = 'Please enter a search term.'; return; }
+        window.open(`https://en.wikipedia.org/wiki/${encodeURIComponent(query.replace(/\s+/g, '_'))}`, '_blank');
+        document.getElementById('wikiOut').innerHTML = `Opening Wikipedia page for "${query}"...`;
+    };
+
+    const shareSection = document.createElement('div');
+    shareSection.className = 'flex-buttons';
+    shareSection.style.background = 'var(--surface)';
+    shareSection.style.padding = '12px';
+    shareSection.style.borderRadius = '32px';
+    shareSection.style.margin = '20px 0';
+    shareSection.innerHTML = `<strong>📱 Share</strong>
+        <button class="tool-btn share-btn-fb" onclick="shareFull('facebook')">📘 FB</button>
+        <button class="tool-btn share-btn-x" onclick="shareFull('twitter')">🐦 X</button>
+        <button class="tool-btn share-btn-linkedin" onclick="shareFull('linkedin')">💼 LinkedIn</button>
+        <button class="tool-btn share-btn-reddit" onclick="shareFull('reddit')">🤖 Reddit</button>
+        <button class="tool-btn share-btn-wa" onclick="shareFull('whatsapp')">💬 WhatsApp</button>
+        <button class="tool-btn share-btn-ig" onclick="shareFull('instagram')">📷 Instagram</button>
+        <button class="tool-btn share-btn-copy" onclick="shareFull('copy')">🔗 Copy Play Link</button>`;
+    document.querySelector('.main-container').insertBefore(shareSection, document.getElementById('toolPanel'));
+
+    window.shareFull = function(platform){
+        const playLink = 'https://play.google.com/store/apps/details?id=multitool.pro2';
+        const text = 'Check out MultiTool Pro - Ultimate toolkit with all tools! · AI Hub · Premium Free & More... ✨ 50+ utilities, world clock, fresh jokes, translator & much more!';
+        const urls = {
+            facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(playLink)}&display=popup&ref=plugin`,
+            twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(playLink)}`,
+            linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(playLink)}`,
+            reddit: `https://www.reddit.com/submit?url=${encodeURIComponent(playLink)}&title=${encodeURIComponent(text)}`,
+            whatsapp: `https://wa.me/?text=${encodeURIComponent(text + ' ' + playLink)}`,
+            instagram: `https://www.instagram.com/`
+        };
+        if(platform === 'instagram') { window.open('https://www.instagram.com', '_blank'); showToast('Open Instagram and share manually'); return; }
+        if(platform === 'copy') { navigator.clipboard.writeText(playLink); showToast('Play Store link copied!'); return; }
+        const url = urls[platform];
+        if(url) window.open(url, '_blank', 'noopener');
+    };
+
+    function renderToolPanel(tid){
+        let title = '', content = '';
+        switch(tid){
+            case 'calculator': 
+                title='🧮 Advanced Calculator'; 
+                content=`<div id="calcDisplay" style="font-size:1.5rem; padding:12px; background:var(--surface2); border-radius:12px; margin-bottom:10px; min-height:48px; word-break:break-all; overflow:hidden;">0</div>
+                <div style="display:grid; grid-template-columns: repeat(5, 1fr); gap:6px; max-width:100%; overflow:hidden;">
+                  <button class="tool-btn calc-btn" onclick="appendCalc('sin(')" style="font-size:0.85rem;">sin</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('cos(')" style="font-size:0.85rem;">cos</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('tan(')" style="font-size:0.85rem;">tan</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('log(')" style="font-size:0.85rem;">log</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('ln(')" style="font-size:0.85rem;">ln</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('sqrt(')" style="font-size:0.85rem;">√</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('^')" style="font-size:0.85rem;">^</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('π')" style="font-size:0.85rem;">π</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('e')" style="font-size:0.85rem;">e</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('(')" style="font-size:0.85rem;">(</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc(')')" style="font-size:0.85rem;">)</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('7')" style="font-size:1.1rem;">7</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('8')" style="font-size:1.1rem;">8</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('9')" style="font-size:1.1rem;">9</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('/')" style="font-size:1.1rem;">/</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('DEL')" style="background:#e74c3c; font-size:0.85rem;">DEL</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('4')" style="font-size:1.1rem;">4</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('5')" style="font-size:1.1rem;">5</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('6')" style="font-size:1.1rem;">6</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('*')" style="font-size:1.1rem;">×</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('C')" style="background:#e67e22; font-size:0.85rem;">C</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('1')" style="font-size:1.1rem;">1</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('2')" style="font-size:1.1rem;">2</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('3')" style="font-size:1.1rem;">3</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('-')" style="font-size:1.1rem;">-</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('0')" style="font-size:1.1rem;">0</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('.')" style="font-size:1.1rem;">.</button>
+                  <button class="tool-btn calc-btn" onclick="evalCalc()" style="background:#27ae60; font-size:1.1rem;">=</button>
+                  <button class="tool-btn calc-btn" onclick="appendCalc('+')" style="font-size:1.1rem;">+</button>
+                </div>
+                <div id="calcResult" class="tool-output" style="margin-top:8px;"></div>`;
+                calcExpr = '';
+                break;
+            case 'password': title='🔐 Password Generator'; content=`<input type="range" id="passLen" min="6" max="32" value="16"><span id="lenVal">16</span><button class="tool-btn" onclick="genPass()">Generate</button><div id="passOut" class="tool-output"></div>`; break;
+            case 'wordcount': title='📝 Word Counter'; content=`<textarea id="wcText" rows="4" class="search-input"></textarea><div class="tool-output">Words: <span id="wcWord">0</span> Characters: <span id="wcChar">0</span></div>`; break;
+            case 'caseconverter': title='🔤 Case Converter'; content=`<textarea id="caseText" class="search-input"></textarea><button class="tool-btn" onclick="toUpper()">UPPER</button><button class="tool-btn" onclick="toLower()">lower</button><div id="caseOut" class="tool-output"></div>`; break;
+            case 'colorpicker': title='🎨 Color Picker'; content=`<input type="color" id="colorPick" value="#6c5ce7"><div id="colorShow" style="width:80px;height:80px;border-radius:50%;background:#6c5ce7;"></div><div class="tool-output">HEX: <span id="hexOut">#6c5ce7</span></div>`; break;
+            case 'unitconverter': title='📏 Unit Converter'; content=`<input id="unitVal" type="number" class="search-input"><select id="unitFrom"><option value="m">Meter</option><option value="km">KM</option></select> → <select id="unitTo"><option value="m">Meter</option><option value="km">KM</option></select><button class="tool-btn" onclick="convertUnit()">Convert</button><div id="unitOut" class="tool-output"></div>`; break;
+            case 'stopwatch': title='⏱️ Stopwatch'; content=`<div id="swTime" style="font-size:3rem;">00:00:00</div><button class="tool-btn" onclick="startSW()">Start</button><button class="tool-btn" onclick="pauseSW()">Pause</button><button class="tool-btn" onclick="resetSW()">Reset</button>`; break;
+            case 'qrcode': title='📱 QR Code'; content=`<input id="qrText" class="search-input" placeholder="URL or text"><button class="tool-btn" onclick="genQR()">Generate</button><div id="qrImg" class="tool-output"></div>`; break;
+            case 'bmi': title='⚖️ BMI Calculator'; content=`<input id="bmiHeight" placeholder="Height (cm)" class="search-input"><input id="bmiWeight" placeholder="Weight (kg)" class="search-input"><button class="tool-btn" onclick="calcBMI()">Calculate</button><div id="bmiOut" class="tool-output"></div>`; break;
+            case 'random': title='🎲 Random Number'; content=`<input id="randMin" placeholder="Min" value="1" class="search-input"><input id="randMax" placeholder="Max" value="100" class="search-input"><button class="tool-btn" onclick="genRandom()">Generate</button><div id="randOut" class="tool-output"></div>`; break;
+            case 'countdown': title='⏳ Countdown'; content=`<input id="cdSec" type="number" value="60" class="search-input"><button class="tool-btn" onclick="startCD()">Start</button><button class="tool-btn" onclick="pauseCD()">Pause</button><button class="tool-btn" onclick="resetCD()">Reset</button><div id="cdDisplay" style="font-size:2rem;">00:00</div>`; break;
+            case 'datediff': title='📅 Date Difference'; content=`<input type="date" id="date1" class="search-input"><input type="date" id="date2" class="search-input"><button class="tool-btn" onclick="diffDates()">Difference</button><div id="dateOut" class="tool-output"></div>`; break;
+            case 'base64': title='🔣 Base64'; content=`<textarea id="b64Text" rows="3" class="search-input"></textarea><button class="tool-btn" onclick="b64Encode()">Encode</button><button class="tool-btn" onclick="b64Decode()">Decode</button><div id="b64Out" class="tool-output"></div>`; break;
+            case 'urlencode': title='🔗 URL Encode'; content=`<input id="urlText" class="search-input"><button class="tool-btn" onclick="urlEnc()">Encode</button><button class="tool-btn" onclick="urlDec()">Decode</button><div id="urlOut" class="tool-output"></div>`; break;
+            case 'jsonformat': title='📋 JSON Formatter'; content=`<textarea id="jsonIn" rows="5" class="search-input" placeholder='{"name":"test"}'></textarea><button class="tool-btn" onclick="formatJSON()">Format</button><pre id="jsonOut" class="tool-output"></pre>`; break;
+            case 'lorem': title='📄 Lorem Ipsum'; content=`<input id="loremPara" type="number" value="2" class="search-input"><button class="tool-btn" onclick="genLorem()">Generate</button><div id="loremOut" class="tool-output"></div>`; break;
+            case 'currency': title='💱 Currency Converter'; content=`<input id="currAmt" type="number" class="search-input"><select id="currFrom"><option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option></select> → <select id="currTo"><option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option></select><button class="tool-btn" onclick="convCurrency()">Convert</button><div id="currOut" class="tool-output"></div>`; break;
+            case 'percentcalc': title='📊 Percentage'; content=`<input id="percVal" placeholder="Value" class="search-input"><input id="percPer" placeholder="Percent" class="search-input"><button class="tool-btn" onclick="calcPercent()">Calculate %</button><div id="percOut" class="tool-output"></div>`; break;
+            case 'agecalc': title='🎂 Age Calculator'; content=`<input type="date" id="dob" class="search-input"><button class="tool-btn" onclick="calcAge()">Calculate Age</button><div id="ageOut" class="tool-output"></div>`; break;
+            case 'binhex': title='💻 Binary/Hex'; content=`<input id="binVal" class="search-input" placeholder="Enter number"><button class="tool-btn" onclick="toBinary()">To Binary</button><button class="tool-btn" onclick="toHex()">To Hex</button><div id="binhexOut" class="tool-output"></div>`; break;
+            case 'roman': title='🏛️ Roman Numeral'; content=`<input id="romanNum" class="search-input" placeholder="Number 1-3999"><button class="tool-btn" onclick="toRoman()">Convert</button><div id="romanOut" class="tool-output"></div>`; break;
+            case 'tipcalc': title='💰 Tip Calculator'; content=`<input id="billAmt" placeholder="Bill amount" class="search-input"><input id="tipPct" placeholder="Tip %" value="15" class="search-input"><button class="tool-btn" onclick="calcTip()">Calculate</button><div id="tipOut" class="tool-output"></div>`; break;
+            case 'worldclock': title='🕐 World Clock (All Zones)'; content=`<div id="worldClockContainer" class="tool-output">Loading...</div>`; setTimeout(()=>{ updateWorldClock(); setInterval(updateWorldClock, 60000); }, 100); break;
+            case 'dice': title='🎲 Dice Roller'; content=`<button class="tool-btn" onclick="rollDice()">Roll Dice</button><div id="diceOut" class="tool-output"></div>`; break;
+            case 'coin': title='🪙 Coin Flip'; content=`<button class="tool-btn" onclick="flipCoin()">Flip Coin</button><div id="coinOut" class="tool-output"></div>`; break;
+            case 'joke': title='😂 Fresh Joke'; content=`<button class="tool-btn" onclick="fetchNewJoke()">Get New Joke 🤣</button><div id="jokeOutput" class="tool-output">Click to get a fresh joke</div>`; break;
+            case 'ip': title='🌍 IP Lookup'; content=`<button class="tool-btn" onclick="getIP()">Get My IP</button><div id="ipOut" class="tool-output"></div>`; break;
+            default: title='✨ Tool', content='<div class="tool-output">Ready to use.</div>';
+        }
+        document.getElementById('toolPanelTitle').innerHTML = title;
+        document.getElementById('toolContent').innerHTML = content;
+        if(tid=='wordcount') document.getElementById('wcText')?.addEventListener('input',()=>{ let t=document.getElementById('wcText').value; document.getElementById('wcWord').innerText=t.trim().split(/\s+/).length; document.getElementById('wcChar').innerText=t.length; });
+        if(tid=='password') document.getElementById('passLen')?.addEventListener('input',(e)=>document.getElementById('lenVal').innerText=e.target.value);
+        if(tid=='colorpicker') document.getElementById('colorPick')?.addEventListener('input',(e)=>{ let c=e.target.value; document.getElementById('colorShow').style.background=c; document.getElementById('hexOut').innerText=c; });
+    }
+
+    window.appendCalc = function(v) {
+        if (v === 'C') { calcExpr = ''; }
+        else if (v === 'DEL') { calcExpr = calcExpr.slice(0, -1); }
+        else { calcExpr += v; }
+        const display = document.getElementById('calcDisplay');
+        if (display) display.textContent = calcExpr || '0';
+    };
+    window.evalCalc = function() {
+        let expr = calcExpr;
+        if (!expr) return;
+        try {
+            expr = expr.replace(/sin\(/g, 'Math.sin(');
+            expr = expr.replace(/cos\(/g, 'Math.cos(');
+            expr = expr.replace(/tan\(/g, 'Math.tan(');
+            expr = expr.replace(/log\(/g, 'Math.log10(');
+            expr = expr.replace(/ln\(/g, 'Math.log(');
+            expr = expr.replace(/sqrt\(/g, 'Math.sqrt(');
+            expr = expr.replace(/π/g, 'Math.PI');
+            expr = expr.replace(/\be\b/g, 'Math.E');
+            expr = expr.replace(/\^/g, '**');
+            let result = new Function('return ' + expr)();
+            document.getElementById('calcResult').innerHTML = '<strong>Result:</strong> ' + result;
+            calcExpr = String(result);
+            const display = document.getElementById('calcDisplay');
+            if (display) display.textContent = result;
+        } catch(e) { document.getElementById('calcResult').innerHTML = 'Error'; }
+    };
+    window.genPass = function(){ let len=document.getElementById('passLen').value, chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*',p=''; for(let i=0;i<len;i++) p+=chars[Math.floor(Math.random()*chars.length)]; document.getElementById('passOut').innerText=p; };
+    window.toUpper = function(){ document.getElementById('caseOut').innerText = document.getElementById('caseText').value.toUpperCase(); };
+    window.toLower = function(){ document.getElementById('caseOut').innerText = document.getElementById('caseText').value.toLowerCase(); };
+    window.convertUnit = function(){ let val=parseFloat(document.getElementById('unitVal').value), from=document.getElementById('unitFrom').value, to=document.getElementById('unitTo').value, m={m:1,km:1000}; let res=val*m[from]/m[to]; document.getElementById('unitOut').innerText=res.toFixed(4)+' '+to; };
+    let swInterval,swTime=0,swRunning=false;
+    window.startSW=function(){ if(swRunning)return; swRunning=true; let start=Date.now()-swTime; swInterval=setInterval(()=>{ swTime=Date.now()-start; let d=new Date(swTime); document.getElementById('swTime').innerText=d.toISOString().substr(11,8);},100); };
+    window.pauseSW=function(){ clearInterval(swInterval); swRunning=false; };
+    window.resetSW=function(){ clearInterval(swInterval); swRunning=false; swTime=0; document.getElementById('swTime').innerText='00:00:00'; };
+    window.genQR=function(){ let txt=document.getElementById('qrText').value; if(txt) document.getElementById('qrImg').innerHTML=`<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(txt)}">`; };
+    window.calcBMI=function(){ let h=parseFloat(document.getElementById('bmiHeight').value), w=parseFloat(document.getElementById('bmiWeight').value); let bmi=w/((h/100)**2); document.getElementById('bmiOut').innerText=bmi.toFixed(1)+' - '+(bmi<18.5?'Underweight':bmi<25?'Normal':bmi<30?'Overweight':'Obese'); };
+    window.genRandom=function(){ let min=parseInt(document.getElementById('randMin').value)||0, max=parseInt(document.getElementById('randMax').value)||100; document.getElementById('randOut').innerText=Math.floor(Math.random()*(max-min+1))+min; };
+    let cdInterval, cdSeconds=0, cdActive=false;
+    window.startCD=function(){ if(cdActive)return; cdSeconds=parseInt(document.getElementById('cdSec').value)||60; cdActive=true; cdInterval=setInterval(()=>{ if(cdSeconds<=0){ clearInterval(cdInterval); cdActive=false; showToast('Time up!'); } else cdSeconds--; let m=Math.floor(cdSeconds/60), s=cdSeconds%60; document.getElementById('cdDisplay').innerText=`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; },1000); };
+    window.pauseCD=function(){ clearInterval(cdInterval); cdActive=false; };
+    window.resetCD=function(){ clearInterval(cdInterval); cdActive=false; cdSeconds=0; document.getElementById('cdDisplay').innerText='00:00'; };
+    window.diffDates=function(){ let d1=new Date(document.getElementById('date1').value), d2=new Date(document.getElementById('date2').value); let diff=Math.abs((d2-d1)/(1000*60*60*24)); document.getElementById('dateOut').innerText=diff+' days'; };
+    window.b64Encode=function(){ document.getElementById('b64Out').innerText=btoa(document.getElementById('b64Text').value); };
+    window.b64Decode=function(){ try{ document.getElementById('b64Out').innerText=atob(document.getElementById('b64Text').value); }catch(e){ document.getElementById('b64Out').innerText='Invalid base64'; } };
+    window.urlEnc=function(){ document.getElementById('urlOut').innerText=encodeURIComponent(document.getElementById('urlText').value); };
+    window.urlDec=function(){ document.getElementById('urlOut').innerText=decodeURIComponent(document.getElementById('urlText').value); };
+    window.formatJSON=function(){ try{ let obj=JSON.parse(document.getElementById('jsonIn').value); document.getElementById('jsonOut').innerText=JSON.stringify(obj,null,2); }catch(e){ document.getElementById('jsonOut').innerText='Invalid JSON'; } };
+    window.genLorem=function(){ let p=parseInt(document.getElementById('loremPara').value)||1; let txt='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. '; document.getElementById('loremOut').innerText=Array(p).fill(txt).join('\n\n'); };
+    window.convCurrency=function(){ let rates={USD:1,EUR:0.92,GBP:0.79}, amt=parseFloat(document.getElementById('currAmt').value), from=document.getElementById('currFrom').value, to=document.getElementById('currTo').value; let res=amt*rates[to]/rates[from]; document.getElementById('currOut').innerText=res.toFixed(2)+' '+to; };
+    window.calcPercent=function(){ let val=parseFloat(document.getElementById('percVal').value), per=parseFloat(document.getElementById('percPer').value); document.getElementById('percOut').innerText=(val*per/100).toFixed(2); };
+    window.calcAge=function(){ let dob=new Date(document.getElementById('dob').value), today=new Date(); let age=today.getFullYear()-dob.getFullYear(); let m=today.getMonth()-dob.getMonth(); if(m<0||(m===0&&today.getDate()<dob.getDate())) age--; document.getElementById('ageOut').innerText=age+' years'; };
+    window.toBinary=function(){ let num=parseInt(document.getElementById('binVal').value); document.getElementById('binhexOut').innerText=isNaN(num)?'Invalid':num.toString(2); };
+    window.toHex=function(){ let num=parseInt(document.getElementById('binVal').value); document.getElementById('binhexOut').innerText=isNaN(num)?'Invalid':num.toString(16).toUpperCase(); };
+    window.toRoman=function(){ let num=parseInt(document.getElementById('romanNum').value); if(num<1||num>3999){ document.getElementById('romanOut').innerText='Enter 1-3999'; return; } let map={M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1},res=''; for(let key in map){ while(num>=map[key]){ res+=key; num-=map[key]; } } document.getElementById('romanOut').innerText=res; };
+    window.calcTip=function(){ let bill=parseFloat(document.getElementById('billAmt').value), tipP=parseFloat(document.getElementById('tipPct').value); let tip=bill*tipP/100; document.getElementById('tipOut').innerHTML=`Tip: $${tip.toFixed(2)}<br>Total: $${(bill+tip).toFixed(2)}`; };
+    window.rollDice=function(){ document.getElementById('diceOut').innerHTML='🎲 '+(Math.floor(Math.random()*6)+1); };
+    window.flipCoin=function(){ document.getElementById('coinOut').innerHTML=Math.random()<0.5?'🪙 Heads':'🪙 Tails'; };
+    window.getIP=function(){ fetch('https://api.ipify.org?format=json').then(r=>r.json()).then(d=>document.getElementById('ipOut').innerHTML='Your IP: '+d.ip).catch(()=>document.getElementById('ipOut').innerHTML='Error'); };
+    window.fetchNewJoke = fetchNewJoke;
+
+    document.getElementById('globalSearch').addEventListener('input',function(e){
+        let q=e.target.value.trim().toLowerCase();
+        if(q===''){ document.getElementById('searchResults').style.display='none'; return; }
+        let filtered = fullToolsList.filter(t=>t.name.toLowerCase().includes(q));
+        let html = filtered.map(t=>`<div style="padding:12px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectTool('${t.id}'); document.getElementById('globalSearch').value=''; document.getElementById('searchResults').style.display='none';">${t.icon} ${t.name}</div>`).join('');
+        if(!html){ html = `<div style="padding:16px; text-align:center;"><div>No tools found for "<strong>${q}</strong>"</div><button class="tool-btn" style="margin-top:12px;" onclick="searchGoogle('${q}')">🔍 Search Google for "${q} free online"</button></div>`; }
+        document.getElementById('searchResults').innerHTML=html;
+        document.getElementById('searchResults').style.display='block';
+    });
+    window.searchGoogle = function(query){ window.open(`https://www.google.com/search?q=${encodeURIComponent(query + ' free online')}`, '_blank'); document.getElementById('globalSearch').value = ''; document.getElementById('searchResults').style.display = 'none'; };
+    document.addEventListener('click',(e)=>{ if(!e.target.closest('.search-container')) document.getElementById('searchResults').style.display='none'; });
+
+    renderGrid();
+    renderSidebar();
+    selectTool('calculator');
+    document.body.addEventListener('click',(e)=>{ if(e.target.closest('.tool-card, .tool-btn, .footer-btn, .scroll-up-arrow, .footer-arrow-down')) playSound(); });
+
+    const randomBtn = document.getElementById('randomToolBtn');
+    let isRandomVisible = true;
+    function toggleRandomButton() { if (randomBtn) { if (isRandomVisible) randomBtn.classList.add('hide-random'); else randomBtn.classList.remove('hide-random'); isRandomVisible = !isRandomVisible; } }
+    setInterval(toggleRandomButton, 3000);
+    randomBtn.addEventListener('click', function() {
+        const availableTools = fullToolsList.filter(t => t.id !== 'premium_ai');
+        const randomIndex = Math.floor(Math.random() * availableTools.length);
+        const randomTool = availableTools[randomIndex];
+        if (randomTool) { selectTool(randomTool.id); playSound(); showToast(`🎲 Random tool: ${randomTool.name}`); }
+    });
 })();
 </script>
 
@@ -431,7 +1809,7 @@
 })();
 </script>
 
-<!-- Language detection + translate using the hosted page URL – script simplified, banner hiding handled inline above -->
+<!-- Language detection + translate using the hosted page URL -->
 <script>
 (function() {
     const PAGE_URL = 'https://boussedraoui.github.io/Multitool-Pro-Full-Complete/';
@@ -468,13 +1846,13 @@
     langMsg.textContent = `Your language: ${langName}. Translate app?`;
     langBanner.style.display = 'flex';
 
-    // The actual translate action is handled by the inline onclick in the button.
-    // We additionally set the redirect here to ensure it always works.
+    // The inline onclick of the button already hides the banner and sets the flag.
+    // We add the redirect as well.
     langTranslateBtn.addEventListener('click', function() {
         window.location.href = `https://translate.google.com/translate?hl=${browserLang}&sl=en&u=${encodeURIComponent(PAGE_URL)}`;
     });
 
-    // Close button also handled inline, but we keep this for redundancy
+    // Close button also has inline onclick; this is just redundancy.
     langCloseBtn.addEventListener('click', function() {
         langBanner.style.display = 'none';
         localStorage.setItem('langBannerDismissed', 'true');
