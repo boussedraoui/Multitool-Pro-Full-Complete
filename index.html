@@ -1917,95 +1917,110 @@
     const STORAGE_KEY = 'gtProtectionPopupShown';
     const PAGE_LOAD_KEY = 'gtProtectionPageLoad';
 
-    // Multi-language messages – updated French message with green Google Translate note
+    // Multi-language messages including the security warning
     const messages = {
         en: {
             title: '🛡️ Google Translate Notice',
-            message: 'This message from Google Translate is normal and appears for your protection. You can continue browsing in your translated language or return to the original English page.',
+            message: 'This message from Google Translate is normal and appears for your protection.',
+            securityWarning: 'Form not accepted. For security reasons when using Google Translate, do not send information in this type of form.',
             continue: 'Continue',
             returnOriginal: 'Return to Original'
         },
         ar: {
             title: '🛡️ إشعار Google Translate',
-            message: 'هذه الرسالة من Google Translate أمر عادي وتظهر من أجل الحماية. يمكنك متابعة التصفح بلغتك المترجمة أو العودة إلى الصفحة الأصلية باللغة الإنجليزية.',
+            message: 'هذه الرسالة من Google Translate أمر عادي وتظهر من أجل الحماية.',
+            securityWarning: 'النموذج غير مقبول. لأسباب أمنية عند استخدام الترجمة من Google، لا ترسل معلومات في هذا النوع من النماذج.',
             continue: 'استمرار',
             returnOriginal: 'العودة إلى الأصل'
         },
         fr: {
             title: '🛡️ Avis Google Translate',
-            message: 'Ce message de Google Translate est normal et apparaît pour votre protection. <span style="color:#2ecc71;">Message de Google Translate : Cette page a été traduite automatiquement.</span> Vous pouvez continuer à naviguer dans votre langue traduite ou revenir à la page originale en anglais.',
+            message: 'Ce message de Google Translate est normal et apparaît pour votre protection.',
+            securityWarning: 'Formulaire non accepté. Pour des raisons de sécurité lorsque vous utilisez Google Traduction, n\'envoyez pas d\'informations dans ce type de formulaire.',
             continue: 'Continuer',
             returnOriginal: 'Retour à l\'original'
         },
         es: {
             title: '🛡️ Aviso de Google Translate',
-            message: 'Este mensaje de Google Translate es normal y aparece para su protección. Puede continuar navegando en su idioma traducido o volver a la página original en inglés.',
+            message: 'Este mensaje de Google Translate es normal y aparece para su protección.',
+            securityWarning: 'Formulario no aceptado. Por razones de seguridad al usar el Traductor de Google, no envíe información en este tipo de formulario.',
             continue: 'Continuar',
             returnOriginal: 'Volver al original'
         },
         de: {
             title: '🛡️ Google Translate Hinweis',
-            message: 'Diese Nachricht von Google Translate ist normal und erscheint zu Ihrem Schutz. Sie können in Ihrer übersetzten Sprache weitersurfen oder zur englischen Originalseite zurückkehren.',
+            message: 'Diese Nachricht von Google Translate ist normal und erscheint zu Ihrem Schutz.',
+            securityWarning: 'Formular nicht akzeptiert. Aus Sicherheitsgründen bei Verwendung von Google Übersetzer senden Sie keine Informationen in dieser Art von Formular.',
             continue: 'Fortfahren',
             returnOriginal: 'Zurück zum Original'
         },
         it: {
             title: '🛡️ Avviso Google Translate',
-            message: 'Questo messaggio di Google Translate è normale e appare per la tua protezione. Puoi continuare a navigare nella tua lingua tradotta o tornare alla pagina originale in inglese.',
+            message: 'Questo messaggio di Google Translate è normale e appare per la tua protezione.',
+            securityWarning: 'Modulo non accettato. Per motivi di sicurezza quando si utilizza Google Traduttore, non inviare informazioni in questo tipo di modulo.',
             continue: 'Continua',
             returnOriginal: 'Torna all\'originale'
         },
         pt: {
             title: '🛡️ Aviso do Google Translate',
-            message: 'Esta mensagem do Google Translate é normal e aparece para sua proteção. Você pode continuar navegando no seu idioma traduzido ou retornar à página original em inglês.',
+            message: 'Esta mensagem do Google Translate é normal e aparece para sua proteção.',
+            securityWarning: 'Formulário não aceito. Por razões de segurança ao usar o Google Tradutor, não envie informações neste tipo de formulário.',
             continue: 'Continuar',
             returnOriginal: 'Voltar ao original'
         },
         ru: {
             title: '🛡️ Уведомление Google Translate',
-            message: 'Это сообщение от Google Translate является нормальным и появляется для вашей защиты. Вы можете продолжить просмотр на переведенном языке или вернуться к оригинальной английской странице.',
+            message: 'Это сообщение от Google Translate является нормальным и появляется для вашей защиты.',
+            securityWarning: 'Форма не принята. По соображениям безопасности при использовании Google Переводчика не отправляйте информацию в подобной форме.',
             continue: 'Продолжить',
             returnOriginal: 'Вернуться к оригиналу'
         },
         zh: {
             title: '🛡️ Google 翻译通知',
-            message: '来自 Google 翻译的此消息是正常的，出于保护目的而显示。您可以继续使用翻译后的语言浏览，或返回原始英文页面。',
+            message: '来自 Google 翻译的此消息是正常的，出于保护目的而显示。',
+            securityWarning: '表单未接受。出于安全原因，使用谷歌翻译时，请勿在此类表单中发送信息。',
             continue: '继续',
             returnOriginal: '返回原文'
         },
         ja: {
             title: '🛡️ Google 翻訳のお知らせ',
-            message: 'Google 翻訳からのこのメッセージは正常であり、保護のために表示されます。翻訳された言語で閲覧を続けるか、元の英語ページに戻ることができます。',
+            message: 'Google 翻訳からのこのメッセージは正常であり、保護のために表示されます。',
+            securityWarning: 'フォームは受け付けられませんでした。Google翻訳の使用時のセキュリティ上の理由により、この種のフォームに情報を送信しないでください。',
             continue: '続ける',
             returnOriginal: '元のページに戻る'
         },
         ko: {
             title: '🛡️ Google 번역 알림',
-            message: 'Google 번역의 이 메시지는 정상적인 보호 메시지입니다. 번역된 언어로 계속 탐색하거나 원래 영어 페이지로 돌아갈 수 있습니다.',
+            message: 'Google 번역의 이 메시지는 정상적인 보호 메시지입니다.',
+            securityWarning: '양식이 허용되지 않았습니다. Google 번역 사용 시 보안상의 이유로 이러한 유형의 양식에 정보를 보내지 마십시오.',
             continue: '계속하기',
             returnOriginal: '원본으로 돌아가기'
         },
         hi: {
             title: '🛡️ Google अनुवाद सूचना',
-            message: 'Google अनुवाद का यह संदेश सामान्य है और आपकी सुरक्षा के लिए प्रकट होता है। आप अपनी अनुवादित भाषा में ब्राउज़िंग जारी रख सकते हैं या मूल अंग्रेज़ी पृष्ठ पर वापस लौट सकते हैं।',
+            message: 'Google अनुवाद का यह संदेश सामान्य है और आपकी सुरक्षा के लिए प्रकट होता है।',
+            securityWarning: 'फ़ॉर्म स्वीकार नहीं किया गया. Google अनुवाद का उपयोग करते समय सुरक्षा कारणों से, इस प्रकार के फ़ॉर्म में जानकारी न भेजें।',
             continue: 'जारी रखें',
             returnOriginal: 'मूल पर वापस जाएं'
         },
         tr: {
             title: '🛡️ Google Çeviri Bildirimi',
-            message: 'Google Translate\'ten gelen bu mesaj normaldir ve koruma amacıyla görünür. Çevrilmiş dilinizde gezinmeye devam edebilir veya orijinal İngilizce sayfaya dönebilirsiniz.',
+            message: 'Google Translate\'ten gelen bu mesaj normaldir ve koruma amacıyla görünür.',
+            securityWarning: 'Form kabul edilmedi. Google Translate kullanırken güvenlik nedeniyle bu tür formlara bilgi göndermeyin.',
             continue: 'Devam Et',
             returnOriginal: 'Orijinale Dön'
         },
         nl: {
             title: '🛡️ Google Translate Melding',
-            message: 'Dit bericht van Google Translate is normaal en verschijnt voor uw bescherming. U kunt doorgaan met browsen in uw vertaalde taal of terugkeren naar de originele Engelse pagina.',
+            message: 'Dit bericht van Google Translate is normaal en verschijnt voor uw bescherming.',
+            securityWarning: 'Formulier niet geaccepteerd. Stuur om veiligheidsredenen bij gebruik van Google Translate geen informatie in dit type formulier.',
             continue: 'Doorgaan',
             returnOriginal: 'Terug naar origineel'
         },
         pl: {
             title: '🛡️ Powiadomienie Google Translate',
-            message: 'Ta wiadomość od Google Translate jest normalna i pojawia się w celu ochrony. Możesz kontynuować przeglądanie w przetłumaczonym języku lub wrócić do oryginalnej angielskiej strony.',
+            message: 'Ta wiadomość od Google Translate jest normalna i pojawia się w celu ochrony.',
+            securityWarning: 'Formularz nie został zaakceptowany. Ze względów bezpieczeństwa podczas korzystania z Tłumacza Google nie wysyłaj informacji w tego typu formularzu.',
             continue: 'Kontynuuj',
             returnOriginal: 'Powrót do oryginału'
         }
@@ -2055,7 +2070,10 @@
                 <button class="gt-close-x" id="gtCloseX">✕</button>
                 <div class="gt-icon">🛡️🔤</div>
                 <div class="gt-title">${localized.title}</div>
-                <div class="gt-message">${localized.message}</div>
+                <div class="gt-message">
+                    ${localized.message}<br>
+                    <span style="color:#2ecc71;">${localized.securityWarning}</span>
+                </div>
                 <div class="gt-buttons">
                     <button class="gt-btn gt-btn-continue" id="gtContinueBtn">${localized.continue}</button>
                     <button class="gt-btn gt-btn-original" id="gtReturnBtn">${localized.returnOriginal}</button>
