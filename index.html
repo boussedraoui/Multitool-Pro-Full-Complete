@@ -39,7 +39,6 @@
       "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "reviewCount": "1500" }
     }
     </script>
-    <!-- Enhanced fonts for the title -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -59,7 +58,6 @@
             --shadow: 0 10px 30px -12px rgba(0,0,0,0.1); 
             --shadow-lg: 0 20px 40px -12px rgba(0,0,0,0.2); 
             --radius: 28px; 
-            --font-scale: 1.1;
         }
         [data-theme="dark"] { 
             --bg: #0f0f1a; 
@@ -83,92 +81,57 @@
         .main-container { max-width: 1400px; margin: 0 auto; padding: 30px 24px 40px; }
         .hero { text-align: center; padding: 30px 20px 24px; }
         
-        /* ===== ENHANCED TITLE STYLES ===== */
+        /* ===== TITLE: MultiTOOL (Rainbow 1) ===== */
         .hero h1 { 
-            font-family: 'Poppins', 'Montserrat', system-ui, -apple-system, sans-serif;
+            font-family: 'Poppins', 'Montserrat', system-ui, sans-serif;
             font-size: 5rem; 
             font-weight: 900; 
-            width: 100%;
-            background: linear-gradient(135deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000);
+            display: inline-block;
+            background: linear-gradient(135deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff);
             background-size: 400% 400%;
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 12px; 
             letter-spacing: -0.02em;
-            animation: rainbowMove 6s ease infinite, upDownMotion 2.2s ease-in-out infinite, eyeEnter 0.9s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
-            transform-origin: center;
-            text-shadow: 0 0 8px rgba(255,255,255,0.3);
-            transition: text-shadow 0.2s ease;
-            display: inline-block;
-            padding: 0 8px;
+            animation: rainbow1 6s ease infinite, floatTitle 2.2s ease-in-out infinite;
+            text-shadow: none;
+            filter: drop-shadow(0 0 6px rgba(0,0,0,0.2));
         }
-        /* Hover effect: expands glow and slightly scales */
-        .hero h1:hover {
-            transform: scale(1.03);
-            text-shadow: 0 0 20px rgba(255,255,255,0.7), 0 0 10px rgba(255,215,0,0.5);
-            transition: transform 0.25s ease, text-shadow 0.2s ease;
-        }
-        @keyframes rainbowMove {
+        @keyframes rainbow1 {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-        @keyframes upDownMotion {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-            100% { transform: translateY(0px); }
+        @keyframes floatTitle {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
         }
-        @keyframes eyeEnter {
-            0% {
-                transform: scale(0.92) translateY(0);
-                opacity: 0.7;
-                letter-spacing: -0.03em;
-                text-shadow: 0 0 0px rgba(0,0,0,0);
-            }
-            35% {
-                transform: scale(1.12) translateY(-4px);
-                letter-spacing: 0.02em;
-                text-shadow: 0 0 18px rgba(255,255,255,0.8), 0 0 25px rgba(255,215,0,0.6);
-            }
-            70% {
-                transform: scale(0.98) translateY(2px);
-                letter-spacing: -0.01em;
-                text-shadow: 0 0 12px rgba(255,255,255,0.5);
-            }
-            100% {
-                transform: scale(1) translateY(0);
-                letter-spacing: -0.02em;
-                opacity: 1;
-            }
-        }
-        /* GOLDEN SHINY FRAME + STARS around "Pro" */
+        
+        /* ===== Pro frame: golden shiny with stars (crisp) ===== */
         .hero h1 .pro-frame {
             display: inline-block;
-            background: linear-gradient(145deg, #FFD700, #FFA500, #FFD700, #FFB347);
-            background-size: 300% 300%;
-            backdrop-filter: blur(2px);
-            border: 2px solid rgba(255, 215, 0, 0.9);
-            border-radius: 60px;
-            padding: 0.1em 0.5em;
-            margin-left: 0.1em;
-            margin-right: 0.1em;
-            box-shadow: 0 0 15px rgba(255,215,0,0.8), 0 0 8px rgba(255,255,0,0.5), inset 0 1px 2px rgba(255,255,200,0.8);
-            text-shadow: 0 0 6px rgba(0,0,0,0.4);
-            transition: all 0.2s ease;
+            background: linear-gradient(145deg, #FFD700, #FFA500, #FFD700, #FFC125);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
             font-weight: 900;
-            letter-spacing: 1px;
-            animation: goldenShine 1.8s infinite alternate, starPulse 0.8s ease-in-out infinite;
+            border: 2px solid rgba(255, 215, 0, 0.8);
+            border-radius: 60px;
+            padding: 0.1em 0.6em;
+            margin: 0 0.1em;
+            box-shadow: 0 0 12px rgba(255,215,0,0.8), inset 0 1px 2px rgba(255,255,200,0.9);
+            text-shadow: 0 0 4px rgba(0,0,0,0.3);
             position: relative;
+            animation: goldenPulse 1.8s infinite alternate;
         }
-        /* Star decorations around Pro */
         .hero h1 .pro-frame::before,
         .hero h1 .pro-frame::after {
             content: "✨";
             position: absolute;
-            font-size: 1.2rem;
-            top: -10px;
-            opacity: 0.9;
+            font-size: 1.4rem;
+            top: -12px;
             filter: drop-shadow(0 0 3px gold);
             animation: starFloat 1.5s infinite alternate;
         }
@@ -179,49 +142,72 @@
             right: -20px;
             animation-delay: 0.5s;
         }
-        @keyframes goldenShine {
-            0% { box-shadow: 0 0 5px gold, inset 0 1px 1px rgba(255,255,200,0.5); border-color: #FFD700; background-position: 0% 50%; }
-            100% { box-shadow: 0 0 25px #FFD700, 0 0 15px #FFA500, inset 0 1px 2px rgba(255,255,200,0.9); border-color: #FFB347; background-position: 100% 50%; }
-        }
-        @keyframes starPulse {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.03); }
+        @keyframes goldenPulse {
+            0% { box-shadow: 0 0 4px gold, inset 0 1px 1px rgba(255,255,200,0.5); border-color: #FFD700; background-position: 0% 50%; }
+            100% { box-shadow: 0 0 18px #FFD700, 0 0 8px #FFA500, inset 0 1px 2px rgba(255,255,200,0.9); border-color: #FFB347; background-position: 100% 50%; }
         }
         @keyframes starFloat {
-            0% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
-            100% { transform: translateY(-5px) rotate(15deg); opacity: 1; }
+            0% { transform: translateY(0px) rotate(0deg); opacity: 0.9; }
+            100% { transform: translateY(-6px) rotate(12deg); opacity: 1; }
         }
-        /* Rainbow I 💗 TOOLS with beating heart */
+        
+        /* ===== FULL + Complete (Rainbow 2) ===== */
+        .full-complete-badge { 
+            font-size: 2.6rem; 
+            font-weight: 900; 
+            background: linear-gradient(135deg, #f7971e, #ffd200, #00c6ff, #0072ff, #a8c0ff, #3f2b96);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbow2 4s ease infinite, pulseBadge 1.6s ease-in-out infinite;
+            display: inline-block; 
+            margin: 16px 0 8px; 
+            letter-spacing: 3px;
+            white-space: nowrap;
+        }
+        @keyframes rainbow2 {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes pulseBadge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* ===== I 💗 TOOLS (Rainbow 3, beating heart, crisp) ===== */
         .love-text {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 1.6rem;
+            font-size: 1.7rem;
             font-weight: 900;
-            background: linear-gradient(135deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff, #ff00ff);
-            background-size: 300% 300%;
+            background: linear-gradient(135deg, #ff0844, #ffb199, #ff4e50, #f9d423, #00b4db, #0083b0, #6a11cb, #2575fc);
+            background-size: 400% 400%;
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: loveRainbow 4s ease infinite, heartbeatPulse 1.2s ease-in-out infinite;
+            animation: rainbow3 5s ease infinite, heartbeatPulse 1.2s ease-in-out infinite;
             white-space: nowrap;
-            text-shadow: 0 0 12px rgba(255,255,255,0.8), 0 0 8px rgba(255,0,0,0.5);
+            text-shadow: 0 0 6px rgba(255,255,255,0.5);
             letter-spacing: 1px;
         }
-        @keyframes loveRainbow {
+        @keyframes rainbow3 {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
         @keyframes heartbeatPulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); text-shadow: 0 0 8px rgba(255,0,0,0.6); }
-            25% { transform: translate(-50%, -50%) scale(1.2); text-shadow: 0 0 25px rgba(255,0,0,0.9), 0 0 12px gold; }
+            0%, 100% { transform: translate(-50%, -50%) scale(1); text-shadow: 0 0 8px rgba(255,8,68,0.6); }
+            25% { transform: translate(-50%, -50%) scale(1.2); text-shadow: 0 0 20px rgba(255,8,68,0.9); }
             35% { transform: translate(-50%, -50%) scale(1.1); }
-            45% { transform: translate(-50%, -50%) scale(1.3); text-shadow: 0 0 30px rgba(255,0,0,1), 0 0 18px orange; }
+            45% { transform: translate(-50%, -50%) scale(1.25); text-shadow: 0 0 28px rgba(255,8,68,1); }
             55% { transform: translate(-50%, -50%) scale(1); }
         }
-        /* Premium ribbon up-down motion */
+        
+        /* Premium ribbon up-down */
         .premium-ribbon { 
             background: linear-gradient(135deg, #f7b731, #f0c060); 
             color: #1a1a2e; 
@@ -237,26 +223,8 @@
         }
         @keyframes ribbonBounce {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-6px); }
+            50% { transform: translateY(-5px); }
         }
-
-        /* Rest of existing styles unchanged */
-        .full-complete-badge { 
-            font-size: 2.8rem; 
-            font-weight: 900; 
-            background: linear-gradient(135deg, #ff0000, #ff9900, #33cc33, #3399ff, #9900cc, #ff0099); 
-            background-size: 300% 300%; 
-            -webkit-background-clip: text; 
-            background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            animation: fullCompletePulse 1.8s ease-in-out infinite, gradientShift 3s ease infinite; 
-            display: inline-block; 
-            margin: 16px 0 8px; 
-            letter-spacing: 3px;
-            white-space: nowrap;
-        }
-        @keyframes fullCompletePulse { 0%,100%{transform:scale(1) translateY(0)}20%{transform:scale(1.15) translateY(-4px)}40%{transform:scale(0.92) translateY(2px)}60%{transform:scale(1.1) translateY(-2px)}80%{transform:scale(0.96) translateY(1px)}}
-        @keyframes gradientShift {0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
         
         .subtitle { font-size: 1.4rem; color: var(--text2); margin-top: 12px; font-weight: 500; }
         .more-text { text-align: center; font-size: 1.2rem; font-weight: 700; color: var(--primary); margin-top: 12px; letter-spacing: 1px; }
@@ -282,7 +250,6 @@
             0% { transform: rotate(0deg) translateX(120px) rotate(0deg); }
             100% { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
         }
-        
         .love-phrase {
             text-align: center;
             margin: 20px 0 12px;
@@ -292,11 +259,8 @@
             align-items: center;
             min-height: 140px;
         }
-        .premium-ribbon {
-            position: relative;
-            z-index: 3;
-        }
         
+        /* ===== Rest of original styles (unchanged, kept fully) ===== */
         .search-container { max-width: 640px; margin: 24px auto 30px; }
         .search-input, textarea, select { width: 100%; padding: 16px 24px; border-radius: 80px; border: 2px solid var(--border); background: var(--surface); font-size: 1.05rem; transition: all 0.2s; font-family: inherit; }
         .search-results { background: var(--surface); border-radius: 28px; margin-top: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); max-height: 480px; overflow-y: auto; font-size: 1rem; }
@@ -399,13 +363,9 @@
             .tool-card .tool-name { font-size: 1rem; }
             .tool-panel { padding: 24px 20px; }
             .tool-btn { padding: 12px 24px; font-size: 0.9rem; }
-            .hero h1 .pro-frame::before,
-            .hero h1 .pro-frame::after {
-                font-size: 0.9rem;
-                top: -6px;
-            }
-            .hero h1 .pro-frame::before { left: -12px; }
-            .hero h1 .pro-frame::after { right: -12px; }
+            .hero h1 .pro-frame::before, .hero h1 .pro-frame::after { font-size: 1rem; top: -8px; }
+            .hero h1 .pro-frame::before { left: -14px; }
+            .hero h1 .pro-frame::after { right: -14px; }
         }
     </style>
 </head>
