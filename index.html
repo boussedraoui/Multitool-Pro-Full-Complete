@@ -83,75 +83,105 @@
         .main-container { max-width: 1400px; margin: 0 auto; padding: 30px 24px 40px; }
         .hero { text-align: center; padding: 30px 20px 24px; }
         
-        /* ===== ENHANCED TITLE STYLES - more awesome, eye-catching effect ===== */
+        /* ===== ENHANCED TITLE STYLES - Rainbow colors + Up/Down movement + Pro frame ===== */
         .hero h1 { 
             font-family: 'Poppins', 'Montserrat', system-ui, -apple-system, sans-serif;
             font-size: 5rem; 
             font-weight: 900; 
             width: 100%;
-            background: linear-gradient(135deg, #1e3c72, #2a5298, #8e44ad, #e84393, #ff6b6b, #feca57);
-            background-size: 300% 300%;
+            /* FULL RAINBOW GRADIENT - all colors */
+            background: linear-gradient(135deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000);
+            background-size: 400% 400%;
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 12px; 
             letter-spacing: -0.02em;
-            /* original gradient animation */
-            animation: titleShift 5s ease infinite;
-            /* NEW: Eye-catching entrance animation (enters the eye and returns) */
-            animation: eyeEnter 0.9s cubic-bezier(0.34, 1.2, 0.64, 1) forwards, titleShift 5s ease infinite;
+            animation: rainbowMove 6s ease infinite, upDownMotion 2.2s ease-in-out infinite, eyeEnter 0.9s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
             transform-origin: center;
-            text-shadow: 0 0 8px rgba(108, 92, 231, 0.3), 0 0 16px rgba(0, 206, 201, 0.2);
-            transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1), text-shadow 0.2s ease, letter-spacing 0.2s ease;
+            text-shadow: 0 0 8px rgba(255,255,255,0.3);
+            transition: text-shadow 0.2s ease;
             display: inline-block;
             padding: 0 8px;
         }
         /* Hover effect: expands glow and slightly scales */
         .hero h1:hover {
             transform: scale(1.03);
-            text-shadow: 0 0 20px rgba(108, 92, 231, 0.7), 0 0 30px rgba(0, 206, 201, 0.6), 0 0 8px rgba(255,255,255,0.5);
-            letter-spacing: 1px;
-            transition: transform 0.25s ease, text-shadow 0.2s ease, letter-spacing 0.2s ease;
+            text-shadow: 0 0 20px rgba(255,255,255,0.7), 0 0 10px rgba(255,215,0,0.5);
+            transition: transform 0.25s ease, text-shadow 0.2s ease;
         }
-        @keyframes eyeEnter {
-            0% {
-                transform: scale(0.92);
-                opacity: 0.7;
-                letter-spacing: -0.03em;
-                text-shadow: 0 0 0px rgba(108,92,231,0), 0 0 0px rgba(0,206,201,0);
-            }
-            35% {
-                transform: scale(1.12);
-                letter-spacing: 0.02em;
-                text-shadow: 0 0 18px rgba(108,92,231,0.8), 0 0 25px rgba(0,206,201,0.6), 0 0 8px rgba(255,215,0,0.5);
-            }
-            70% {
-                transform: scale(0.98);
-                letter-spacing: -0.01em;
-                text-shadow: 0 0 12px rgba(108,92,231,0.6), 0 0 20px rgba(0,206,201,0.4);
-            }
-            100% {
-                transform: scale(1);
-                letter-spacing: -0.02em;
-                text-shadow: 0 0 8px rgba(108,92,231,0.4), 0 0 16px rgba(0,206,201,0.3);
-                opacity: 1;
-            }
-        }
-        @keyframes titleShift {
+        /* Rainbow background shifting */
+        @keyframes rainbowMove {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+        /* Up and down floating motion */
+        @keyframes upDownMotion {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+        /* Eye-catching entrance (enters the eye and returns) */
+        @keyframes eyeEnter {
+            0% {
+                transform: scale(0.92) translateY(0);
+                opacity: 0.7;
+                letter-spacing: -0.03em;
+                text-shadow: 0 0 0px rgba(0,0,0,0);
+            }
+            35% {
+                transform: scale(1.12) translateY(-4px);
+                letter-spacing: 0.02em;
+                text-shadow: 0 0 18px rgba(255,255,255,0.8), 0 0 25px rgba(255,215,0,0.6);
+            }
+            70% {
+                transform: scale(0.98) translateY(2px);
+                letter-spacing: -0.01em;
+                text-shadow: 0 0 12px rgba(255,255,255,0.5);
+            }
+            100% {
+                transform: scale(1) translateY(0);
+                letter-spacing: -0.02em;
+                opacity: 1;
+            }
+        }
+        /* Beautiful frame around "Pro" */
+        .hero h1 .pro-frame {
+            display: inline-block;
+            background: linear-gradient(145deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+            backdrop-filter: blur(4px);
+            border: 2px solid rgba(255,255,255,0.6);
+            border-radius: 60px;
+            padding: 0.1em 0.5em;
+            margin-left: 0.1em;
+            margin-right: 0.1em;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.5);
+            text-shadow: 0 0 6px rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+        .hero h1:hover .pro-frame {
+            border-color: gold;
+            box-shadow: 0 0 20px rgba(255,215,0,0.8), inset 0 1px 1px rgba(255,255,255,0.8);
+            transform: scale(1.02);
+        }
         /* Responsive font adjustment for mobile */
         @media (max-width: 740px) {
             .hero h1 {
-                font-size: 3rem;
+                font-size: 2.8rem;
                 letter-spacing: -0.01em;
             }
             @keyframes eyeEnter {
                 0% { transform: scale(0.95); opacity: 0.8; letter-spacing: -0.02em; }
                 35% { transform: scale(1.08); letter-spacing: 0.01em; }
                 100% { transform: scale(1); letter-spacing: -0.01em; }
+            }
+            @keyframes upDownMotion {
+                0% { transform: translateY(0px); }
+                50% { transform: translateY(-5px); }
+                100% { transform: translateY(0px); }
             }
         }
         /* Rest of existing styles unchanged */
@@ -340,7 +370,7 @@
         .gt-btn-return-red { width: 26px; height: 26px; background: red !important; padding: 0 !important; margin: 0 !important; font-size: 0 !important; border-radius: 6px; display: inline-block; cursor: pointer; }
         @media (max-width: 740px) {
             body { font-size: 16px; }
-            .hero h1 { font-size: 3rem; }
+            .hero h1 { font-size: 2.8rem; }
             .full-complete-badge { font-size: 1.8rem; white-space: normal; }
             .orbiting-love { width: 140px; height: 140px; margin: -70px 0 0 -70px; }
             @keyframes orbit { 0% { transform: rotate(0deg) translateX(90px) rotate(0deg); } 100% { transform: rotate(360deg) translateX(90px) rotate(-360deg); } }
@@ -374,7 +404,7 @@
 <div id="onlineOverlay" class="online-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">🌐 Online Tools · Free & Useful</h2><p style="text-align:center;margin-bottom:20px;font-size:1.1rem;">30+ powerful online tools – click to open</p><div id="onlineGrid" class="online-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeOnlineOverlay()">← Back to main tools</button></div></div></div>
 <main class="main-container" id="mainPage">
     <div class="hero">
-        <h1>MultiTool Pro</h1>
+        <h1>MultiTOOL <span class="pro-frame">Pro</span></h1>
         <div class="full-complete-badge">FULL + Complete</div>
         <p class="subtitle">All Tools · AI Hub · Premium Free</p>
         <div class="more-text">& More...</div>
