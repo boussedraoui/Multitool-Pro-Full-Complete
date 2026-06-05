@@ -39,6 +39,8 @@
       "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "reviewCount": "1500" }
     }
     </script>
+    <!-- Enhanced fonts for the title -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         :root { 
@@ -80,24 +82,79 @@
         }
         .main-container { max-width: 1400px; margin: 0 auto; padding: 30px 24px 40px; }
         .hero { text-align: center; padding: 30px 20px 24px; }
+        
+        /* ===== ENHANCED TITLE STYLES - more awesome, eye-catching effect ===== */
         .hero h1 { 
+            font-family: 'Poppins', 'Montserrat', system-ui, -apple-system, sans-serif;
             font-size: 5rem; 
-            font-weight: 800; 
+            font-weight: 900; 
             width: 100%;
-            background: linear-gradient(135deg, #1e3c72, #2a5298, #8e44ad, #e84393);
+            background: linear-gradient(135deg, #1e3c72, #2a5298, #8e44ad, #e84393, #ff6b6b, #feca57);
             background-size: 300% 300%;
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 12px; 
             letter-spacing: -0.02em;
+            /* original gradient animation */
             animation: titleShift 5s ease infinite;
+            /* NEW: Eye-catching entrance animation (enters the eye and returns) */
+            animation: eyeEnter 0.9s cubic-bezier(0.34, 1.2, 0.64, 1) forwards, titleShift 5s ease infinite;
+            transform-origin: center;
+            text-shadow: 0 0 8px rgba(108, 92, 231, 0.3), 0 0 16px rgba(0, 206, 201, 0.2);
+            transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1), text-shadow 0.2s ease, letter-spacing 0.2s ease;
+            display: inline-block;
+            padding: 0 8px;
+        }
+        /* Hover effect: expands glow and slightly scales */
+        .hero h1:hover {
+            transform: scale(1.03);
+            text-shadow: 0 0 20px rgba(108, 92, 231, 0.7), 0 0 30px rgba(0, 206, 201, 0.6), 0 0 8px rgba(255,255,255,0.5);
+            letter-spacing: 1px;
+            transition: transform 0.25s ease, text-shadow 0.2s ease, letter-spacing 0.2s ease;
+        }
+        @keyframes eyeEnter {
+            0% {
+                transform: scale(0.92);
+                opacity: 0.7;
+                letter-spacing: -0.03em;
+                text-shadow: 0 0 0px rgba(108,92,231,0), 0 0 0px rgba(0,206,201,0);
+            }
+            35% {
+                transform: scale(1.12);
+                letter-spacing: 0.02em;
+                text-shadow: 0 0 18px rgba(108,92,231,0.8), 0 0 25px rgba(0,206,201,0.6), 0 0 8px rgba(255,215,0,0.5);
+            }
+            70% {
+                transform: scale(0.98);
+                letter-spacing: -0.01em;
+                text-shadow: 0 0 12px rgba(108,92,231,0.6), 0 0 20px rgba(0,206,201,0.4);
+            }
+            100% {
+                transform: scale(1);
+                letter-spacing: -0.02em;
+                text-shadow: 0 0 8px rgba(108,92,231,0.4), 0 0 16px rgba(0,206,201,0.3);
+                opacity: 1;
+            }
         }
         @keyframes titleShift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+        /* Responsive font adjustment for mobile */
+        @media (max-width: 740px) {
+            .hero h1 {
+                font-size: 3rem;
+                letter-spacing: -0.01em;
+            }
+            @keyframes eyeEnter {
+                0% { transform: scale(0.95); opacity: 0.8; letter-spacing: -0.02em; }
+                35% { transform: scale(1.08); letter-spacing: 0.01em; }
+                100% { transform: scale(1); letter-spacing: -0.01em; }
+            }
+        }
+        /* Rest of existing styles unchanged */
         .full-complete-badge { 
             font-size: 2.8rem; 
             font-weight: 900; 
