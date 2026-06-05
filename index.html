@@ -141,10 +141,9 @@
         .tool-reco-banner .reco-try-btn { background: white; color: #6c5ce7; border: none; padding: 8px 18px; border-radius: 30px; font-weight: bold; cursor: pointer; font-size: 0.9rem; transition: 0.2s; white-space: nowrap; }
         .tool-reco-banner .reco-try-btn:hover { background: #f0f0ff; transform: scale(1.05); }
         .tool-reco-banner .reco-close { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; margin-left: 10px; font-weight: bold; }
-        .lang-banner { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #6c5ce7, #00cec9); color: white; border-radius: 20px; padding: 12px 24px; z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 12px; font-size: 0.95rem; max-width: 90vw; flex-wrap: wrap; animation: fadeInBanner 0.5s ease; }
-        .lang-text { flex: 1 1 auto; }
-        .lang-translate-btn { background: white; color: #6c5ce7; border: none; padding: 6px 16px; border-radius: 30px; font-weight: bold; cursor: pointer; white-space: nowrap; }
-        .lang-close-btn { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; font-weight: bold; }
+        .translation-toolbar { display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; background: var(--surface2); border-radius: 40px; padding: 8px 16px; border: 1px solid var(--border); }
+        .translation-toolbar select { width: auto; padding: 8px 12px; border-radius: 40px; font-size: 0.85rem; margin: 0; }
+        .translation-toolbar .tool-btn { padding: 6px 18px; font-size: 0.85rem; margin: 0; }
         .gt-protection-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 99999; display: flex; align-items: center; justify-content: center; animation: gtFadeIn 0.35s ease; }
         @keyframes gtFadeIn { from { opacity: 0; } to { opacity: 1; } }
         .gt-protection-popup { background: var(--surface, #ffffff); border-radius: 24px; padding: 28px 24px 22px; max-width: 460px; width: 92%; max-height: 80vh; overflow-y: auto; box-shadow: 0 25px 60px rgba(0,0,0,0.35); border: 2px solid var(--primary, #6c5ce7); text-align: center; position: relative; animation: gtSlideUp 0.4s ease; }
@@ -166,10 +165,7 @@
             .tool-card.large { grid-column: span 2; } .tool-card.online-tools, .tool-card.browsers-card { grid-column: 1 / -1; }
             .footer-love-line { font-size: 1rem; gap: 12px; } .browser-frame { height: 50vh; }
             .internal-tab-header h3 { display: none; } .internal-tab-header .tool-btn { font-size: 0.8rem; padding: 8px 12px; }
-            .lang-banner { flex-direction: column; align-items: flex-start; gap: 8px; padding: 16px; }
-            .lang-text { width: 100%; } .lang-translate-btn, .lang-close-btn { align-self: flex-end; }
-            .gt-protection-popup { padding: 22px 16px 18px; max-height: 85vh; }
-            .gt-protection-popup .gt-title { font-size: 1.1rem; }
+            .translation-toolbar { justify-content: center; }
         }
     </style>
 </head>
@@ -212,15 +208,14 @@
 </main>
 <footer class="footer-widget">
     <div class="footer-controls"><button class="footer-btn" onclick="toggleTheme()">🌓</button><button class="footer-btn" onclick="toggleSidebar()">☰</button><button class="footer-btn" id="muteBtn">🔊</button></div>
+    <div class="translation-toolbar"><span>🌍 Translate App (Non‑Google):</span><select id="targetLangSelect"><option value="ar">العربية</option><option value="zh">中文</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="es">Español</option><option value="hi">हिन्दी</option><option value="it">Italiano</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="pt">Português</option><option value="ru">Русский</option><option value="tr">Türkçe</option><option value="nl">Nederlands</option><option value="pl">Polski</option><option value="sv">Svenska</option><option value="th">ไทย</option><option value="vi">Tiếng Việt</option><option value="id">Bahasa Indonesia</option><option value="ms">Bahasa Melayu</option><option value="fa">فارسی</option><option value="ur">اردو</option><option value="bn">বাংলা</option><option value="uk">Українська</option><option value="ro">Română</option><option value="cs">Čeština</option><option value="el">Ελληνικά</option><option value="he">עברית</option><option value="hu">Magyar</option><option value="no">Norsk</option><option value="fi">Suomi</option><option value="da">Dansk</option><option value="en">English</option></select><button class="tool-btn" id="translatePageBtn">🌐 Translate & Open</button></div>
     <p>© 2026 MultiTool Pro · Ultimate toolkit</p>
     <div class="footer-love-line"><span id="scrollUpArrow" class="scroll-up-arrow" onclick="scrollToTop()" title="Go to top">↑</span><span>Made with <span class="heart-beat">💕</span></span><span class="footer-arrow-down" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})" title="Go to bottom">↓</span></div>
     <div class="random-trigger"><button id="randomToolBtn" class="random-btn">🎲 Random Tool</button></div>
     <div id="toolRecoBanner" class="tool-reco-banner" style="display:none;"><span class="reco-text" id="recoMessage">🧮 Try the Advanced Calculator</span><button class="reco-try-btn" id="recoTryBtn">Try it</button><button class="reco-close" id="recoCloseBtn">✕</button></div>
 </footer>
-<div id="langBanner" class="lang-banner" style="display:none;"><span class="lang-text" id="langMsg"></span><button class="lang-translate-btn" id="langTranslateBtn" onclick="document.getElementById('langBanner').style.display='none';localStorage.setItem('langBannerDismissed','true');">Translate</button><button class="lang-close-btn" id="langCloseBtn" onclick="document.getElementById('langBanner').style.display='none';localStorage.setItem('langBannerDismissed','true');">✕</button></div>
 <div id="toast" class="toast"></div>
 
-<!-- ==================== FULL ORIGINAL SCRIPTS (with added Google Translate in All AI Translator) ==================== -->
 <script>
 (function(){
     let darkMode = localStorage.getItem('theme') === 'dark';
@@ -307,11 +302,11 @@
     window.closeConvertOverlay = function(){ document.getElementById('convertOverlay').classList.remove('active'); };
     function renderConvertGrid() { const container = document.getElementById('convertGrid'); const convertSites = [ { name: 'PDFescape', icon: '📄', url: 'https://www.pdfescape.com', category: 'PDF Tools' }, { name: 'Sejda PDF', icon: '📑', url: 'https://www.sejda.com', category: 'PDF Tools' }, { name: 'PDF24 Tools', icon: '📋', url: 'https://tools.pdf24.org', category: 'PDF Tools' }, { name: 'PDF Candy', icon: '🍬', url: 'https://pdfcandy.com', category: 'PDF Tools' }, { name: 'PDF2Go', icon: '📤', url: 'https://www.pdf2go.com', category: 'PDF Tools' }, { name: 'Soda PDF', icon: '🥤', url: 'https://www.sodapdf.com', category: 'PDF Tools' }, { name: 'Foxit Online', icon: '🦊', url: 'https://www.foxit.com/pdf-editor/', category: 'PDF Tools' }, { name: 'DocHub', icon: '✍️', url: 'https://dochub.com', category: 'PDF Tools' }, { name: 'Fotor', icon: '🖼️', url: 'https://www.fotor.com', category: 'Image Editors' }, { name: 'BeFunky', icon: '🎨', url: 'https://www.befunky.com', category: 'Image Editors' }, { name: 'LunaPic', icon: '🌙', url: 'https://www.lunapic.com', category: 'Image Editors' }, { name: 'Sumopaint', icon: '🖌️', url: 'https://www.sumopaint.com', category: 'Image Editors' }, { name: 'Google Docs', icon: '📝', url: 'https://docs.google.com', category: 'Word & Docs' }, { name: 'Microsoft Office Online', icon: '📊', url: 'https://www.office.com', category: 'Word & Docs' }, { name: 'Zoho Writer', icon: '📃', url: 'https://www.zoho.com/writer/', category: 'Word & Docs' }, { name: 'OnlyOffice', icon: '🏢', url: 'https://www.onlyoffice.com', category: 'Word & Docs' }, { name: 'CryptPad', icon: '🔒', url: 'https://cryptpad.fr', category: 'Word & Docs' }, { name: 'Zamzar', icon: '🔄', url: 'https://www.zamzar.com', category: 'File Converters' }, { name: 'Online-Convert.com', icon: '🔁', url: 'https://www.online-convert.com', category: 'File Converters' }, { name: 'FileZigZag', icon: '⚡', url: 'https://www.filezigzag.com', category: 'File Converters' }, { name: 'Aconvert', icon: '🔄', url: 'https://www.aconvert.com', category: 'File Converters' }, { name: 'FreeFileConvert', icon: '📂', url: 'https://www.freefileconvert.com', category: 'File Converters' }, { name: 'Online Audio Converter', icon: '🎵', url: 'https://online-audio-converter.com', category: 'Audio/Video Tools' }, { name: 'Media.io', icon: '🎬', url: 'https://www.media.io', category: 'Audio/Video Tools' }, { name: 'VEED.io', icon: '✂️', url: 'https://www.veed.io', category: 'Audio/Video Tools' }, { name: 'Clipchamp', icon: '🎞️', url: 'https://clipchamp.com', category: 'Audio/Video Tools' }, { name: '123Apps', icon: '🔧', url: 'https://123apps.com', category: 'Audio/Video Tools' }, { name: 'AudioTrimmer', icon: '✂️', url: 'https://audiotrimmer.com', category: 'Audio/Video Tools' } ]; const grouped = {}; convertSites.forEach(site => { if (!grouped[site.category]) grouped[site.category] = []; grouped[site.category].push(site); }); let html = ''; for (const [cat, sites] of Object.entries(grouped)) { html += `<h3 style="margin-top:24px;text-align:center;border-bottom:1px solid var(--border);padding-bottom:8px;">${cat}</h3><div class="convert-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-top:16px;">`; sites.forEach(site => { html += `<div class="convert-card" onclick="window.open('${site.url}', '_blank');"><div style="font-size:2rem;">${site.icon}</div><div style="font-weight:600;">${site.name}</div><div style="font-size:0.7rem;">Click to open</div></div>`; }); html += '</div>'; } container.innerHTML = html; }
 
-    // UPDATED: Added Google Translate to All AI Translator with a clear message about its purpose for non-English device users
+    // UPDATED: removed Google Translate special message
     window.openAllAiTranslatorOverlay = function(){ document.getElementById('allAiTranslatorOverlay').classList.add('active'); renderAllAiTranslatorGrid(); };
     window.closeAllAiTranslatorOverlay = function(){ document.getElementById('allAiTranslatorOverlay').classList.remove('active'); };
     function renderAllAiTranslatorGrid() { const container = document.getElementById('allAiTranslatorGrid'); const translatorSites = [ 
-        { name: 'Google Translate', icon: '🌐🔤', url: 'https://translate.google.com', message: 'ℹ️ This tool also appears automatically above for users with non-English devices, to help them understand the app.' },
+        { name: 'Google Translate', icon: '🌐🔤', url: 'https://translate.google.com' },
         { name: 'Lernix AI', icon: '🦉', url: 'https://lernix.ai' }, 
         { name: 'Reverso', icon: '🔄', url: 'https://www.reverso.net/text-translation' }, 
         { name: 'Linguee', icon: '📖', url: 'https://www.linguee.com' }, 
@@ -327,8 +322,7 @@
     ]; 
     let html = '<div class="convert-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px;margin-top:16px;">'; 
     translatorSites.forEach(site => { 
-        let extraNote = site.message ? `<div style="font-size:0.65rem; margin-top:8px; background:var(--surface2); padding:4px 6px; border-radius:12px; color:var(--primary-dark);">${site.message}</div>` : ''; 
-        html += `<div class="convert-card" style="cursor:pointer;" onclick="window.open('${site.url}', '_blank');"><div style="font-size:2rem;">${site.icon}</div><div style="font-weight:600;">${site.name}</div>${extraNote}<div style="font-size:0.7rem; margin-top:4px;">Click to open</div></div>`; 
+        html += `<div class="convert-card" style="cursor:pointer;" onclick="window.open('${site.url}', '_blank');"><div style="font-size:2rem;">${site.icon}</div><div style="font-weight:600;">${site.name}</div><div style="font-size:0.7rem; margin-top:4px;">Click to open</div></div>`; 
     }); 
     html += '</div>'; 
     container.innerHTML = html; 
@@ -547,11 +541,24 @@
 (function() { const banner = document.getElementById('toolRecoBanner'); const msgEl = document.getElementById('recoMessage'); const tryBtn = document.getElementById('recoTryBtn'); const closeBtn = document.getElementById('recoCloseBtn'); if (!banner || !msgEl || !tryBtn || !closeBtn) return; const toolSuggestions = [ { name: "🧮 Advanced Calculator", toolId: "calculator" }, { name: "🔐 Password Generator", toolId: "password" }, { name: "📝 Word Counter", toolId: "wordcount" }, { name: "🎨 Color Picker", toolId: "colorpicker" }, { name: "📏 Unit Converter", toolId: "unitconverter" }, { name: "⏱️ Stopwatch", toolId: "stopwatch" }, { name: "📱 QR Code Generator", toolId: "qrcode" }, { name: "⚖️ BMI Calculator", toolId: "bmi" }, { name: "🎲 Random Number", toolId: "random" }, { name: "⏳ Countdown Timer", toolId: "countdown" }, { name: "📅 Date Difference", toolId: "datediff" }, { name: "🔣 Base64 Encoder", toolId: "base64" }, { name: "🔗 URL Encoder", toolId: "urlencode" }, { name: "📋 JSON Formatter", toolId: "jsonformat" }, { name: "📄 Lorem Ipsum", toolId: "lorem" }, { name: "💱 Currency Converter", toolId: "currency" }, { name: "📊 Percentage Calc", toolId: "percentcalc" }, { name: "🎂 Age Calculator", toolId: "agecalc" }, { name: "💻 Binary/Hex Converter", toolId: "binhex" }, { name: "🏛️ Roman Numerals", toolId: "roman" }, { name: "💰 Tip Calculator", toolId: "tipcalc" }, { name: "🕐 World Clock", toolId: "worldclock" }, { name: "😂 Joke Generator", toolId: "joke" }, { name: "🌍 IP Lookup", toolId: "ip" }, { name: "✨ AI Text Enhancer", toolId: "premium_ai" } ]; let currentTool = null; let bannerTimer = null; const SHOW_INTERVAL = 2 * 60 * 60 * 1000; const INITIAL_DELAY = 10000; function showRandomTool() { const randomIndex = Math.floor(Math.random() * toolSuggestions.length); currentTool = toolSuggestions[randomIndex]; msgEl.textContent = currentTool.name; banner.style.display = 'flex'; banner.style.animation = 'none'; banner.offsetHeight; banner.style.animation = 'fadeInBanner 0.5s ease'; } function hideBanner() { banner.style.display = 'none'; } tryBtn.addEventListener('click', function() { if (currentTool && currentTool.toolId) { if (typeof selectTool === 'function') selectTool(currentTool.toolId); else document.getElementById('toolsGrid').scrollIntoView({behavior:'smooth'}); } hideBanner(); if (bannerTimer) clearTimeout(bannerTimer); bannerTimer = setTimeout(showRandomTool, SHOW_INTERVAL); }); closeBtn.addEventListener('click', function() { hideBanner(); if (bannerTimer) clearTimeout(bannerTimer); bannerTimer = setTimeout(showRandomTool, SHOW_INTERVAL); }); function startBannerCycle() { bannerTimer = setTimeout(function() { showRandomTool(); bannerTimer = setInterval(showRandomTool, SHOW_INTERVAL); }, INITIAL_DELAY); } startBannerCycle(); })();
 </script>
 
+<!-- Non-Google Page Translation Feature -->
 <script>
-(function() { const PAGE_URL = 'https://boussedraoui.github.io/Multitool-Pro-Full-Complete/'; const langBanner = document.getElementById('langBanner'); const langMsg = document.getElementById('langMsg'); const langTranslateBtn = document.getElementById('langTranslateBtn'); const langCloseBtn = document.getElementById('langCloseBtn'); const langNames = { 'ar': 'العربية', 'es': 'Español', 'fr': 'Français', 'de': 'Deutsch', 'it': 'Italiano', 'pt': 'Português', 'ru': 'Русский', 'zh': '中文', 'ja': '日本語', 'ko': '한국어', 'hi': 'हिन्दी', 'tr': 'Türkçe', 'nl': 'Nederlands', 'pl': 'Polski', 'sv': 'Svenska', 'da': 'Dansk', 'fi': 'Suomi', 'no': 'Norsk', 'cs': 'Čeština', 'hu': 'Magyar', 'el': 'Ελληνικά', 'he': 'עברית', 'th': 'ไทย', 'vi': 'Tiếng Việt', 'id': 'Bahasa Indonesia', 'ms': 'Bahasa Melayu', 'fa': 'فارسی', 'ur': 'اردو', 'bn': 'বাংলা', 'ro': 'Română', 'uk': 'Українська' }; function getBrowserLanguage() { return (navigator.language || navigator.browserLanguage || 'en').split('-')[0].toLowerCase(); } if (localStorage.getItem('langBannerDismissed') === 'true') { langBanner.style.display = 'none'; return; } const browserLang = getBrowserLanguage(); if (browserLang === 'en') return; const langName = langNames[browserLang] || browserLang.toUpperCase(); langMsg.textContent = `Your language: ${langName}. Translate app?`; langBanner.style.display = 'flex'; langTranslateBtn.addEventListener('click', function() { window.location.href = `https://translate.google.com/translate?hl=${browserLang}&sl=en&u=${encodeURIComponent(PAGE_URL)}`; }); langCloseBtn.addEventListener('click', function() { langBanner.style.display = 'none'; localStorage.setItem('langBannerDismissed', 'true'); }); })();
+(function() {
+    const translateBtn = document.getElementById('translatePageBtn');
+    const langSelect = document.getElementById('targetLangSelect');
+    const PAGE_URL = 'https://boussedraoui.github.io/Multitool-Pro-Full-Complete/';
+    if (translateBtn && langSelect) {
+        translateBtn.addEventListener('click', function() {
+            const targetLang = langSelect.value;
+            // Using Yandex Translate which supports full webpage translation (non-Google)
+            const yandexUrl = `https://translate.yandex.com/translate?url=${encodeURIComponent(PAGE_URL)}&lang=en-${targetLang}`;
+            window.open(yandexUrl, '_blank');
+        });
+    }
+})();
 </script>
 
-<!-- ============ FINAL EXACT PROTECTION POPUP ============ -->
+<!-- PROTECTION POPUP (preserved) -->
 <script>
 (function() {
     const ORIGINAL_PAGE_URL = 'https://boussedraoui.github.io/Multitool-Pro-Full-Complete/';
