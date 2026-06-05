@@ -57,7 +57,7 @@
             --shadow: 0 10px 30px -12px rgba(0,0,0,0.1); 
             --shadow-lg: 0 20px 40px -12px rgba(0,0,0,0.2); 
             --radius: 28px; 
-            --font-scale: 1.1;  /* base scaling */
+            --font-scale: 1.1;
         }
         [data-theme="dark"] { 
             --bg: #0f0f1a; 
@@ -75,21 +75,126 @@
             color: var(--text); 
             transition: background 0.3s, color 0.3s; 
             top: 0 !important;
-            font-size: 18px;  /* larger base */
+            font-size: 18px;
             line-height: 1.4;
         }
         .main-container { max-width: 1400px; margin: 0 auto; padding: 30px 24px 40px; }
         .hero { text-align: center; padding: 30px 20px 24px; }
-        .hero h1 { font-size: 3.8rem; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--accent), var(--accent2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px; letter-spacing: -0.02em; }
-        .full-complete-badge { font-size: 2.8rem; font-weight: 900; background: linear-gradient(135deg, #ff0000, #ff9900, #33cc33, #3399ff, #9900cc, #ff0099); background-size: 300% 300%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: fullCompletePulse 1.8s ease-in-out infinite, gradientShift 3s ease infinite; display: inline-block; margin: 16px 0 8px; letter-spacing: 3px; }
+        /* MultiTool Pro title - full width, larger, distinct gradient */
+        .hero h1 { 
+            font-size: 5rem; 
+            font-weight: 800; 
+            width: 100%;
+            background: linear-gradient(135deg, #1e3c72, #2a5298, #8e44ad, #e84393);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px; 
+            letter-spacing: -0.02em;
+            animation: titleShift 5s ease infinite;
+        }
+        @keyframes titleShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        /* FULL + Complete - single line, rainbow gradient */
+        .full-complete-badge { 
+            font-size: 2.8rem; 
+            font-weight: 900; 
+            background: linear-gradient(135deg, #ff0000, #ff9900, #33cc33, #3399ff, #9900cc, #ff0099); 
+            background-size: 300% 300%; 
+            -webkit-background-clip: text; 
+            background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            animation: fullCompletePulse 1.8s ease-in-out infinite, gradientShift 3s ease infinite; 
+            display: inline-block; 
+            margin: 16px 0 8px; 
+            letter-spacing: 3px;
+            white-space: nowrap;
+        }
         @keyframes fullCompletePulse { 0%,100%{transform:scale(1) translateY(0)}20%{transform:scale(1.15) translateY(-4px)}40%{transform:scale(0.92) translateY(2px)}60%{transform:scale(1.1) translateY(-2px)}80%{transform:scale(0.96) translateY(1px)}}
         @keyframes gradientShift {0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+        
         .subtitle { font-size: 1.4rem; color: var(--text2); margin-top: 12px; font-weight: 500; }
         .more-text { text-align: center; font-size: 1.2rem; font-weight: 700; color: var(--primary); margin-top: 12px; letter-spacing: 1px; }
-        .premium-ribbon { background: linear-gradient(135deg, #f7b731, #f0c060); color: #1a1a2e; font-weight: 800; padding: 10px 24px; border-radius: 60px; font-size: 1.1rem; display: inline-block; margin-top: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .love-phrase { text-align: center; margin: 20px 0 12px; }
-        .love-text { font-size: clamp(2.5rem, 8vw, 5.5rem); font-weight: 900; background: linear-gradient(135deg, #ff2d75, #ff6b9d, #c44dff, #4d9dff, #00e5ff, #ffb347); background-size: 300% 300%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: loveGradient 5s infinite; }
-        @keyframes loveGradient {0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+        
+        /* Premium ribbon container for orbiting effect */
+        .premium-container {
+            position: relative;
+            display: inline-block;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .premium-ribbon { 
+            background: linear-gradient(135deg, #f7b731, #f0c060); 
+            color: #1a1a2e; 
+            font-weight: 800; 
+            padding: 10px 24px; 
+            border-radius: 60px; 
+            font-size: 1.1rem; 
+            display: inline-block; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 2;
+        }
+        /* orbiting love text */
+        .orbiting-love {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 180px;
+            height: 180px;
+            margin: -90px 0 0 -90px;
+            pointer-events: none;
+            z-index: 1;
+            animation: orbit 8s linear infinite;
+        }
+        .love-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.6rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff8c00, #ff2d75, #ffd700);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: loveGradient 3s ease infinite, pulseText 1.5s ease infinite;
+            white-space: nowrap;
+            text-shadow: 0 0 8px rgba(255,140,0,0.3);
+        }
+        @keyframes orbit {
+            0% { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+        }
+        @keyframes loveGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes pulseText {
+            0%,100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+        }
+        /* adjust spacing */
+        .love-phrase {
+            text-align: center;
+            margin: 20px 0 12px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 140px;
+        }
+        .premium-ribbon {
+            position: relative;
+            z-index: 3;
+        }
+        
         .search-container { max-width: 640px; margin: 24px auto 30px; }
         .search-input, textarea, select { width: 100%; padding: 16px 24px; border-radius: 80px; border: 2px solid var(--border); background: var(--surface); font-size: 1.05rem; transition: all 0.2s; font-family: inherit; }
         .search-results { background: var(--surface); border-radius: 28px; margin-top: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); max-height: 480px; overflow-y: auto; font-size: 1rem; }
@@ -172,10 +277,13 @@
         .gt-btn-return-red { width: 26px; height: 26px; background: red !important; padding: 0 !important; margin: 0 !important; font-size: 0 !important; border-radius: 6px; display: inline-block; cursor: pointer; }
         @media (max-width: 740px) {
             body { font-size: 16px; }
+            .hero h1 { font-size: 3rem; }
+            .full-complete-badge { font-size: 1.8rem; white-space: normal; }
+            .orbiting-love { width: 140px; height: 140px; margin: -70px 0 0 -70px; }
+            @keyframes orbit { 0% { transform: rotate(0deg) translateX(90px) rotate(0deg); } 100% { transform: rotate(360deg) translateX(90px) rotate(-360deg); } }
+            .love-text { font-size: 1.2rem; }
             .tools-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 16px; }
             .tool-card .tool-name { font-size: 1rem; }
-            .hero h1 { font-size: 2.6rem; }
-            .full-complete-badge { font-size: 2rem; }
             .tool-panel { padding: 24px 20px; }
             .tool-btn { padding: 12px 24px; font-size: 0.9rem; }
         }
@@ -202,7 +310,21 @@
 <div id="imagineOverlay" class="imagine-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">✨ IMAGINE · 25 New Tools ✨</h2><p style="text-align:center;margin-bottom:20px;font-size:1.1rem;">All unique tools – not found anywhere else in the app</p><div id="imagineToolsGrid" class="imagine-tools-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeImagineOverlay()">← Back to main tools</button></div></div></div>
 <div id="onlineOverlay" class="online-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">🌐 Online Tools · Free & Useful</h2><p style="text-align:center;margin-bottom:20px;font-size:1.1rem;">30+ powerful online tools – click to open</p><div id="onlineGrid" class="online-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeOnlineOverlay()">← Back to main tools</button></div></div></div>
 <main class="main-container" id="mainPage">
-    <div class="hero"><h1>MultiTool Pro</h1><div class="full-complete-badge">FULL + Complete</div><p class="subtitle">All tools · AI Hub · Premium Free</p><div class="more-text">& More...</div><span class="premium-ribbon">💎 100% FREE PREMIUM</span><div class="love-phrase"><span class="love-text">I ❤️ TOOLS</span></div></div>
+    <div class="hero">
+        <h1>MultiTool Pro</h1>
+        <div class="full-complete-badge">FULL + Complete</div>
+        <p class="subtitle">All tools · AI Hub · Premium Free</p>
+        <div class="more-text">& More...</div>
+        <!-- orbiting love text around premium ribbon -->
+        <div class="love-phrase">
+            <div class="premium-container">
+                <span class="premium-ribbon">💎 100% FREE PREMIUM</span>
+                <div class="orbiting-love">
+                    <div class="love-text">I ❤️ TOOLS</div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="search-container"><input type="text" id="globalSearch" class="search-input" placeholder="🔍 Search any tool... calculator, world clock, translator..."><div id="searchResults" class="search-results" style="display:none;"></div></div>
     <div class="tools-grid" id="toolsGrid"></div>
     <div style="display:flex;justify-content:center;margin:20px 0 30px;"><button class="sites-wide-btn" style="background:linear-gradient(135deg,#ff7e5f,#feb47b);" onclick="openMediaOverlay()">📺 MEDIA (Video Platforms)</button></div>
