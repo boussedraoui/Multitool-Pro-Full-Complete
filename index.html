@@ -81,77 +81,74 @@
         .main-container { max-width: 1400px; margin: 0 auto; padding: 30px 24px 40px; }
         .hero { text-align: center; padding: 30px 20px 24px; }
         
-        /* ===== TITLE: MultiTOOL (Rainbow 1) ===== */
-        .hero h1 { 
+        /* ===== MultiTOOL Pro: static, each letter different color, new star frame ===== */
+        .hero h1 {
             font-family: 'Poppins', 'Montserrat', system-ui, sans-serif;
-            font-size: 5rem; 
-            font-weight: 900; 
-            display: inline-block;
-            background: linear-gradient(135deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff);
-            background-size: 400% 400%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 12px; 
+            font-size: 5rem;
+            font-weight: 900;
+            margin-bottom: 12px;
             letter-spacing: -0.02em;
-            animation: rainbow1 6s ease infinite, floatTitle 2.2s ease-in-out infinite;
-            text-shadow: none;
-            filter: drop-shadow(0 0 6px rgba(0,0,0,0.2));
-        }
-        @keyframes rainbow1 {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        @keyframes floatTitle {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-6px); }
-        }
-        
-        /* ===== Pro frame: golden shiny with stars (crisp) ===== */
-        .hero h1 .pro-frame {
             display: inline-block;
-            background: linear-gradient(145deg, #FFD700, #FFA500, #FFD700, #FFC125);
+            /* No animation, static */
+        }
+        /* MultiTOOL: each letter gets a distinct color */
+        .multi-letter {
+            display: inline-block;
+        }
+        .letter-m { color: #FF3366; }
+        .letter-u { color: #FF9933; }
+        .letter-l { color: #FFCC00; }
+        .letter-t { color: #33CC66; }
+        .letter-i { color: #3399FF; }
+        .letter-o { color: #9933FF; }
+        .letter-o2 { color: #FF33CC; }
+        .letter-l2 { color: #FF6633; }
+        
+        /* Pro frame: many stars around it, no movement */
+        .pro-frame {
+            display: inline-block;
+            background: linear-gradient(145deg, #FFD700, #FFA500, #FFD700);
             background-size: 200% 200%;
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 900;
-            border: 2px solid rgba(255, 215, 0, 0.8);
+            border: 2px solid rgba(255, 215, 0, 0.9);
             border-radius: 60px;
-            padding: 0.1em 0.6em;
-            margin: 0 0.1em;
+            padding: 0.1em 0.8em;
+            margin: 0 0.2em;
             box-shadow: 0 0 12px rgba(255,215,0,0.8), inset 0 1px 2px rgba(255,255,200,0.9);
-            text-shadow: 0 0 4px rgba(0,0,0,0.3);
             position: relative;
-            animation: goldenPulse 1.8s infinite alternate;
+            background-color: rgba(0,0,0,0.05);
+            backdrop-filter: blur(2px);
         }
-        .hero h1 .pro-frame::before,
-        .hero h1 .pro-frame::after {
-            content: "✨";
+        /* Many stars floating */
+        .pro-frame::before,
+        .pro-frame::after {
+            content: "✨✨✨";
             position: absolute;
-            font-size: 1.4rem;
-            top: -12px;
+            font-size: 1.2rem;
+            white-space: nowrap;
             filter: drop-shadow(0 0 3px gold);
-            animation: starFloat 1.5s infinite alternate;
+            animation: starFloatMany 2s infinite alternate;
+            pointer-events: none;
         }
-        .hero h1 .pro-frame::before {
-            left: -20px;
+        .pro-frame::before {
+            top: -20px;
+            left: -30px;
+            content: "✨✨✨✨";
         }
-        .hero h1 .pro-frame::after {
-            right: -20px;
-            animation-delay: 0.5s;
+        .pro-frame::after {
+            bottom: -20px;
+            right: -30px;
+            content: "✨✨✨✨";
         }
-        @keyframes goldenPulse {
-            0% { box-shadow: 0 0 4px gold, inset 0 1px 1px rgba(255,255,200,0.5); border-color: #FFD700; background-position: 0% 50%; }
-            100% { box-shadow: 0 0 18px #FFD700, 0 0 8px #FFA500, inset 0 1px 2px rgba(255,255,200,0.9); border-color: #FFB347; background-position: 100% 50%; }
-        }
-        @keyframes starFloat {
-            0% { transform: translateY(0px) rotate(0deg); opacity: 0.9; }
-            100% { transform: translateY(-6px) rotate(12deg); opacity: 1; }
+        @keyframes starFloatMany {
+            0% { transform: translateY(0px) rotate(0deg); opacity: 0.8; }
+            100% { transform: translateY(-8px) rotate(10deg); opacity: 1; }
         }
         
-        /* ===== FULL + Complete (Rainbow 2) ===== */
+        /* ===== FULL + Complete: strong scaling (big/small) ===== */
         .full-complete-badge { 
             font-size: 2.6rem; 
             font-weight: 900; 
@@ -160,41 +157,37 @@
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: rainbow2 4s ease infinite, pulseBadge 1.6s ease-in-out infinite;
             display: inline-block; 
             margin: 16px 0 8px; 
             letter-spacing: 3px;
             white-space: nowrap;
+            animation: pulseScale 1.2s ease-in-out infinite;
         }
-        @keyframes rainbow2 {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        @keyframes pulseBadge {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        @keyframes pulseScale {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.25); }
+            100% { transform: scale(1); }
         }
         
-        /* ===== I 💗 TOOLS (Rainbow 3, beating heart, crisp) ===== */
+        /* ===== I 💗 TOOLS: rainbow gradient, beating heart, crisp ===== */
         .love-text {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 1.7rem;
+            font-size: 1.8rem;
             font-weight: 900;
             background: linear-gradient(135deg, #ff0844, #ffb199, #ff4e50, #f9d423, #00b4db, #0083b0, #6a11cb, #2575fc);
             background-size: 400% 400%;
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: rainbow3 5s ease infinite, heartbeatPulse 1.2s ease-in-out infinite;
+            animation: rainbowBeat 4s ease infinite, heartbeatPulse 1.2s ease-in-out infinite;
             white-space: nowrap;
-            text-shadow: 0 0 6px rgba(255,255,255,0.5);
+            text-shadow: 0 0 8px rgba(255,255,255,0.6);
             letter-spacing: 1px;
         }
-        @keyframes rainbow3 {
+        @keyframes rainbowBeat {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
@@ -207,7 +200,26 @@
             55% { transform: translate(-50%, -50%) scale(1); }
         }
         
-        /* Premium ribbon up-down */
+        /* Static subtitle and "& More..." — no movement */
+        .subtitle {
+            font-size: 1.4rem;
+            color: var(--text2);
+            margin-top: 12px;
+            font-weight: 500;
+            animation: none;
+            transform: none;
+        }
+        .more-text {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 12px;
+            letter-spacing: 1px;
+            animation: none;
+        }
+        
+        /* Premium ribbon up-down (only this moves) */
         .premium-ribbon { 
             background: linear-gradient(135deg, #f7b731, #f0c060); 
             color: #1a1a2e; 
@@ -225,9 +237,6 @@
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-5px); }
         }
-        
-        .subtitle { font-size: 1.4rem; color: var(--text2); margin-top: 12px; font-weight: 500; }
-        .more-text { text-align: center; font-size: 1.2rem; font-weight: 700; color: var(--primary); margin-top: 12px; letter-spacing: 1px; }
         
         .premium-container {
             position: relative;
@@ -358,14 +367,13 @@
             .full-complete-badge { font-size: 1.8rem; white-space: normal; }
             .orbiting-love { width: 140px; height: 140px; margin: -70px 0 0 -70px; }
             @keyframes orbit { 0% { transform: rotate(0deg) translateX(90px) rotate(0deg); } 100% { transform: rotate(360deg) translateX(90px) rotate(-360deg); } }
-            .love-text { font-size: 1.2rem; }
+            .love-text { font-size: 1.3rem; }
             .tools-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 16px; }
             .tool-card .tool-name { font-size: 1rem; }
             .tool-panel { padding: 24px 20px; }
             .tool-btn { padding: 12px 24px; font-size: 0.9rem; }
-            .hero h1 .pro-frame::before, .hero h1 .pro-frame::after { font-size: 1rem; top: -8px; }
-            .hero h1 .pro-frame::before { left: -14px; }
-            .hero h1 .pro-frame::after { right: -14px; }
+            .pro-frame::before { content: "✨✨"; top: -15px; left: -20px; font-size: 0.9rem; }
+            .pro-frame::after { content: "✨✨"; bottom: -15px; right: -20px; font-size: 0.9rem; }
         }
     </style>
 </head>
@@ -391,7 +399,10 @@
 <div id="onlineOverlay" class="online-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">🌐 Online Tools · Free & Useful</h2><p style="text-align:center;margin-bottom:20px;font-size:1.1rem;">30+ powerful online tools – click to open</p><div id="onlineGrid" class="online-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeOnlineOverlay()">← Back to main tools</button></div></div></div>
 <main class="main-container" id="mainPage">
     <div class="hero">
-        <h1>MultiTOOL <span class="pro-frame">Pro</span></h1>
+        <h1>
+            <span class="multi-letter letter-m">M</span><span class="multi-letter letter-u">u</span><span class="multi-letter letter-l">l</span><span class="multi-letter letter-t">t</span><span class="multi-letter letter-i">i</span><span class="multi-letter letter-o">T</span><span class="multi-letter letter-o2">O</span><span class="multi-letter letter-l2">O</span><span class="multi-letter letter-l2" style="color:#FF3366;">L</span>
+            <span class="pro-frame">Pro</span>
+        </h1>
         <div class="full-complete-badge">FULL + Complete</div>
         <p class="subtitle">All Tools · AI Hub · Premium Free</p>
         <div class="more-text">& More...</div>
