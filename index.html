@@ -214,7 +214,13 @@
         .tool-panel { background: var(--surface); border-radius: 40px; padding: 32px 28px; margin: 32px 0 40px; box-shadow: var(--shadow-lg); border: 1px solid var(--border); overflow: hidden; }
         .tool-btn { background: var(--primary); border: none; padding: 14px 28px; border-radius: 60px; font-weight: 700; color: white; cursor: pointer; transition: 0.2s; margin: 8px; display: inline-block; font-size: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
         .tool-btn:hover { background: var(--primary-dark); transform: scale(0.97); }
-        .calc-btn { min-width: 0; width: 100%; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0 !important; padding: 12px 0 !important; border-radius: 16px; font-weight: 700; font-size: 0.9rem; }
+        /* Colored calculator buttons */
+        .calc-btn-num { background: #3498db; }
+        .calc-btn-op { background: #e67e22; }
+        .calc-btn-func { background: #2ecc71; }
+        .calc-btn-equal { background: #e74c3c; }
+        .calc-btn-clear { background: #95a5a6; }
+        .calc-btn { margin: 0 !important; padding: 12px 0 !important; border-radius: 16px; font-weight: 700; font-size: 0.9rem; }
         .tool-output { background: var(--surface2); padding: 16px 20px; border-radius: 28px; margin-top: 20px; word-break: break-word; border: 1px solid var(--border); max-height: 500px; overflow-y: auto; font-size: 1rem; }
         .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--surface); color: var(--text); padding: 16px 32px; border-radius: 80px; font-weight: 600; transition: 0.3s; z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.2); pointer-events: none; font-size: 1rem; }
         .toast.show { transform: translateX(-50%) translateY(0); }
@@ -397,7 +403,7 @@
 <div id="toast" class="toast"></div>
 
 <script>
-// FULLY FUNCTIONAL CODE - ALL TOOLS WORKING, ADVANCED CALCULATOR, ALL TOOLS IN SIDEBAR, WEEKLY UPDATE SYSTEM
+// FULLY FUNCTIONAL CODE - ALL TOOLS WORKING, ADVANCED CALCULATOR WITH COLORED BUTTONS, ALL TOOLS IN SIDEBAR, WEEKLY UPDATE SYSTEM
 (function(){
     let darkMode = localStorage.getItem('theme') === 'dark';
     if(darkMode) document.documentElement.setAttribute('data-theme','dark');
@@ -485,49 +491,48 @@
     const fullToolsList = [...originalTools, ...metaSearchTools];
     const metaIds = new Set(metaSearchTools.map(t => t.id));
     
-    // SIDEBAR: includes ALL tools (both original and meta)
+    // SIDEBAR: includes ALL tools (both original and meta) - all cards
     function renderSidebar(){
         let sidebar = document.getElementById('sidebarList');
         let allToolsForSidebar = fullToolsList;
         sidebar.innerHTML = allToolsForSidebar.map(t => `<div class="sidebar-item" onclick="selectTool('${t.id}'); closeSidebar();"><span style="font-size:1.6rem;">${t.icon}</span> <span style="font-size:1rem;">${t.name}</span></div>`).join('');
-        // Also add category links if needed, but all are already in metaTools
     }
     
-    // ADVANCED CALCULATOR with scientific functions
+    // ADVANCED CALCULATOR with colored buttons
     function renderCalculator() {
         return `
         <div id="calcDisplay" style="font-size:2rem;padding:16px;background:var(--surface2);border-radius:20px;margin-bottom:16px;font-family:monospace;word-break:break-all;">0</div>
         <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;">
-            <button class="tool-btn calc-btn" onclick="appendCalc('7')">7</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('8')">8</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('9')">9</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('/')">/</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('C')">C</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('4')">4</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('5')">5</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('6')">6</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('*')">*</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('DEL')">⌫</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('1')">1</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('2')">2</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('3')">3</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('-')">-</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('(')">(</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('0')">0</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('.')">.</button>
-            <button class="tool-btn calc-btn" onclick="evalCalc()">=</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('+')">+</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc(')')">)</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('sin(')">sin</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('cos(')">cos</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('tan(')">tan</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('log(')">log</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('ln(')">ln</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('sqrt(')">√</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('^')">^</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('π')">π</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('e')">e</button>
-            <button class="tool-btn calc-btn" onclick="appendCalc('abs(')">abs</button>
+            <button class="tool-btn calc-btn calc-btn-num" onclick="appendCalc('7')">7</button>
+            <button class="tool-btn calc-btn calc-btn-num" onclick="appendCalc('8')">8</button>
+            <button class="tool-btn calc-btn calc-btn-num" onclick="appendCalc('9')">9</button>
+            <button class="tool-btn calc-btn calc-btn-op" onclick="appendCalc('/')">/</button>
+            <button class="tool-btn calc-btn calc-btn-clear" onclick="appendCalc('C')">C</button>
+            <button class="tool-btn calc-btn calc-btn-num" onclick="appendCalc('4')">4</button>
+            <button class="tool-btn calc-btn calc-btn-num" onclick="appendCalc('5')">5</button>
+            <button class="tool-btn calc-btn calc-btn-num" onclick="appendCalc('6')">6</button>
+            <button class="tool-btn calc-btn calc-btn-op" onclick="appendCalc('*')">*</button>
+            <button class="tool-btn calc-btn calc-btn-clear" onclick="appendCalc('DEL')">⌫</button>
+            <button class="tool-btn calc-btn calc-btn-num" onclick="appendCalc('1')">1</button>
+            <button class="tool-btn calc-btn calc-btn-num" onclick="appendCalc('2')">2</button>
+            <button class="tool-btn calc-btn calc-btn-num" onclick="appendCalc('3')">3</button>
+            <button class="tool-btn calc-btn calc-btn-op" onclick="appendCalc('-')">-</button>
+            <button class="tool-btn calc-btn calc-btn-func" onclick="appendCalc('(')">(</button>
+            <button class="tool-btn calc-btn calc-btn-num" onclick="appendCalc('0')">0</button>
+            <button class="tool-btn calc-btn calc-btn-num" onclick="appendCalc('.')">.</button>
+            <button class="tool-btn calc-btn calc-btn-equal" onclick="evalCalc()">=</button>
+            <button class="tool-btn calc-btn calc-btn-op" onclick="appendCalc('+')">+</button>
+            <button class="tool-btn calc-btn calc-btn-func" onclick="appendCalc(')')">)</button>
+            <button class="tool-btn calc-btn calc-btn-func" onclick="appendCalc('sin(')">sin</button>
+            <button class="tool-btn calc-btn calc-btn-func" onclick="appendCalc('cos(')">cos</button>
+            <button class="tool-btn calc-btn calc-btn-func" onclick="appendCalc('tan(')">tan</button>
+            <button class="tool-btn calc-btn calc-btn-func" onclick="appendCalc('log(')">log</button>
+            <button class="tool-btn calc-btn calc-btn-func" onclick="appendCalc('ln(')">ln</button>
+            <button class="tool-btn calc-btn calc-btn-func" onclick="appendCalc('sqrt(')">√</button>
+            <button class="tool-btn calc-btn calc-btn-func" onclick="appendCalc('^')">^</button>
+            <button class="tool-btn calc-btn calc-btn-func" onclick="appendCalc('π')">π</button>
+            <button class="tool-btn calc-btn calc-btn-func" onclick="appendCalc('e')">e</button>
+            <button class="tool-btn calc-btn calc-btn-func" onclick="appendCalc('abs(')">abs</button>
         </div>
         <div id="calcResult" class="tool-output"></div>`;
     }
@@ -697,7 +702,7 @@
     window.openAiTools = function(){ document.getElementById('aiToolsOverlay').classList.add('active'); document.getElementById('aiToolsContainer').innerHTML=`<h2>🤖 AI Hub</h2><div class="tool-card" onclick="window.open('https://chat.openai.com','_blank')">🤖 ChatGPT</div><div class="tool-card" onclick="window.open('https://gemini.google.com','_blank')">🧠 Gemini</div><button class="tool-btn" onclick="closeAiOverlay()">Close</button>`; };
     window.closeAiOverlay = () => document.getElementById('aiToolsOverlay').classList.remove('active');
     
-    // Weekly update system (Saturday) with correct messaging
+    // Weekly update system (Saturday) with correct messaging and version display v9.8 initially
     const versionSpan = document.getElementById('appVersion');
     const updateMessages = [
         "🚀 Device performance accelerated.",
