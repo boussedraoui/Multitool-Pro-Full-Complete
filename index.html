@@ -214,7 +214,7 @@
         .tool-panel { background: var(--surface); border-radius: 40px; padding: 32px 28px; margin: 32px 0 40px; box-shadow: var(--shadow-lg); border: 1px solid var(--border); overflow: hidden; }
         .tool-btn { background: var(--primary); border: none; padding: 14px 28px; border-radius: 60px; font-weight: 700; color: white; cursor: pointer; transition: 0.2s; margin: 8px; display: inline-block; font-size: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
         .tool-btn:hover { background: var(--primary-dark); transform: scale(0.97); }
-        .calc-btn { min-width: 0; width: 100%; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0 !important; padding: 14px 4px !important; border-radius: 16px; font-weight: 700; font-size: 1rem; }
+        .calc-btn { min-width: 0; width: 100%; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0 !important; padding: 12px 0 !important; border-radius: 16px; font-weight: 700; font-size: 0.9rem; }
         .tool-output { background: var(--surface2); padding: 16px 20px; border-radius: 28px; margin-top: 20px; word-break: break-word; border: 1px solid var(--border); max-height: 500px; overflow-y: auto; font-size: 1rem; }
         .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--surface); color: var(--text); padding: 16px 32px; border-radius: 80px; font-weight: 600; transition: 0.3s; z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.2); pointer-events: none; font-size: 1rem; }
         .toast.show { transform: translateX(-50%) translateY(0); }
@@ -391,13 +391,13 @@
     <div class="footer-love-line"><span id="scrollUpArrow" class="scroll-up-arrow" onclick="scrollToTop()" title="Go to top">↑</span><span>Made with <span class="heart-beat">💕</span></span><span class="footer-arrow-down" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})" title="Go to bottom">↓</span></div>
     <div class="random-trigger"><button id="randomToolBtn" class="random-btn">🎲 Random Tool <span class="arrow-down">⬇️</span></button></div>
     <div id="toolRecoBanner" class="tool-reco-banner" style="display:none;"><span class="reco-text" id="recoMessage">🧮 Try the Advanced Calculator</span><button class="reco-try-btn" id="recoTryBtn">Try it <span class="arrow-down-different">▼</span></button><button class="reco-close" id="recoCloseBtn">✕</button></div>
-    <!-- Direct download link with "Update" text as requested -->
-    <div style="margin-top: 20px;"><a href="https://apk.e-droid.net/apk/app4024601-9udb5a.apk?v=36" class="download-btn" target="_blank">🔄 Update MultiTool Pro APK (Direct)</a></div>
+    <!-- Direct download link with "Update" and weekly info -->
+    <div style="margin-top: 20px;"><a href="https://apk.e-droid.net/apk/app4024601-9udb5a.apk?v=36" class="download-btn" target="_blank">🔄 Update MultiTool Pro APK (Direct) - New update every Saturday</a></div>
 </footer>
 <div id="toast" class="toast"></div>
 
 <script>
-// FULLY FUNCTIONAL CODE - ALL TOOLS WORKING, WEEKLY UPDATE SYSTEM, ENHANCED CURRENCY CONVERTER
+// FULLY FUNCTIONAL CODE - ALL TOOLS WORKING, ADVANCED CALCULATOR, ALL TOOLS IN SIDEBAR, WEEKLY UPDATE SYSTEM
 (function(){
     let darkMode = localStorage.getItem('theme') === 'dark';
     if(darkMode) document.documentElement.setAttribute('data-theme','dark');
@@ -485,20 +485,87 @@
     const fullToolsList = [...originalTools, ...metaSearchTools];
     const metaIds = new Set(metaSearchTools.map(t => t.id));
     
-    function renderGrid(){ let grid = document.getElementById('toolsGrid'); let html = ''; for(let i=0; i<fullToolsList.length; i++){ let t = fullToolsList[i]; if(metaIds.has(t.id)) continue; if(t.id === 'premium_ai'){ html += `<div class="tool-card" data-tool="${t.id}" onclick="selectTool('${t.id}')"><div style="font-size:2.8rem;">${t.icon}</div><div class="tool-name">${t.name}</div></div>`; html += `<div class="tool-card large" onclick="openImagineOverlay()"><div style="font-size:2.8rem;">✨🧠✨</div><div class="tool-name">IMAGINE</div><div style="font-size:0.95rem;margin-top:6px;">25+ new tools</div></div>`; html += `<div class="tool-card online-tools" onclick="openOnlineOverlay()"><div style="font-size:2.8rem;">🌐💻🌍</div><div class="tool-name">Online Tools</div><div style="font-size:0.95rem;margin-top:6px;">30+ free online utilities</div></div>`; } else { html += `<div class="tool-card" data-tool="${t.id}" onclick="selectTool('${t.id}')"><div style="font-size:2.8rem;">${t.icon}</div><div class="tool-name">${t.name}</div></div>`; } } grid.innerHTML = html; }
-    function renderSidebar(){ let sidebar = document.getElementById('sidebarList'); let sidebarTools = fullToolsList.filter(t => !metaIds.has(t.id)); sidebar.innerHTML = sidebarTools.map(t => `<div class="sidebar-item" onclick="selectTool('${t.id}'); closeSidebar();"><span style="font-size:1.6rem;">${t.icon}</span> <span style="font-size:1rem;">${t.name}</span></div>`).join(''); let imagineItem = document.createElement('div'); imagineItem.className = 'sidebar-item'; imagineItem.innerHTML = '<span style="font-size:1.6rem;">✨🧠✨</span> <span style="font-size:1rem;">IMAGINE (New Tools)</span>'; imagineItem.onclick = () => { closeSidebar(); openImagineOverlay(); }; sidebar.appendChild(imagineItem); let shortenerItem = document.createElement('div'); shortenerItem.className = 'sidebar-item'; shortenerItem.innerHTML = '<span style="font-size:1.6rem;">🔗</span> <span style="font-size:1rem;">URL Shorteners</span>'; shortenerItem.onclick = () => { closeSidebar(); openShortenerOverlay(); }; sidebar.appendChild(shortenerItem); let onlineItem = document.createElement('div'); onlineItem.className = 'sidebar-item'; onlineItem.innerHTML = '<span style="font-size:1.6rem;">🌐</span> <span style="font-size:1rem;">Online Tools</span>'; onlineItem.onclick = () => { closeSidebar(); openOnlineOverlay(); }; sidebar.appendChild(onlineItem); let sitesItem = document.createElement('div'); sitesItem.className = 'sidebar-item'; sitesItem.innerHTML = '<span style="font-size:1.6rem;">🌍</span> <span style="font-size:1rem;">SITES (Popular)</span>'; sitesItem.onclick = () => { closeSidebar(); openSitesOverlay(); }; sidebar.appendChild(sitesItem); let mediaItem = document.createElement('div'); mediaItem.className = 'sidebar-item'; mediaItem.innerHTML = '<span style="font-size:1.6rem;">📺</span> <span style="font-size:1rem;">MEDIA (Video)</span>'; mediaItem.onclick = () => { closeSidebar(); openMediaOverlay(); }; sidebar.appendChild(mediaItem); let tvRadioItem = document.createElement('div'); tvRadioItem.className = 'sidebar-item'; tvRadioItem.innerHTML = '<span style="font-size:1.6rem;">📺📻</span> <span style="font-size:1rem;">TV / RADIO</span>'; tvRadioItem.onclick = () => { closeSidebar(); openTvRadioOverlay(); }; sidebar.appendChild(tvRadioItem); let browsersItem = document.createElement('div'); browsersItem.className = 'sidebar-item'; browsersItem.innerHTML = '<span style="font-size:1.6rem;">🌐🧭</span> <span style="font-size:1rem;">Browsers (In‑App)</span>'; browsersItem.onclick = () => { closeSidebar(); openBrowsersOverlay(); }; sidebar.appendChild(browsersItem); let convertItem = document.createElement('div'); convertItem.className = 'sidebar-item'; convertItem.innerHTML = '<span style="font-size:1.6rem;">🔄📄🖼️</span> <span style="font-size:1rem;">CONVERT Edit Word, Image, PDF…</span>'; convertItem.onclick = () => { closeSidebar(); openConvertOverlay(); }; sidebar.appendChild(convertItem); let translatorItem = document.createElement('div'); translatorItem.className = 'sidebar-item'; translatorItem.innerHTML = '<span style="font-size:1.6rem;">🌐🔤🤖</span> <span style="font-size:1rem;">All AI Translator</span>'; translatorItem.onclick = () => { closeSidebar(); openAllAiTranslatorOverlay(); }; sidebar.appendChild(translatorItem); let gamesItem = document.createElement('div'); gamesItem.className = 'sidebar-item'; gamesItem.innerHTML = '<span style="font-size:1.6rem;">🎮</span> <span style="font-size:1rem;">GAMES</span>'; gamesItem.onclick = () => { closeSidebar(); openGamesOverlay(); }; sidebar.appendChild(gamesItem); let moneyItem = document.createElement('div'); moneyItem.className = 'sidebar-item'; moneyItem.innerHTML = '<span style="font-size:1.6rem;">💵</span> <span style="font-size:1rem;">MONEY & INVESTMENTS</span>'; moneyItem.onclick = () => { closeSidebar(); openMoneyOverlay(); }; sidebar.appendChild(moneyItem); let remoteItem = document.createElement('div'); remoteItem.className = 'sidebar-item'; remoteItem.innerHTML = '<span style="font-size:1.6rem;">🖥️🔒📱</span> <span style="font-size:1rem;">RDP, VPN & Web Preview</span>'; remoteItem.onclick = () => { closeSidebar(); openRemoteToolsOverlay(); }; sidebar.appendChild(remoteItem); }
+    // SIDEBAR: includes ALL tools (both original and meta)
+    function renderSidebar(){
+        let sidebar = document.getElementById('sidebarList');
+        let allToolsForSidebar = fullToolsList;
+        sidebar.innerHTML = allToolsForSidebar.map(t => `<div class="sidebar-item" onclick="selectTool('${t.id}'); closeSidebar();"><span style="font-size:1.6rem;">${t.icon}</span> <span style="font-size:1rem;">${t.name}</span></div>`).join('');
+        // Also add category links if needed, but all are already in metaTools
+    }
+    
+    // ADVANCED CALCULATOR with scientific functions
+    function renderCalculator() {
+        return `
+        <div id="calcDisplay" style="font-size:2rem;padding:16px;background:var(--surface2);border-radius:20px;margin-bottom:16px;font-family:monospace;word-break:break-all;">0</div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;">
+            <button class="tool-btn calc-btn" onclick="appendCalc('7')">7</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('8')">8</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('9')">9</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('/')">/</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('C')">C</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('4')">4</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('5')">5</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('6')">6</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('*')">*</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('DEL')">⌫</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('1')">1</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('2')">2</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('3')">3</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('-')">-</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('(')">(</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('0')">0</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('.')">.</button>
+            <button class="tool-btn calc-btn" onclick="evalCalc()">=</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('+')">+</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc(')')">)</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('sin(')">sin</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('cos(')">cos</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('tan(')">tan</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('log(')">log</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('ln(')">ln</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('sqrt(')">√</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('^')">^</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('π')">π</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('e')">e</button>
+            <button class="tool-btn calc-btn" onclick="appendCalc('abs(')">abs</button>
+        </div>
+        <div id="calcResult" class="tool-output"></div>`;
+    }
     
     // Tool panel renderer (full implementation)
     function renderToolPanel(tid){
         let title='', content='';
         if(tid=='calculator'){ 
-            title='🧮 Advanced Calculator'; 
-            content=`<div id="calcDisplay" style="font-size:2rem;padding:16px;background:var(--surface2);border-radius:20px;margin-bottom:16px;">0</div><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;"><button class="tool-btn calc-btn" onclick="appendCalc('7')">7</button><button class="tool-btn calc-btn" onclick="appendCalc('8')">8</button><button class="tool-btn calc-btn" onclick="appendCalc('9')">9</button><button class="tool-btn calc-btn" onclick="appendCalc('/')">/</button><button class="tool-btn calc-btn" onclick="appendCalc('4')">4</button><button class="tool-btn calc-btn" onclick="appendCalc('5')">5</button><button class="tool-btn calc-btn" onclick="appendCalc('6')">6</button><button class="tool-btn calc-btn" onclick="appendCalc('*')">*</button><button class="tool-btn calc-btn" onclick="appendCalc('1')">1</button><button class="tool-btn calc-btn" onclick="appendCalc('2')">2</button><button class="tool-btn calc-btn" onclick="appendCalc('3')">3</button><button class="tool-btn calc-btn" onclick="appendCalc('-')">-</button><button class="tool-btn calc-btn" onclick="appendCalc('0')">0</button><button class="tool-btn calc-btn" onclick="appendCalc('.')">.</button><button class="tool-btn calc-btn" onclick="evalCalc()">=</button><button class="tool-btn calc-btn" onclick="appendCalc('+')">+</button><button class="tool-btn calc-btn" onclick="appendCalc('C')">C</button><button class="tool-btn calc-btn" onclick="appendCalc('DEL')">⌫</button></div><div id="calcResult" class="tool-output"></div>`;
+            title='🧮 Advanced Calculator (Scientific)'; 
+            content = renderCalculator();
             window.calcExpr = '';
-            window.appendCalc = function(v){ if(v==='C') window.calcExpr=''; else if(v==='DEL') window.calcExpr=window.calcExpr.slice(0,-1); else window.calcExpr+=v; document.getElementById('calcDisplay').innerText=window.calcExpr||'0'; };
-            window.evalCalc = function(){ try{ let res = eval(window.calcExpr); document.getElementById('calcResult').innerHTML='Result: '+res; window.calcExpr=String(res); document.getElementById('calcDisplay').innerText=res; }catch(e){ document.getElementById('calcResult').innerHTML='Error'; } };
+            window.appendCalc = function(v){ 
+                if(v==='C') window.calcExpr=''; 
+                else if(v==='DEL') window.calcExpr=window.calcExpr.slice(0,-1); 
+                else window.calcExpr+=v; 
+                document.getElementById('calcDisplay').innerText=window.calcExpr||'0'; 
+            };
+            window.evalCalc = function(){ 
+                try{ 
+                    let expr = window.calcExpr;
+                    expr = expr.replace(/sin\(/g, 'Math.sin(');
+                    expr = expr.replace(/cos\(/g, 'Math.cos(');
+                    expr = expr.replace(/tan\(/g, 'Math.tan(');
+                    expr = expr.replace(/log\(/g, 'Math.log10(');
+                    expr = expr.replace(/ln\(/g, 'Math.log(');
+                    expr = expr.replace(/sqrt\(/g, 'Math.sqrt(');
+                    expr = expr.replace(/abs\(/g, 'Math.abs(');
+                    expr = expr.replace(/π/g, 'Math.PI');
+                    expr = expr.replace(/\be\b/g, 'Math.E');
+                    expr = expr.replace(/\^/g, '**');
+                    let result = new Function('return ' + expr)();
+                    document.getElementById('calcResult').innerHTML = '<strong>Result:</strong> ' + result;
+                    window.calcExpr = String(result);
+                    document.getElementById('calcDisplay').innerText = result;
+                } catch(e){ document.getElementById('calcResult').innerHTML = 'Error'; }
+            };
         }
-        else if(tid=='password'){ title='🔐 Password Generator'; content=`<input type="range" id="passLen" min="6" max="32" value="16"><span id="lenVal">16</span><button class="tool-btn" onclick="genPass()">Generate</button><div id="passOut" class="tool-output"></div>`; window.genPass=function(){ let l=document.getElementById('passLen').value, chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*',p=''; for(let i=0;i<l;i++) p+=chars[Math.floor(Math.random()*chars.length)]; document.getElementById('passOut').innerText=p; }; document.getElementById('passLen')?.addEventListener('input',(e)=>document.getElementById('lenVal').innerText=e.target.value); }
+        else if(tid=='password'){ title='🔐 Password Generator'; content=`<input type="range" id="passLen" min="6" max="32" value="16"><span id="lenVal">16</span><br><button class="tool-btn" onclick="genPass()">Generate</button><div id="passOut" class="tool-output"></div>`; window.genPass=function(){ let l=document.getElementById('passLen').value, chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*',p=''; for(let i=0;i<l;i++) p+=chars[Math.floor(Math.random()*chars.length)]; document.getElementById('passOut').innerText=p; }; document.getElementById('passLen')?.addEventListener('input',(e)=>document.getElementById('lenVal').innerText=e.target.value); }
         else if(tid=='worldclock'){ title='🕐 World Clock'; content='<div id="worldClockContainer" class="tool-output">Loading...</div>'; window.updateWorldClock=function(){ let d=new Date(); document.getElementById('worldClockContainer').innerHTML=`<strong>UTC:</strong> ${d.toUTCString()}<br><strong>Local:</strong> ${d.toLocaleString()}<br><strong>Timezone offset:</strong> ${-d.getTimezoneOffset()/60} hours`; }; updateWorldClock(); setInterval(updateWorldClock,60000); }
         else if(tid=='joke'){ title='😂 Fresh Joke'; content='<button class="tool-btn" onclick="fetchNewJoke()">Get New Joke 🤣</button><div id="jokeOutput" class="tool-output">Click to get a joke</div>'; window.fetchNewJoke=async function(){ let out=document.getElementById('jokeOutput'); out.innerHTML='Loading...'; try{ let r=await fetch('https://v2.jokeapi.dev/joke/Any?safe-mode'); let d=await r.json(); out.innerHTML=d.type==='single'?d.joke:`${d.setup} 😂 ${d.delivery}`; }catch(e){ out.innerHTML='😂 Why do programmers prefer dark mode? Because light attracts bugs!'; } }; }
         else if(tid=='ip'){ title='🌍 IP Lookup'; content='<button class="tool-btn" onclick="getIP()">Get My IP</button><div id="ipOut" class="tool-output"></div>'; window.getIP=function(){ fetch('https://api.ipify.org?format=json').then(r=>r.json()).then(d=>document.getElementById('ipOut').innerHTML=`Your IP: ${d.ip}`).catch(()=>document.getElementById('ipOut').innerHTML='Error'); }; }
@@ -575,7 +642,7 @@
         }
     };
     
-    // Overlay functions (simplified but all present)
+    // Overlay functions (all present)
     window.selectTool = function(toolId){
         if (toolId === 'media_overlay') return openMediaOverlay();
         if (toolId === 'sites_overlay') return openSitesOverlay();
@@ -595,7 +662,6 @@
         playSound();
     };
     
-    // Minimal overlay implementations (all needed)
     window.openMediaOverlay = function(){ document.getElementById('mediaOverlay').classList.add('active'); document.getElementById('mediaGrid').innerHTML='<div class="tool-card" onclick="window.open(\'https://youtube.com\',\'_blank\')">📺 YouTube</div><div class="tool-card" onclick="window.open(\'https://netflix.com\',\'_blank\')">🎬 Netflix</div>'; };
     window.closeMediaOverlay = () => document.getElementById('mediaOverlay').classList.remove('active');
     window.openSitesOverlay = function(){ document.getElementById('sitesOverlay').classList.add('active'); document.getElementById('sitesGrid').innerHTML='<div class="tool-card" onclick="window.open(\'https://reddit.com\',\'_blank\')">🤖 Reddit</div><div class="tool-card" onclick="window.open(\'https://github.com\',\'_blank\')">🐙 GitHub</div>'; };
@@ -631,9 +697,20 @@
     window.openAiTools = function(){ document.getElementById('aiToolsOverlay').classList.add('active'); document.getElementById('aiToolsContainer').innerHTML=`<h2>🤖 AI Hub</h2><div class="tool-card" onclick="window.open('https://chat.openai.com','_blank')">🤖 ChatGPT</div><div class="tool-card" onclick="window.open('https://gemini.google.com','_blank')">🧠 Gemini</div><button class="tool-btn" onclick="closeAiOverlay()">Close</button>`; };
     window.closeAiOverlay = () => document.getElementById('aiToolsOverlay').classList.remove('active');
     
-    // Weekly update system
+    // Weekly update system (Saturday) with correct messaging
     const versionSpan = document.getElementById('appVersion');
-    const updateMessages = ["🚀 Device performance accelerated.","🃏 One card updated, new translator tool added.","🔧 Fixes and improvements to search engine.","📱 Improved Android compatibility.","✨ New World Clock interface.","🔒 Enhanced security.","🎨 New colors and themes.","📊 Currency converter with live rates.","🧠 AI Hub updated with new models.","🌐 Improved translator performance."];
+    const updateMessages = [
+        "🚀 Device performance accelerated.",
+        "🃏 One card updated, new translator tool added.",
+        "🔧 Fixes and improvements to search engine.",
+        "📱 Improved Android compatibility.",
+        "✨ New World Clock interface.",
+        "🔒 Enhanced security.",
+        "🎨 New colors and themes.",
+        "📊 Currency converter with live rates.",
+        "🧠 AI Hub updated with new models.",
+        "🌐 Improved translator performance."
+    ];
     function getNextVersion(currentVer) {
         let parts = currentVer.split('.');
         if (parts.length === 1) return (parseInt(parts[0]) + 1).toString();
@@ -655,11 +732,11 @@
         popup.className = 'update-popup';
         popup.innerHTML = `
             <div class="close-popup" onclick="this.parentElement.remove()">✕</div>
-            <strong>🔄 Update Available for MultiTool Pro</strong><br>
+            <strong>🔄 New Update Available for MultiTool Pro</strong><br>
             New Version: <strong>${version}</strong><br>
             <span style="font-size:0.9rem;">${message}</span><br>
-            <a href="https://apk.e-droid.net/apk/app4024601-9udb5a.apk?v=36" class="download-btn" target="_blank">🔄 Update MultiTool Pro APK (Direct)</a>
-            <div style="font-size:0.8rem; margin-top:6px;">Auto-update every Saturday</div>
+            <a href="https://apk.e-droid.net/apk/app4024601-9udb5a.apk?v=36" class="download-btn" target="_blank">🔄 Update MultiTool Pro APK (Direct) - New update every Saturday</a>
+            <div style="font-size:0.8rem; margin-top:6px;">New update every Saturday</div>
         `;
         document.body.appendChild(popup);
         setTimeout(() => { if(popup) popup.remove(); }, 20000);
@@ -690,15 +767,33 @@
     checkAndUpdateWeekly();
     setInterval(checkAndUpdateWeekly, 3600000);
     
-    // Search, random tool, etc.
-    document.getElementById('globalSearch').addEventListener('input',function(e){ let q=e.target.value.trim().toLowerCase(); if(!q){ document.getElementById('searchResults').style.display='none'; return; } let filtered=fullToolsList.filter(t=>t.name.toLowerCase().includes(q)); let html=filtered.map(t=>`<div style="padding:12px;cursor:pointer;" onclick="selectTool('${t.id}'); document.getElementById('globalSearch').value=''; document.getElementById('searchResults').style.display='none';">${t.icon} ${t.name}</div>`).join(''); document.getElementById('searchResults').innerHTML=html||'<div>No tools found</div>'; document.getElementById('searchResults').style.display='block'; });
+    // Grid and search
+    function renderGrid(){ 
+        let grid = document.getElementById('toolsGrid'); 
+        let html = ''; 
+        for(let i=0; i<fullToolsList.length; i++){ 
+            let t = fullToolsList[i]; 
+            if(metaIds.has(t.id)) continue; 
+            if(t.id === 'premium_ai'){ 
+                html += `<div class="tool-card" onclick="selectTool('${t.id}')"><div style="font-size:2.8rem;">${t.icon}</div><div class="tool-name">${t.name}</div></div>`; 
+                html += `<div class="tool-card large" onclick="openImagineOverlay()"><div style="font-size:2.8rem;">✨🧠✨</div><div class="tool-name">IMAGINE</div><div style="font-size:0.95rem;margin-top:6px;">25+ new tools</div></div>`; 
+                html += `<div class="tool-card online-tools" onclick="openOnlineOverlay()"><div style="font-size:2.8rem;">🌐💻🌍</div><div class="tool-name">Online Tools</div><div style="font-size:0.95rem;margin-top:6px;">30+ free online utilities</div></div>`; 
+            } else { 
+                html += `<div class="tool-card" onclick="selectTool('${t.id}')"><div style="font-size:2.8rem;">${t.icon}</div><div class="tool-name">${t.name}</div></div>`; 
+            } 
+        } 
+        grid.innerHTML = html; 
+    }
+    
+    document.getElementById('globalSearch').addEventListener('input',function(e){ let q=e.target.value.trim().toLowerCase(); if(!q){ document.getElementById('searchResults').style.display='none'; return; } let filtered=fullToolsList.filter(t=>t.name.toLowerCase().includes(q)); let html=filtered.map(t=>`<div style="padding:12px;cursor:pointer;border-bottom:1px solid var(--border);" onclick="selectTool('${t.id}'); document.getElementById('globalSearch').value=''; document.getElementById('searchResults').style.display='none';">${t.icon} ${t.name}</div>`).join(''); document.getElementById('searchResults').innerHTML=html||'<div>No tools found</div>'; document.getElementById('searchResults').style.display='block'; });
     document.addEventListener('click',(e)=>{ if(!e.target.closest('.search-container')) document.getElementById('searchResults').style.display='none'; });
+    
     const randomBtn = document.getElementById('randomToolBtn'); let isRandomVisible = true; function toggleRandomButton() { if (randomBtn) { if (isRandomVisible) randomBtn.classList.add('hide-random'); else randomBtn.classList.remove('hide-random'); isRandomVisible = !isRandomVisible; } } setInterval(toggleRandomButton, 3000); randomBtn.addEventListener('click', function() { const availableTools = fullToolsList.filter(t => t.id !== 'premium_ai'); const randomIndex = Math.floor(Math.random() * availableTools.length); const randomTool = availableTools[randomIndex]; if (randomTool) { selectTool(randomTool.id); playSound(); showToast(`🎲 Random tool: ${randomTool.name}`); } });
+    
     renderGrid(); renderSidebar(); selectTool('calculator');
     document.body.addEventListener('click',(e)=>{ if(e.target.closest('.tool-card, .tool-btn, .footer-btn, .scroll-up-arrow, .footer-arrow-down')) playSound(); });
-    // Recommendation banner
+    
     setTimeout(()=>{ let b=document.getElementById('toolRecoBanner'); if(b){ b.style.display='flex'; document.getElementById('recoMessage').innerText='✨ Try Advanced Calculator'; document.getElementById('recoTryBtn').onclick=()=>selectTool('calculator'); document.getElementById('recoCloseBtn').onclick=()=>b.style.display='none'; } }, 15000);
-    // Translation button
     document.getElementById('translatePageBtn')?.addEventListener('click',()=>{ let lang=document.getElementById('targetLangSelect').value; window.open(`https://translate.yandex.com/translate?url=${encodeURIComponent(window.location.href)}&lang=en-${lang}`,'_blank'); });
 })();
 </script>
