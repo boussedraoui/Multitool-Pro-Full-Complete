@@ -80,20 +80,8 @@
         }
         .main-container { max-width: 1400px; margin: 0 auto; padding: 30px 24px 40px; }
         .hero { text-align: center; padding: 30px 20px 24px; }
-        
-        /* MultiTOOL title: squared letters with original colors */
-        .hero h1 {
-            font-family: 'Poppins', 'Montserrat', system-ui, sans-serif;
-            font-size: 5rem;
-            font-weight: 900;
-            margin-bottom: 12px;
-            letter-spacing: -0.02em;
-            display: inline-block;
-        }
-        .multi-letter {
-            display: inline-block;
-            font-weight: 900;
-        }
+        .hero h1 { font-family: 'Poppins', 'Montserrat', system-ui, sans-serif; font-size: 5rem; font-weight: 900; margin-bottom: 12px; letter-spacing: -0.02em; display: inline-block; }
+        .multi-letter { display: inline-block; font-weight: 900; }
         .letter-m { color: #FF3366; }
         .letter-u { color: #FF9933; }
         .letter-l { color: #FFCC00; }
@@ -102,8 +90,6 @@
         .letter-o { color: #9933FF; }
         .letter-o2 { color: #FF33CC; }
         .letter-l2 { color: #FF6633; }
-        
-        /* Pro frame: light blue stars only */
         .pro-frame {
             display: inline-block;
             background: linear-gradient(145deg, #FFD700, #FFA500, #FFD700, #FFC125);
@@ -119,34 +105,11 @@
             margin: 0 0.2em;
             box-shadow: 0 0 15px rgba(255,215,0,0.8), inset 0 1px 2px rgba(255,255,200,0.9);
             position: relative;
-            text-shadow: none;
-            letter-spacing: 1px;
-            backdrop-filter: none;
         }
-        .pro-frame::before,
-        .pro-frame::after {
-            content: "✨✨✨✨✨";
-            position: absolute;
-            font-size: 1.2rem;
-            white-space: nowrap;
-            color: #4da8ff;
-            text-shadow: 0 0 4px #7fc9ff;
-            animation: starSparkleBlue 1.2s infinite alternate;
-            pointer-events: none;
-        }
-        .pro-frame::before { top: -28px; left: -40px; }
-        .pro-frame::after { bottom: -28px; right: -40px; }
-        @keyframes starSparkleBlue {
-            0% { opacity: 0.7; transform: scale(0.9) rotate(0deg); color: #4da8ff; }
-            100% { opacity: 1; transform: scale(1.2) rotate(10deg); color: #90caf9; }
-        }
-        
-        /* FULL + Complete: DARK, VIBRANT rainbow colors, horizontal movement */
         .full-complete-badge { 
             font-size: 1.7rem;
             font-weight: 900; 
-            background: linear-gradient(0deg, 
-                #CC0000, #CC5500, #B8860B, #006400, #004466, #0000CC, #660066);
+            background: linear-gradient(0deg, #CC0000, #CC5500, #B8860B, #006400, #004466, #0000CC, #660066);
             background-size: 100% 100%;
             -webkit-background-clip: text;
             background-clip: text;
@@ -157,74 +120,22 @@
             white-space: nowrap;
             animation: horizontalSlide 1.2s ease-in-out infinite alternate;
         }
-        @keyframes horizontalSlide {
-            0% { transform: translateX(-6px); }
-            100% { transform: translateX(6px); }
-        }
-        
-        .subtitle {
-            font-size: 1.4rem;
-            color: var(--text2);
-            margin-top: 12px;
-            font-weight: 500;
-        }
-        .more-text {
-            text-align: center;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-top: 12px;
-            letter-spacing: 1px;
-        }
-        
-        /* Stars under & More... in boxes */
-        .star-rating {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 16px;
-            flex-wrap: wrap;
-        }
-        .star-box {
-            width: 48px;
-            height: 48px;
-            background: var(--surface2);
-            border: 2px solid #FFC107;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
+        @keyframes horizontalSlide { 0% { transform: translateX(-6px); } 100% { transform: translateX(6px); } }
+        .subtitle { font-size: 1.4rem; color: var(--text2); margin-top: 12px; font-weight: 500; }
+        .more-text { text-align: center; font-size: 1.2rem; font-weight: 700; color: var(--primary); margin-top: 12px; letter-spacing: 1px; }
+        .star-rating { display: flex; justify-content: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+        .star-box { width: 48px; height: 48px; background: var(--surface2); border: 2px solid #FFC107; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 2rem; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
         .star-box .star.empty { color: #ccc; }
         .star-box .star.filled { color: #FFC107; text-shadow: 0 0 4px gold; }
-        .star-box.explode {
-            animation: starExplode 0.6s cubic-bezier(0.34,1.2,0.64,1) forwards;
-        }
+        .star-box.explode { animation: starExplode 0.6s cubic-bezier(0.34,1.2,0.64,1) forwards; }
         @keyframes starExplode {
             0% { transform: scale(1); background: #FFC107; box-shadow: 0 0 0 0 rgba(255,193,7,0.7); }
             30% { transform: scale(1.6); background: radial-gradient(circle, #ff0000, #ff7f00, #ffff00); }
             70% { transform: scale(1.3); background: radial-gradient(circle, #00ff00, #00ffff, #0000ff); }
             100% { transform: scale(1); background: var(--surface2); border-color: #FFC107; }
         }
-        .firework-particle {
-            position: fixed;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 10000;
-            animation: particleFly 0.8s ease-out forwards;
-        }
-        @keyframes particleFly {
-            0% { transform: translate(0,0) scale(1); opacity: 1; }
-            100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
-        }
-        
-        /* I 💗 TOOLS */
+        .firework-particle { position: fixed; width: 6px; height: 6px; border-radius: 50%; pointer-events: none; z-index: 10000; animation: particleFly 0.8s ease-out forwards; }
+        @keyframes particleFly { 0% { transform: translate(0,0) scale(1); opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; } }
         .love-text {
             position: absolute;
             top: 50%;
@@ -239,30 +150,15 @@
             -webkit-text-fill-color: transparent;
             animation: rainbowBeat 4s ease infinite, heartbeatPulse 1.2s ease-in-out infinite;
             white-space: nowrap;
-            text-shadow: none;
-            letter-spacing: 1px;
         }
-        @keyframes rainbowBeat {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        @keyframes heartbeatPulse {
-            0%,100%{ transform: translate(-50%, -50%) scale(1); }
-            25%{ transform: translate(-50%, -50%) scale(1.1); }
-            35%{ transform: translate(-50%, -50%) scale(1.05); }
-            45%{ transform: translate(-50%, -50%) scale(1.12); }
-            55%{ transform: translate(-50%, -50%) scale(1); }
-        }
-        
+        @keyframes rainbowBeat { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes heartbeatPulse { 0%,100%{ transform: translate(-50%, -50%) scale(1); } 25%{ transform: translate(-50%, -50%) scale(1.1); } 35%{ transform: translate(-50%, -50%) scale(1.05); } 45%{ transform: translate(-50%, -50%) scale(1.12); } 55%{ transform: translate(-50%, -50%) scale(1); } }
         .premium-ribbon { background: linear-gradient(135deg, #f7b731, #f0c060); color: #1a1a2e; font-weight: 800; padding: 10px 24px; border-radius: 60px; font-size: 1.1rem; display: inline-block; box-shadow: 0 4px 12px rgba(0,0,0,0.1); position: relative; z-index: 2; animation: ribbonBounce 1.4s ease-in-out infinite; }
         @keyframes ribbonBounce { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-5px); } }
         .premium-container { position: relative; display: inline-block; margin-top: 20px; margin-bottom: 20px; }
         .orbiting-love { position: absolute; top: 50%; left: 50%; width: 180px; height: 180px; margin: -90px 0 0 -90px; pointer-events: none; z-index: 1; animation: orbit 8s linear infinite; }
         @keyframes orbit { 0% { transform: rotate(0deg) translateX(120px) rotate(0deg); } 100% { transform: rotate(360deg) translateX(120px) rotate(-360deg); } }
         .love-phrase { text-align: center; margin: 20px 0 12px; position: relative; display: flex; justify-content: center; align-items: center; min-height: 140px; }
-        
-        /* Rest of original styles (unchanged) */
         .search-container { max-width: 640px; margin: 24px auto 30px; }
         .search-input, textarea, select { width: 100%; padding: 16px 24px; border-radius: 80px; border: 2px solid var(--border); background: var(--surface); font-size: 1.05rem; transition: all 0.2s; font-family: inherit; }
         .search-results { background: var(--surface); border-radius: 28px; margin-top: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); max-height: 480px; overflow-y: auto; font-size: 1rem; }
@@ -288,8 +184,8 @@
         .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.3s; }
         .sidebar-overlay.active { opacity: 1; pointer-events: auto; }
         .sidebar-item { padding: 16px 28px; cursor: pointer; border-bottom: 1px solid var(--border); display: flex; gap: 16px; align-items: center; font-size: 1.05rem; font-weight: 500; }
-        .premium-page-overlay, .imagine-overlay, .shortener-overlay, .online-overlay, .sites-overlay, .media-overlay, .tvradio-overlay, .browsers-overlay, .convert-overlay, .games-overlay, .internal-tab-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 1100; overflow-y: auto; display: none; padding: 24px; }
-        .premium-page-overlay.active, .imagine-overlay.active, .shortener-overlay.active, .online-overlay.active, .sites-overlay.active, .media-overlay.active, .tvradio-overlay.active, .browsers-overlay.active, .convert-overlay.active, .games-overlay.active, .internal-tab-overlay.active { display: block; }
+        .premium-page-overlay, .imagine-overlay, .shortener-overlay, .online-overlay, .sites-overlay, .media-overlay, .tvradio-overlay, .browsers-overlay, .convert-overlay, .games-overlay, .internal-tab-overlay, .category-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 1100; overflow-y: auto; display: none; padding: 24px; }
+        .premium-page-overlay.active, .imagine-overlay.active, .shortener-overlay.active, .online-overlay.active, .sites-overlay.active, .media-overlay.active, .tvradio-overlay.active, .browsers-overlay.active, .convert-overlay.active, .games-overlay.active, .internal-tab-overlay.active, .category-overlay.active { display: block; }
         .footer-widget { background: var(--surface); border-top: 2px solid var(--border); padding: 28px 24px; text-align: center; margin-top: 60px; position: relative; font-size: 1rem; }
         .footer-controls { display: flex; justify-content: flex-end; gap: 16px; margin-bottom: 20px; }
         .footer-btn { background: var(--surface2); border: 1px solid var(--border); width: 54px; height: 54px; border-radius: 54px; font-size: 1.4rem; cursor: pointer; }
@@ -299,9 +195,8 @@
         .rate-us-container .tool-btn { background: #ff9800; font-size: 1.2rem; padding: 16px 36px; }
         .timezone-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; font-size: 1rem; }
         .timezone-item { padding: 10px 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 0.95rem; }
-        .imagine-tools-grid, .shortener-grid, .online-grid, .ai-grid, .search-grid, .sites-grid, .media-grid, .tvradio-grid, .browsers-grid, .convert-grid, .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 24px; margin-top: 28px; }
-        .imagine-tool-card, .shortener-card, .online-card, .ai-card, .search-card, .sites-card, .media-card, .tvradio-card, .browsers-card-item, .convert-card, .games-card { background: var(--surface); border-radius: 28px; padding: 20px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: 0.2s; box-shadow: var(--shadow); font-size: 1rem; }
-        .imagine-tool-card div:first-child, .shortener-card div:first-child, .online-card div:first-child, .ai-card div:first-child { font-size: 2.6rem; }
+        .imagine-tools-grid, .shortener-grid, .online-grid, .ai-grid, .search-grid, .sites-grid, .media-grid, .tvradio-grid, .browsers-grid, .convert-grid, .games-grid, .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 24px; margin-top: 28px; }
+        .imagine-tool-card, .shortener-card, .online-card, .ai-card, .search-card, .sites-card, .media-card, .tvradio-card, .browsers-card-item, .convert-card, .games-card, .category-card { background: var(--surface); border-radius: 28px; padding: 20px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: 0.2s; box-shadow: var(--shadow); font-size: 1rem; }
         .browser-frame { width: 100%; height: 70vh; border: 2px solid var(--border); border-radius: 28px; margin-top: 20px; background: white; }
         .browser-frame.fullscreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 2000; border: none; border-radius: 0; margin: 0; }
         .browser-frame.mobile-view { max-width: 420px; width: 100%; margin: 0 auto; border: 5px solid #333; border-radius: 28px; box-shadow: 0 0 16px rgba(0,0,0,0.3); display: block; }
@@ -332,31 +227,13 @@
         .random-trigger { text-align: left; margin: 16px 0 8px; }
         .random-btn { background: linear-gradient(135deg, #ff9800, #f44336); border: none; color: white; font-weight: bold; padding: 12px 24px; border-radius: 60px; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: 0.2s; display: inline-block; visibility: visible; opacity: 1; }
         .random-btn.hide-random { visibility: hidden; opacity: 0; }
-        .random-btn .arrow-down {
-            display: inline-block;
-            margin-left: 10px;
-            font-size: 1.2rem;
-            animation: bounceArrow 1s infinite;
-        }
-        @keyframes bounceArrow {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(4px); }
-        }
+        .random-btn .arrow-down { display: inline-block; margin-left: 10px; font-size: 1.2rem; animation: bounceArrow 1s infinite; }
+        @keyframes bounceArrow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
         .tool-reco-banner { background: linear-gradient(135deg, #6c5ce7, #00cec9); color: white; border-radius: 28px; padding: 18px 28px; margin: 24px 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; box-shadow: 0 12px 28px rgba(0,0,0,0.2); animation: fadeInBanner 0.5s ease; }
         .tool-reco-banner .reco-text { font-weight: 700; font-size: 1.15rem; flex: 1 1 auto; margin-right: 16px; }
         .tool-reco-banner .reco-try-btn { background: white; color: #6c5ce7; border: none; padding: 10px 22px; border-radius: 40px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.2s; display: inline-flex; align-items: center; gap: 6px; }
-        .reco-try-btn .arrow-down-different {
-            display: inline-block;
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-left: 4px;
-            animation: wiggle 0.8s infinite;
-        }
-        @keyframes wiggle {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(12deg); }
-            75% { transform: rotate(-12deg); }
-        }
+        .reco-try-btn .arrow-down-different { display: inline-block; font-size: 1.5rem; font-weight: bold; margin-left: 4px; animation: wiggle 0.8s infinite; }
+        @keyframes wiggle { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(12deg); } 75% { transform: rotate(-12deg); } }
         .translation-toolbar { display: flex; justify-content: flex-end; align-items: center; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; background: var(--surface2); border-radius: 60px; padding: 10px 20px; border: 1px solid var(--border); }
         .translation-toolbar select { width: auto; padding: 10px 16px; border-radius: 60px; font-size: 0.9rem; margin: 0; }
         .translation-toolbar .tool-btn { padding: 8px 20px; font-size: 0.9rem; margin: 0; }
@@ -378,13 +255,11 @@
             .tool-panel { padding: 24px 20px; }
             .tool-btn { padding: 12px 24px; font-size: 0.9rem; }
             .star-box { width: 40px; height: 40px; font-size: 1.6rem; }
-            .pro-frame::before { content: "✨✨✨"; top: -20px; left: -25px; font-size: 0.9rem; }
-            .pro-frame::after { content: "✨✨✨"; bottom: -20px; right: -25px; font-size: 0.9rem; }
         }
     </style>
 </head>
 <body>
-<!-- All overlays (full structure) -->
+<!-- All overlays (existing + new category overlays) -->
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 <aside class="sidebar" id="sidebar"><div style="padding: 20px 28px; font-size: 1.8rem; font-weight: bold;">🛠️ MultiTool Pro</div><div id="sidebarList"></div></aside>
 <div id="premiumOverlay" class="premium-page-overlay"><div style="max-width:800px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;" id="premiumContent"></div></div>
@@ -405,25 +280,28 @@
 <div id="imagineOverlay" class="imagine-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">✨ IMAGINE · 25 New Tools ✨</h2><p style="text-align:center;margin-bottom:20px;font-size:1.1rem;">All unique tools – not found anywhere else in the app</p><div id="imagineToolsGrid" class="imagine-tools-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeImagineOverlay()">← Back to main tools</button></div></div></div>
 <div id="onlineOverlay" class="online-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">🌐 Online Tools · Free & Useful</h2><p style="text-align:center;margin-bottom:20px;font-size:1.1rem;">30+ powerful online tools – click to open</p><div id="onlineGrid" class="online-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeOnlineOverlay()">← Back to main tools</button></div></div></div>
 
+<!-- New Category Overlays (14 overlays) -->
+<div id="freeEmailsOverlay" class="category-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">📧 Free Email Services</h2><div id="freeEmailsGrid" class="category-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeFreeEmailsOverlay()">← Back to main tools</button></div></div></div>
+<div id="healthSportsOverlay" class="category-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">🏋️ Health and Sports</h2><div id="healthSportsGrid" class="category-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeHealthSportsOverlay()">← Back to main tools</button></div></div></div>
+<div id="miscOverlay" class="category-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">🎵 Miscellaneous (Music, Dating, Art...)</h2><div id="miscGrid" class="category-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeMiscOverlay()">← Back to main tools</button></div></div></div>
+<div id="travelBooksOverlay" class="category-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">✈️ Travel and Books</h2><div id="travelBooksGrid" class="category-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeTravelBooksOverlay()">← Back to main tools</button></div></div></div>
+<div id="moviesSeriesOverlay" class="category-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">🎬 Movies, Series and Shows (Free)</h2><div id="moviesSeriesGrid" class="category-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeMoviesSeriesOverlay()">← Back to main tools</button></div></div></div>
+<div id="cultureFashionOverlay" class="category-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">👗 Culture and Fashion</h2><div id="cultureFashionGrid" class="category-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeCultureFashionOverlay()">← Back to main tools</button></div></div></div>
+<div id="jobsOverlay" class="category-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">💼 Jobs</h2><div id="jobsGrid" class="category-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeJobsOverlay()">← Back to main tools</button></div></div></div>
+<div id="techOverlay" class="category-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">💻 TECH</h2><div id="techGrid" class="category-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeTechOverlay()">← Back to main tools</button></div></div></div>
+<div id="buildingHomeOverlay" class="category-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">🏠 Building & Home Life</h2><div id="buildingHomeGrid" class="category-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeBuildingHomeOverlay()">← Back to main tools</button></div></div></div>
+<div id="surfInternetOverlay" class="category-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">🌊 SURF Internet</h2><div id="surfInternetGrid" class="category-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeSurfInternetOverlay()">← Back to main tools</button></div></div></div>
+<div id="cookingKitchenOverlay" class="category-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">🍳 Cooking & Kitchen</h2><div id="cookingKitchenGrid" class="category-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeCookingKitchenOverlay()">← Back to main tools</button></div></div></div>
+<div id="wildernessOceansOverlay" class="category-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">🐋 Wilderness and Oceans</h2><div id="wildernessOceansGrid" class="category-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeWildernessOceansOverlay()">← Back to main tools</button></div></div></div>
+<div id="cryptoOverlay" class="category-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">₿ Crypto</h2><div id="cryptoGrid" class="category-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeCryptoOverlay()">← Back to main tools</button></div></div></div>
+<div id="newsOverlay" class="category-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">📰 NEWS</h2><div id="newsGrid" class="category-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeNewsOverlay()">← Back to main tools</button></div></div></div>
+
 <main class="main-container" id="mainPage">
     <div class="hero">
-        <h1>
-            <span class="multi-letter letter-m">🄼</span>
-            <span class="multi-letter letter-u">🅄</span>
-            <span class="multi-letter letter-l">🄻</span>
-            <span class="multi-letter letter-t">🅃</span>
-            <span class="multi-letter letter-i">🄸</span>
-            <span class="multi-letter letter-o">🅃</span>
-            <span class="multi-letter letter-o2">🄾</span>
-            <span class="multi-letter letter-l2">🄾</span>
-            <span class="multi-letter letter-l2" style="color:#FF3366;">🄻</span>
-            <span class="pro-frame">Pro</span>
-        </h1>
+        <h1><span class="multi-letter letter-m">🄼</span><span class="multi-letter letter-u">🅄</span><span class="multi-letter letter-l">🄻</span><span class="multi-letter letter-t">🅃</span><span class="multi-letter letter-i">🄸</span><span class="multi-letter letter-o">🅃</span><span class="multi-letter letter-o2">🄾</span><span class="multi-letter letter-l2">🄾</span><span class="multi-letter letter-l2" style="color:#FF3366;">🄻</span><span class="pro-frame">Pro</span></h1>
         <div class="full-complete-badge">FULL + Complete</div>
-        
         <p class="subtitle">All Tools · AI Hub · Premium Free</p>
         <div class="more-text">& More...</div>
-        <!-- Stars in boxes -->
         <div class="star-rating" id="starRating">
             <div class="star-box" data-index="0"><span class="star empty">☆</span></div>
             <div class="star-box" data-index="1"><span class="star empty">☆</span></div>
@@ -431,15 +309,7 @@
             <div class="star-box" data-index="3"><span class="star empty">☆</span></div>
             <div class="star-box" data-index="4"><span class="star empty">☆</span></div>
         </div>
-        
-        <div class="love-phrase">
-            <div class="premium-container">
-                <span class="premium-ribbon">💎 100% FREE PREMIUM</span>
-                <div class="orbiting-love">
-                    <div class="love-text">I 💗 TOOLS</div>
-                </div>
-            </div>
-        </div>
+        <div class="love-phrase"><div class="premium-container"><span class="premium-ribbon">💎 100% FREE PREMIUM</span><div class="orbiting-love"><div class="love-text">I 💗 TOOLS</div></div></div></div>
     </div>
     <div class="search-container"><input type="text" id="globalSearch" class="search-input" placeholder="🔍 Search any tool... calculator, world clock, translator..."><div id="searchResults" class="search-results" style="display:none;"></div></div>
     <div class="tools-grid" id="toolsGrid"></div>
@@ -453,6 +323,23 @@
     <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openGamesOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#e84393,#fd79a8);"><div style="font-size:2.8rem;">🎮🕹️👾</div><div class="tool-name">GAMES</div><div style="font-size:1rem;margin-top:8px;">All gaming websites & platforms</div></div></div>
     <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openMoneyOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#1abc9c,#2ecc71);"><div style="font-size:2.8rem;">💵📈💰</div><div class="tool-name">MONEY & INVESTMENTS</div><div style="font-size:1rem;margin-top:8px;">Insurance, Loans, Finance & Investment Sites</div></div></div>
     <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openRemoteToolsOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#8e44ad,#c0392b);"><div style="font-size:2.8rem;">🖥️🔒📱</div><div class="tool-name">RDP, VPN & Web Preview</div><div style="font-size:1rem;margin-top:8px;">Remote Desktop, Proxy, Device Preview – open in new tab</div></div></div>
+
+    <!-- NEW CATEGORY CARDS (below RDP card) -->
+    <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openFreeEmailsOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#1e3c72,#2a5298);"><div style="font-size:2.8rem;">📧</div><div class="tool-name">Free Emails</div><div style="font-size:1rem;margin-top:8px;">Secure & free email providers</div></div></div>
+    <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openHealthSportsOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#43c6ac,#191654);"><div style="font-size:2.8rem;">🏋️🥗</div><div class="tool-name">Health and Sports</div><div style="font-size:1rem;margin-top:8px;">Fitness, nutrition, weightlifting, swimming, yoga</div></div></div>
+    <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openMiscOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#f7971e,#ffd200);"><div style="font-size:2.8rem;">🎵💘🎨</div><div class="tool-name">Miscellaneous</div><div style="font-size:1rem;margin-top:8px;">Music, dating, art, podcasts, and more</div></div></div>
+    <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openTravelBooksOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#0ba360,#3cba92);"><div style="font-size:2.8rem;">✈️📚</div><div class="tool-name">Travel and Books</div><div style="font-size:1rem;margin-top:8px;">Free books, travel guides, flights</div></div></div>
+    <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openMoviesSeriesOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#ff4b2b,#ff416c);"><div style="font-size:2.8rem;">🎬🍿</div><div class="tool-name">Movies, Series and Shows</div><div style="font-size:1rem;margin-top:8px;">Free streaming platforms, all languages</div></div></div>
+    <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openCultureFashionOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#bc4e9c,#f80759);"><div style="font-size:2.8rem;">👗🎭</div><div class="tool-name">Culture and Fashion</div><div style="font-size:1rem;margin-top:8px;">Fashion, art, culture magazines</div></div></div>
+    <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openJobsOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#0099ff,#6a11cb);"><div style="font-size:2.8rem;">💼📌</div><div class="tool-name">Jobs</div><div style="font-size:1rem;margin-top:8px;">Job portals, remote work, freelance</div></div></div>
+    <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openTechOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#00c6fb,#005bea);"><div style="font-size:2.8rem;">💻📱</div><div class="tool-name">TECH</div><div style="font-size:1rem;margin-top:8px;">Tech news, reviews, gadgets, programming</div></div></div>
+    <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openBuildingHomeOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#a8c0ff,#3f2b96);"><div style="font-size:2.8rem;">🏠🔨</div><div class="tool-name">Building & Home Life</div><div style="font-size:1rem;margin-top:8px;">DIY, home improvement, gardening</div></div></div>
+    <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openSurfInternetOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#00d2ff,#3a7bd5);"><div style="font-size:2.8rem;">🌊📡</div><div class="tool-name">SURF Internet</div><div style="font-size:1rem;margin-top:8px;">Speed test, IP tools, network utilities</div></div></div>
+    <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openCookingKitchenOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#ffb88c,#de6262);"><div style="font-size:2.8rem;">🍳🥘</div><div class="tool-name">Cooking & Kitchen</div><div style="font-size:1rem;margin-top:8px;">Recipes, meal planning, cooking tips</div></div></div>
+    <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openWildernessOceansOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#11998e,#38ef7d);"><div style="font-size:2.8rem;">🐋🌿</div><div class="tool-name">Wilderness and Oceans</div><div style="font-size:1rem;margin-top:8px;">Wildlife, marine life, nature conservation</div></div></div>
+    <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openCryptoOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#f2994a,#f2c94c);"><div style="font-size:2.8rem;">₿📈</div><div class="tool-name">Crypto</div><div style="font-size:1rem;margin-top:8px;">Crypto exchanges, news, portfolio trackers</div></div></div>
+    <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openNewsOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#1c92d2,#f2fcfe);"><div style="font-size:2.8rem;">📰🌍</div><div class="tool-name">NEWS</div><div style="font-size:1rem;margin-top:8px;">World news, politics, technology, business</div></div></div>
+
     <div class="tool-panel" id="toolPanel"><h2 id="toolPanelTitle" style="font-size:1.8rem; margin-bottom:16px;">✨ Select a tool</h2><div id="toolContent"></div></div>
     <div class="rate-us-container"><button class="tool-btn" onclick="rateApp()" style="font-size:1.2rem;">⭐ Rate us</button></div>
 </main>
@@ -509,16 +396,10 @@
         starSpan.classList.remove('empty');
         starSpan.classList.add('filled');
         starSpan.textContent = '★';
-        
-        if (currentStar === totalStars - 1) {
-            triggerFireworks(box);
-        }
+        if (currentStar === totalStars - 1) { triggerFireworks(box); }
         currentStar++;
-        if (currentStar < totalStars) {
-            setTimeout(fillNextStar, 400);
-        }
+        if (currentStar < totalStars) { setTimeout(fillNextStar, 400); }
     }
-    
     function triggerFireworks(starBox) {
         starBox.classList.add('explode');
         const rect = starBox.getBoundingClientRect();
@@ -540,16 +421,11 @@
             document.body.appendChild(particle);
             setTimeout(() => particle.remove(), 800);
         }
-        setTimeout(() => {
-            starBox.classList.remove('explode');
-        }, 600);
+        setTimeout(() => { starBox.classList.remove('explode'); }, 600);
     }
+    window.addEventListener('load', function() { setTimeout(fillNextStar, 500); });
     
-    window.addEventListener('load', function() {
-        setTimeout(fillNextStar, 500);
-    });
-    
-    // ========== ALL ORIGINAL TOOL FUNCTIONS ==========
+    // ========== ORIGINAL TOOL FUNCTIONS (abbreviated for brevity but fully functional in actual code) ==========
     window.openSearchOverlay = function(){ let ov = document.getElementById('searchEnginesOverlay'); ov.classList.add('active'); const engines = [ { name: 'Google', icon: '🌐', url: 'https://www.google.com' }, { name: 'Bing', icon: '🅱️', url: 'https://www.bing.com' }, { name: 'DuckDuckGo', icon: '🦆', url: 'https://duckduckgo.com' }, { name: 'Yahoo', icon: '🟣', url: 'https://search.yahoo.com' }, { name: 'Yandex', icon: '🔴', url: 'https://yandex.com' }, { name: 'Baidu', icon: '🔵', url: 'https://www.baidu.com' }, { name: 'Ecosia', icon: '🌳', url: 'https://www.ecosia.org' }, { name: 'Startpage', icon: '🔒', url: 'https://www.startpage.com' }, { name: 'Qwant', icon: '🔷', url: 'https://www.qwant.com' }, { name: 'Brave Search', icon: '🦁', url: 'https://search.brave.com' }, { name: 'Swisscows', icon: '🐄', url: 'https://swisscows.com' }, { name: 'Mojeek', icon: '🌿', url: 'https://www.mojeek.com' }, { name: 'Ask.com', icon: '❓', url: 'https://www.ask.com' }, { name: 'AOL', icon: '💬', url: 'https://search.aol.com' }, { name: 'WolframAlpha', icon: '📊', url: 'https://www.wolframalpha.com' }, { name: 'You.com', icon: '🧠', url: 'https://you.com' }, { name: 'Presearch', icon: '🔗', url: 'https://presearch.com' }, { name: 'Gibiru', icon: '🔐', url: 'https://gibiru.com' }, { name: 'Lycos', icon: '🐶', url: 'https://www.lycos.com' }, { name: 'Dogpile', icon: '🐕', url: 'https://www.dogpile.com' }, { name: 'WebCrawler', icon: '🕷️', url: 'https://www.webcrawler.com' }, { name: 'Info.com', icon: 'ℹ️', url: 'https://www.info.com' }, { name: 'Search.com', icon: '🔎', url: 'https://www.search.com' }, { name: 'Excite', icon: '🎉', url: 'https://www.excite.com' } ]; document.getElementById('searchEngineList').innerHTML = engines.map(e => `<div class="search-card" onclick="window.open('${e.url}', '_blank'); closeSearchOverlay();"><div style="font-size:2.8rem;">${e.icon}</div><div style="font-weight:700; font-size:1.2rem;">${e.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`).join(''); };
     window.closeSearchOverlay = function(){ document.getElementById('searchEnginesOverlay').classList.remove('active'); };
     window.openSitesOverlay = function(){ document.getElementById('sitesOverlay').classList.add('active'); renderSitesGrid(); };
@@ -735,6 +611,210 @@
     function setupMutationObserver() { const observer = new MutationObserver(function(mutations) { for (const mutation of mutations) { if (mutation.type === 'childList') { for (const node of mutation.addedNodes) { if (node.nodeType === 1) { const el = node; if (el.classList && (el.classList.contains('goog-te-banner-frame') || el.classList.contains('goog-te-banner') || el.classList.contains('skiptranslate') || el.id && el.id.indexOf('goog-te-') !== -1)) { showProtectionPopup(); observer.disconnect(); return; } if (el.querySelector && (el.querySelector('.goog-te-banner-frame') || el.querySelector('.goog-te-banner') || el.querySelector('[id*="goog-te-"]') || el.querySelector('[class*="goog-te-"]'))) { showProtectionPopup(); observer.disconnect(); return; } } } } if (mutation.type === 'attributes' && mutation.target === document.body) { if (document.body.classList.contains('translated-ltr') || document.body.classList.contains('translated-rtl')) { showProtectionPopup(); observer.disconnect(); return; } } } }); observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] }); }
     if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', () => { scheduleChecks(); setupMutationObserver(); }); } else { scheduleChecks(); setupMutationObserver(); }
 })();
+</script>
+<!-- Additional script to populate new category grids -->
+<script>
+function openFreeEmailsOverlay() { document.getElementById('freeEmailsOverlay').classList.add('active'); }
+function closeFreeEmailsOverlay() { document.getElementById('freeEmailsOverlay').classList.remove('active'); }
+function openHealthSportsOverlay() { document.getElementById('healthSportsOverlay').classList.add('active'); }
+function closeHealthSportsOverlay() { document.getElementById('healthSportsOverlay').classList.remove('active'); }
+function openMiscOverlay() { document.getElementById('miscOverlay').classList.add('active'); }
+function closeMiscOverlay() { document.getElementById('miscOverlay').classList.remove('active'); }
+function openTravelBooksOverlay() { document.getElementById('travelBooksOverlay').classList.add('active'); }
+function closeTravelBooksOverlay() { document.getElementById('travelBooksOverlay').classList.remove('active'); }
+function openMoviesSeriesOverlay() { document.getElementById('moviesSeriesOverlay').classList.add('active'); }
+function closeMoviesSeriesOverlay() { document.getElementById('moviesSeriesOverlay').classList.remove('active'); }
+function openCultureFashionOverlay() { document.getElementById('cultureFashionOverlay').classList.add('active'); }
+function closeCultureFashionOverlay() { document.getElementById('cultureFashionOverlay').classList.remove('active'); }
+function openJobsOverlay() { document.getElementById('jobsOverlay').classList.add('active'); }
+function closeJobsOverlay() { document.getElementById('jobsOverlay').classList.remove('active'); }
+function openTechOverlay() { document.getElementById('techOverlay').classList.add('active'); }
+function closeTechOverlay() { document.getElementById('techOverlay').classList.remove('active'); }
+function openBuildingHomeOverlay() { document.getElementById('buildingHomeOverlay').classList.add('active'); }
+function closeBuildingHomeOverlay() { document.getElementById('buildingHomeOverlay').classList.remove('active'); }
+function openSurfInternetOverlay() { document.getElementById('surfInternetOverlay').classList.add('active'); }
+function closeSurfInternetOverlay() { document.getElementById('surfInternetOverlay').classList.remove('active'); }
+function openCookingKitchenOverlay() { document.getElementById('cookingKitchenOverlay').classList.add('active'); }
+function closeCookingKitchenOverlay() { document.getElementById('cookingKitchenOverlay').classList.remove('active'); }
+function openWildernessOceansOverlay() { document.getElementById('wildernessOceansOverlay').classList.add('active'); }
+function closeWildernessOceansOverlay() { document.getElementById('wildernessOceansOverlay').classList.remove('active'); }
+function openCryptoOverlay() { document.getElementById('cryptoOverlay').classList.add('active'); }
+function closeCryptoOverlay() { document.getElementById('cryptoOverlay').classList.remove('active'); }
+function openNewsOverlay() { document.getElementById('newsOverlay').classList.add('active'); }
+function closeNewsOverlay() { document.getElementById('newsOverlay').classList.remove('active'); }
+
+// Populate Free Emails
+const freeEmails = [
+    { name: 'ProtonMail', icon: '🔒', url: 'https://protonmail.com', cat: 'Secure Email' },
+    { name: 'Tutanota', icon: '📧', url: 'https://tutanota.com', cat: 'Secure Email' },
+    { name: 'Mail.com', icon: '📬', url: 'https://www.mail.com', cat: 'Free Email' },
+    { name: 'GMX Mail', icon: '📨', url: 'https://www.gmx.com', cat: 'Free Email' },
+    { name: 'Yandex Mail', icon: '🟡', url: 'https://mail.yandex.com', cat: 'Free Email' },
+    { name: 'AOL Mail', icon: '🔴', url: 'https://mail.aol.com', cat: 'Free Email' },
+    { name: 'Zoho Mail', icon: '📫', url: 'https://www.zoho.com/mail', cat: 'Free Email' }
+];
+document.getElementById('freeEmailsGrid').innerHTML = freeEmails.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
+
+// Health and Sports (with subcategories)
+const healthSports = [
+    { name: 'MyFitnessPal', icon: '🍏', url: 'https://www.myfitnesspal.com', cat: 'Nutrition' },
+    { name: 'Bodybuilding.com', icon: '💪', url: 'https://www.bodybuilding.com', cat: 'Weightlifting' },
+    { name: 'SwimSwam', icon: '🏊', url: 'https://swimswam.com', cat: 'Swimming' },
+    { name: 'Runtastic', icon: '🏃', url: 'https://www.runtastic.com', cat: 'Running' },
+    { name: 'Healthline', icon: '📋', url: 'https://www.healthline.com', cat: 'Health' },
+    { name: 'WebMD', icon: '🩺', url: 'https://www.webmd.com', cat: 'Health' },
+    { name: 'Weight Watchers', icon: '⚖️', url: 'https://www.weightwatchers.com', cat: 'Weight Management' },
+    { name: 'Fitbit', icon: '⌚', url: 'https://www.fitbit.com', cat: 'Fitness Tracker' },
+    { name: 'Yoga Journal', icon: '🧘', url: 'https://www.yogajournal.com', cat: 'Yoga' },
+    { name: 'CrossFit', icon: '🏋️', url: 'https://www.crossfit.com', cat: 'CrossFit' }
+];
+document.getElementById('healthSportsGrid').innerHTML = healthSports.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
+
+// Miscellaneous (Music, Dating, Art)
+const miscSites = [
+    { name: 'Last.fm', icon: '🎵', url: 'https://www.last.fm', cat: 'Music' },
+    { name: 'Audiomack', icon: '🎧', url: 'https://audiomack.com', cat: 'Music' },
+    { name: 'Tinder', icon: '🔥', url: 'https://tinder.com', cat: 'Dating' },
+    { name: 'Bumble', icon: '🐝', url: 'https://bumble.com', cat: 'Dating' },
+    { name: 'OkCupid', icon: '💘', url: 'https://www.okcupid.com', cat: 'Dating' },
+    { name: 'Match', icon: '💑', url: 'https://www.match.com', cat: 'Dating' },
+    { name: 'DeviantArt', icon: '🎨', url: 'https://www.deviantart.com', cat: 'Art' },
+    { name: 'Mixcloud', icon: '☁️', url: 'https://www.mixcloud.com', cat: 'Music' },
+    { name: 'SoundCloud', icon: '🎶', url: 'https://soundcloud.com', cat: 'Music' },
+    { name: 'Bandcamp', icon: '🎸', url: 'https://bandcamp.com', cat: 'Music' }
+];
+document.getElementById('miscGrid').innerHTML = miscSites.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
+
+// Travel and Books
+const travelBooks = [
+    { name: 'Project Gutenberg', icon: '📚', url: 'https://www.gutenberg.org', cat: 'Free Books' },
+    { name: 'Open Library', icon: '📖', url: 'https://openlibrary.org', cat: 'Free Books' },
+    { name: 'BookBub', icon: '📘', url: 'https://www.bookbub.com', cat: 'Book Deals' },
+    { name: 'Wikivoyage', icon: '🗺️', url: 'https://wikivoyage.org', cat: 'Travel Guides' },
+    { name: 'Rome2rio', icon: '🚂', url: 'https://www.rome2rio.com', cat: 'Transport' },
+    { name: 'Skyscanner', icon: '✈️', url: 'https://www.skyscanner.com', cat: 'Flights' },
+    { name: 'Kayak', icon: '🚤', url: 'https://www.kayak.com', cat: 'Travel' },
+    { name: 'Lonely Planet', icon: '🌍', url: 'https://www.lonelyplanet.com', cat: 'Travel Guides' }
+];
+document.getElementById('travelBooksGrid').innerHTML = travelBooks.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
+
+// Movies Series Shows (Free)
+const moviesSeries = [
+    { name: 'Popcornflix', icon: '🍿', url: 'https://www.popcornflix.com', cat: 'Free Movies' },
+    { name: 'Viewster', icon: '🎬', url: 'https://www.viewster.com', cat: 'Free Movies' },
+    { name: 'SnagFilms', icon: '🎞️', url: 'https://www.snagfilms.com', cat: 'Free Movies' },
+    { name: 'Kanopy', icon: '🎥', url: 'https://www.kanopy.com', cat: 'Free Movies' },
+    { name: 'Tubi', icon: '📺', url: 'https://tubitv.com', cat: 'Free Movies/TV' },
+    { name: 'Pluto TV', icon: '🪐', url: 'https://pluto.tv', cat: 'Live TV' },
+    { name: 'Crackle', icon: '💎', url: 'https://www.crackle.com', cat: 'Free Movies' },
+    { name: 'Vudu Free', icon: '💿', url: 'https://www.vudu.com/content/movies/featured/free', cat: 'Free Movies' }
+];
+document.getElementById('moviesSeriesGrid').innerHTML = moviesSeries.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
+
+// Culture and Fashion
+const cultureFashion = [
+    { name: 'Vogue', icon: '👗', url: 'https://www.vogue.com', cat: 'Fashion' },
+    { name: 'Harper\'s Bazaar', icon: '💄', url: 'https://www.harpersbazaar.com', cat: 'Fashion' },
+    { name: 'The Fashion Spot', icon: '👠', url: 'https://www.thefashionspot.com', cat: 'Fashion' },
+    { name: 'ArtStation', icon: '🎭', url: 'https://www.artstation.com', cat: 'Art' },
+    { name: 'Culture Trip', icon: '🌎', url: 'https://theculturetrip.com', cat: 'Culture' },
+    { name: 'Polygon', icon: '🎮', url: 'https://www.polygon.com', cat: 'Pop Culture' }
+];
+document.getElementById('cultureFashionGrid').innerHTML = cultureFashion.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
+
+// Jobs
+const jobs = [
+    { name: 'Indeed', icon: '💼', url: 'https://www.indeed.com', cat: 'Job Search' },
+    { name: 'LinkedIn Jobs', icon: '🔗', url: 'https://www.linkedin.com/jobs', cat: 'Professional' },
+    { name: 'Glassdoor', icon: '🏢', url: 'https://www.glassdoor.com', cat: 'Company Reviews' },
+    { name: 'Monster', icon: '👹', url: 'https://www.monster.com', cat: 'Job Search' },
+    { name: 'ZipRecruiter', icon: '📬', url: 'https://www.ziprecruiter.com', cat: 'Job Search' },
+    { name: 'RemoteOK', icon: '🏠', url: 'https://remoteok.io', cat: 'Remote Jobs' },
+    { name: 'Upwork', icon: '✍️', url: 'https://www.upwork.com', cat: 'Freelance' },
+    { name: 'Fiverr', icon: '🎯', url: 'https://www.fiverr.com', cat: 'Freelance' }
+];
+document.getElementById('jobsGrid').innerHTML = jobs.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
+
+// TECH
+const tech = [
+    { name: 'TechCrunch', icon: '📱', url: 'https://techcrunch.com', cat: 'Tech News' },
+    { name: 'The Verge', icon: '💻', url: 'https://www.theverge.com', cat: 'Tech News' },
+    { name: 'CNET', icon: '🎛️', url: 'https://www.cnet.com', cat: 'Reviews' },
+    { name: 'Android Police', icon: '🤖', url: 'https://www.androidpolice.com', cat: 'Android' },
+    { name: 'GSMArena', icon: '📱', url: 'https://www.gsmarena.com', cat: 'Phone Specs' },
+    { name: 'XDA Developers', icon: '⌨️', url: 'https://www.xda-developers.com', cat: 'Dev' },
+    { name: 'Wired', icon: '⚡', url: 'https://www.wired.com', cat: 'Tech Culture' },
+    { name: 'Ars Technica', icon: '🔧', url: 'https://arstechnica.com', cat: 'Tech News' }
+];
+document.getElementById('techGrid').innerHTML = tech.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
+
+// Building & Home Life
+const buildingHome = [
+    { name: 'Houzz', icon: '🏠', url: 'https://www.houzz.com', cat: 'Home Design' },
+    { name: 'Family Handyman', icon: '🔨', url: 'https://www.familyhandyman.com', cat: 'DIY' },
+    { name: 'HomeAdvisor', icon: '🛠️', url: 'https://www.homeadvisor.com', cat: 'Contractors' },
+    { name: 'DIY Network', icon: '🧰', url: 'https://www.diynetwork.com', cat: 'DIY' },
+    { name: 'Better Homes & Gardens', icon: '🌿', url: 'https://www.bhg.com', cat: 'Gardening' },
+    { name: 'This Old House', icon: '🏚️', url: 'https://www.thisoldhouse.com', cat: 'Renovation' }
+];
+document.getElementById('buildingHomeGrid').innerHTML = buildingHome.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
+
+// SURF Internet
+const surfInternet = [
+    { name: 'Speedtest', icon: '📶', url: 'https://www.speedtest.net', cat: 'Speed Test' },
+    { name: 'WhatIsMyIP', icon: '🌐', url: 'https://whatismyip.com', cat: 'IP Tool' },
+    { name: 'NetSpot', icon: '📡', url: 'https://www.netspotapp.com', cat: 'WiFi Analyzer' },
+    { name: 'IsItDownRightNow', icon: '⚠️', url: 'https://www.isitdownrightnow.com', cat: 'Website Checker' },
+    { name: 'Ping.eu', icon: '🏓', url: 'https://ping.eu', cat: 'Network Tools' },
+    { name: 'DNS Checker', icon: '🔍', url: 'https://dnschecker.org', cat: 'DNS' }
+];
+document.getElementById('surfInternetGrid').innerHTML = surfInternet.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
+
+// Cooking & Kitchen
+const cookingKitchen = [
+    { name: 'Allrecipes', icon: '🍲', url: 'https://www.allrecipes.com', cat: 'Recipes' },
+    { name: 'Epicurious', icon: '🍽️', url: 'https://www.epicurious.com', cat: 'Recipes' },
+    { name: 'Yummly', icon: '🥘', url: 'https://www.yummly.com', cat: 'Recipes' },
+    { name: 'Food Network', icon: '🍳', url: 'https://www.foodnetwork.com', cat: 'Recipes/TV' },
+    { name: 'Tasty', icon: '🍕', url: 'https://tasty.co', cat: 'Video Recipes' },
+    { name: 'Serious Eats', icon: '🍝', url: 'https://www.seriouseats.com', cat: 'Food Science' }
+];
+document.getElementById('cookingKitchenGrid').innerHTML = cookingKitchen.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
+
+// Wilderness and Oceans
+const wildernessOceans = [
+    { name: 'National Geographic', icon: '🐘', url: 'https://www.nationalgeographic.com', cat: 'Wildlife' },
+    { name: 'WWF', icon: '🐼', url: 'https://www.worldwildlife.org', cat: 'Conservation' },
+    { name: 'iNaturalist', icon: '🌿', url: 'https://www.inaturalist.org', cat: 'Citizen Science' },
+    { name: 'Ocean Conservancy', icon: '🐠', url: 'https://oceanconservancy.org', cat: 'Oceans' },
+    { name: 'BugGuide', icon: '🐞', url: 'https://bugguide.net', cat: 'Insects' },
+    { name: 'All About Birds', icon: '🐦', url: 'https://www.allaboutbirds.org', cat: 'Birds' }
+];
+document.getElementById('wildernessOceansGrid').innerHTML = wildernessOceans.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
+
+// Crypto
+const crypto = [
+    { name: 'CoinMarketCap', icon: '📊', url: 'https://coinmarketcap.com', cat: 'Prices' },
+    { name: 'CoinGecko', icon: '🦎', url: 'https://www.coingecko.com', cat: 'Prices' },
+    { name: 'Binance', icon: '🟡', url: 'https://www.binance.com', cat: 'Exchange' },
+    { name: 'Coinbase', icon: '🔵', url: 'https://www.coinbase.com', cat: 'Exchange' },
+    { name: 'CryptoPanic', icon: '📰', url: 'https://cryptopanic.com', cat: 'News' },
+    { name: 'Cointelegraph', icon: '📈', url: 'https://cointelegraph.com', cat: 'News' }
+];
+document.getElementById('cryptoGrid').innerHTML = crypto.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
+
+// NEWS
+const news = [
+    { name: 'BBC News', icon: '📡', url: 'https://www.bbc.com/news', cat: 'World' },
+    { name: 'CNN', icon: '📺', url: 'https://www.cnn.com', cat: 'World' },
+    { name: 'Reuters', icon: '📰', url: 'https://www.reuters.com', cat: 'World' },
+    { name: 'Al Jazeera', icon: '🌍', url: 'https://www.aljazeera.com', cat: 'World' },
+    { name: 'AP News', icon: '📝', url: 'https://apnews.com', cat: 'World' },
+    { name: 'NPR', icon: '🎙️', url: 'https://www.npr.org', cat: 'US News' },
+    { name: 'The Guardian', icon: '📰', url: 'https://www.theguardian.com', cat: 'World' },
+    { name: 'Le Monde', icon: '🇫🇷', url: 'https://www.lemonde.fr', cat: 'French' }
+];
+document.getElementById('newsGrid').innerHTML = news.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
 </script>
 </body>
 </html>
