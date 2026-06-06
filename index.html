@@ -6,7 +6,7 @@
     <meta name="description" content="MultiTool Pro - All tools, AI Hub, Premium Free. 50+ utilities, world clock, fresh jokes, translator, and more.">
     <title>MultiTool Pro | Complete Toolkit</title>
     <link rel="canonical" href="https://play.google.com/store/apps/details?id=multitool.pro2" />
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="keywords" content="multitool, tools, all-in-one, calculator, AI, utilities, free, premium, productivity, world clock, jokes, translator, QR code, converter, toolkit, Android app">
     <meta name="author" content="MultiTool Pro">
     <meta property="og:title" content="MultiTool Pro - Complete Toolkit with 50+ Free Utilities">
@@ -79,8 +79,27 @@
             line-height: 1.4;
         }
         .main-container { max-width: 1400px; margin: 0 auto; padding: 30px 24px 40px; }
-        .hero { text-align: center; padding: 30px 20px 24px; }
-        .hero h1 { font-family: 'Poppins', 'Montserrat', system-ui, sans-serif; font-size: 5rem; font-weight: 900; margin-bottom: 12px; letter-spacing: -0.02em; display: inline-block; }
+        .hero { text-align: center; padding: 20px 20px 16px; }
+        
+        /* NEW TITLE STRUCTURE */
+        .hero-title {
+            margin-bottom: 0.25rem;
+        }
+        .title-line1, .title-line2 {
+            display: block;
+            font-family: 'Poppins', 'Montserrat', system-ui, sans-serif;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+        .title-line1 {
+            font-size: 6rem;
+            margin-bottom: 0.05em;
+        }
+        .title-line2 {
+            font-size: 6rem;
+        }
+        /* Each colored letter */
         .multi-letter { display: inline-block; font-weight: 900; }
         .letter-m { color: #FF3366; }
         .letter-u { color: #FF9933; }
@@ -90,7 +109,9 @@
         .letter-o { color: #9933FF; }
         .letter-o2 { color: #FF33CC; }
         .letter-l2 { color: #FF6633; }
-        .pro-frame {
+        
+        /* Pro line (smaller than main title) */
+        .pro-line {
             display: inline-block;
             background: linear-gradient(145deg, #FFD700, #FFA500, #FFD700, #FFC125);
             background-size: 300% 300%;
@@ -98,29 +119,35 @@
             background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 900;
-            font-size: 1.1em;
+            font-size: 2.6rem;
             border: 2px solid rgba(255, 215, 0, 0.9);
-            border-radius: 60px;
-            padding: 0.1em 0.8em;
-            margin: 0 0.2em;
-            box-shadow: 0 0 15px rgba(255,215,0,0.8), inset 0 1px 2px rgba(255,255,200,0.9);
-            position: relative;
+            border-radius: 80px;
+            padding: 0.1em 0.7em;
+            margin-top: 0.2rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            box-shadow: 0 0 12px rgba(255,215,0,0.8), inset 0 1px 2px rgba(255,255,200,0.9);
+            vertical-align: middle;
         }
+        
+        /* FULL + Complete badge even smaller */
         .full-complete-badge { 
-            font-size: 1.7rem;
-            font-weight: 900; 
+            font-size: 1.4rem;
+            font-weight: 800; 
             background: linear-gradient(0deg, #CC0000, #CC5500, #B8860B, #006400, #004466, #0000CC, #660066);
             background-size: 100% 100%;
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
             display: inline-block; 
-            margin: 16px 0 8px; 
-            letter-spacing: 3px;
+            margin: 12px 0 8px; 
+            letter-spacing: 2px;
             white-space: nowrap;
             animation: horizontalSlide 1.2s ease-in-out infinite alternate;
         }
+        
         @keyframes horizontalSlide { 0% { transform: translateX(-6px); } 100% { transform: translateX(6px); } }
+        
         .subtitle { font-size: 1.4rem; color: var(--text2); margin-top: 12px; font-weight: 500; }
         .more-text { text-align: center; font-size: 1.2rem; font-weight: 700; color: var(--primary); margin-top: 12px; letter-spacing: 1px; }
         .star-rating { display: flex; justify-content: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
@@ -159,6 +186,24 @@
         .orbiting-love { position: absolute; top: 50%; left: 50%; width: 180px; height: 180px; margin: -90px 0 0 -90px; pointer-events: none; z-index: 1; animation: orbit 8s linear infinite; }
         @keyframes orbit { 0% { transform: rotate(0deg) translateX(120px) rotate(0deg); } 100% { transform: rotate(360deg) translateX(120px) rotate(-360deg); } }
         .love-phrase { text-align: center; margin: 20px 0 12px; position: relative; display: flex; justify-content: center; align-items: center; min-height: 140px; }
+        
+        /* Responsive adjustments */
+        @media (max-width: 740px) {
+            body { font-size: 16px; }
+            .title-line1, .title-line2 { font-size: 3.6rem; }
+            .pro-line { font-size: 1.8rem; padding: 0.05em 0.6em; border-width: 1.5px; }
+            .full-complete-badge { font-size: 1.1rem; white-space: nowrap; letter-spacing: 1px; }
+            .orbiting-love { width: 140px; height: 140px; margin: -70px 0 0 -70px; }
+            @keyframes orbit { 0% { transform: rotate(0deg) translateX(90px) rotate(0deg); } 100% { transform: rotate(360deg) translateX(90px) rotate(-360deg); } }
+            .love-text { font-size: 1.3rem; }
+            .tools-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 16px; }
+            .tool-card .tool-name { font-size: 1rem; }
+            .tool-panel { padding: 24px 20px; }
+            .tool-btn { padding: 12px 24px; font-size: 0.9rem; }
+            .star-box { width: 40px; height: 40px; font-size: 1.6rem; }
+        }
+        
+        /* rest of existing styles (kept from original) */
         .search-container { max-width: 640px; margin: 24px auto 30px; }
         .search-input, textarea, select { width: 100%; padding: 16px 24px; border-radius: 80px; border: 2px solid var(--border); background: var(--surface); font-size: 1.05rem; transition: all 0.2s; font-family: inherit; }
         .search-results { background: var(--surface); border-radius: 28px; margin-top: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); max-height: 480px; overflow-y: auto; font-size: 1rem; }
@@ -231,7 +276,7 @@
         @keyframes bounceArrow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
         .tool-reco-banner { background: linear-gradient(135deg, #6c5ce7, #00cec9); color: white; border-radius: 28px; padding: 18px 28px; margin: 24px 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; box-shadow: 0 12px 28px rgba(0,0,0,0.2); animation: fadeInBanner 0.5s ease; }
         .tool-reco-banner .reco-text { font-weight: 700; font-size: 1.15rem; flex: 1 1 auto; margin-right: 16px; }
-        .tool-reco-banner .reco-try-btn { background: white; color: #6c5ce7; border: none; padding: 10px 22px; border-radius: 40px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+        .tool-reco-banner .reco-try-btn { background: white; color: #6c5ce7; border: none; padding: 10px 22px; border-radius: 40px; font-weight: bold; cursor: pointer; font-size: 1rem; display: inline-flex; align-items: center; gap: 6px; }
         .reco-try-btn .arrow-down-different { display: inline-block; font-size: 1.5rem; font-weight: bold; margin-left: 4px; animation: wiggle 0.8s infinite; }
         @keyframes wiggle { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(12deg); } 75% { transform: rotate(-12deg); } }
         .translation-toolbar { display: flex; justify-content: flex-end; align-items: center; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; background: var(--surface2); border-radius: 60px; padding: 10px 20px; border: 1px solid var(--border); }
@@ -243,23 +288,9 @@
         .gt-protection-popup .gt-message { font-size: 1rem; line-height: 1.6; margin-bottom: 24px; }
         .gt-btn { padding: 12px 26px; font-size: 1rem; }
         .gt-btn-return-red { width: 26px; height: 26px; background: red !important; padding: 0 !important; margin: 0 !important; font-size: 0 !important; border-radius: 6px; display: inline-block; cursor: pointer; }
-        @media (max-width: 740px) {
-            body { font-size: 16px; }
-            .hero h1 { font-size: 2.8rem; }
-            .full-complete-badge { font-size: 1.3rem; white-space: nowrap; }
-            .orbiting-love { width: 140px; height: 140px; margin: -70px 0 0 -70px; }
-            @keyframes orbit { 0% { transform: rotate(0deg) translateX(90px) rotate(0deg); } 100% { transform: rotate(360deg) translateX(90px) rotate(-360deg); } }
-            .love-text { font-size: 1.3rem; }
-            .tools-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 16px; }
-            .tool-card .tool-name { font-size: 1rem; }
-            .tool-panel { padding: 24px 20px; }
-            .tool-btn { padding: 12px 24px; font-size: 0.9rem; }
-            .star-box { width: 40px; height: 40px; font-size: 1.6rem; }
-        }
     </style>
 </head>
 <body>
-<!-- All overlays (existing + new category overlays) -->
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 <aside class="sidebar" id="sidebar"><div style="padding: 20px 28px; font-size: 1.8rem; font-weight: bold;">🛠️ MultiTool Pro</div><div id="sidebarList"></div></aside>
 <div id="premiumOverlay" class="premium-page-overlay"><div style="max-width:800px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;" id="premiumContent"></div></div>
@@ -279,8 +310,6 @@
 <div id="shortenerOverlay" class="shortener-overlay"><div style="max-width:1200px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2rem;">🔗 Choose a URL Shortener</h2><p style="text-align:center;margin-bottom:20px;">Select any service (opens in new tab)</p><div id="shortenerGrid" class="shortener-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeShortenerOverlay()">← Back to main tools</button></div></div></div>
 <div id="imagineOverlay" class="imagine-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">✨ IMAGINE · 25 New Tools ✨</h2><p style="text-align:center;margin-bottom:20px;font-size:1.1rem;">All unique tools – not found anywhere else in the app</p><div id="imagineToolsGrid" class="imagine-tools-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeImagineOverlay()">← Back to main tools</button></div></div></div>
 <div id="onlineOverlay" class="online-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">🌐 Online Tools · Free & Useful</h2><p style="text-align:center;margin-bottom:20px;font-size:1.1rem;">30+ powerful online tools – click to open</p><div id="onlineGrid" class="online-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeOnlineOverlay()">← Back to main tools</button></div></div></div>
-
-<!-- New Category Overlays (14 overlays) -->
 <div id="freeEmailsOverlay" class="category-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">📧 Free Email Services</h2><div id="freeEmailsGrid" class="category-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeFreeEmailsOverlay()">← Back to main tools</button></div></div></div>
 <div id="healthSportsOverlay" class="category-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">🏋️ Health and Sports</h2><div id="healthSportsGrid" class="category-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeHealthSportsOverlay()">← Back to main tools</button></div></div></div>
 <div id="miscOverlay" class="category-overlay"><div style="max-width:1400px;margin:auto;background:var(--surface);border-radius:48px;padding:32px;"><h2 style="text-align:center;font-size:2.2rem;">🎵 Miscellaneous (Music, Dating, Art...)</h2><div id="miscGrid" class="category-grid"></div><div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeMiscOverlay()">← Back to main tools</button></div></div></div>
@@ -298,7 +327,22 @@
 
 <main class="main-container" id="mainPage">
     <div class="hero">
-        <h1><span class="multi-letter letter-m">🄼</span><span class="multi-letter letter-u">🅄</span><span class="multi-letter letter-l">🄻</span><span class="multi-letter letter-t">🅃</span><span class="multi-letter letter-i">🄸</span><span class="multi-letter letter-o">🅃</span><span class="multi-letter letter-o2">🄾</span><span class="multi-letter letter-l2">🄾</span><span class="multi-letter letter-l2" style="color:#FF3366;">🄻</span><span class="pro-frame">Pro</span></h1>
+        <div class="hero-title">
+            <div class="title-line1">
+                <span class="multi-letter letter-m">🄼</span>
+                <span class="multi-letter letter-u">🅄</span>
+                <span class="multi-letter letter-l">🄻</span>
+                <span class="multi-letter letter-t">🅃</span>
+                <span class="multi-letter letter-i">🄸</span>
+            </div>
+            <div class="title-line2">
+                <span class="multi-letter letter-o">🅃</span>
+                <span class="multi-letter letter-o2">🄾</span>
+                <span class="multi-letter letter-l2">🄾</span>
+                <span class="multi-letter letter-l2" style="color:#FF3366;">🄻</span>
+            </div>
+        </div>
+        <div class="pro-line">Pro</div>
         <div class="full-complete-badge">FULL + Complete</div>
         <p class="subtitle">All Tools · AI Hub · Premium Free</p>
         <div class="more-text">& More...</div>
@@ -323,8 +367,6 @@
     <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openGamesOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#e84393,#fd79a8);"><div style="font-size:2.8rem;">🎮🕹️👾</div><div class="tool-name">GAMES</div><div style="font-size:1rem;margin-top:8px;">All gaming websites & platforms</div></div></div>
     <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openMoneyOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#1abc9c,#2ecc71);"><div style="font-size:2.8rem;">💵📈💰</div><div class="tool-name">MONEY & INVESTMENTS</div><div style="font-size:1rem;margin-top:8px;">Insurance, Loans, Finance & Investment Sites</div></div></div>
     <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openRemoteToolsOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#8e44ad,#c0392b);"><div style="font-size:2.8rem;">🖥️🔒📱</div><div class="tool-name">RDP, VPN & Web Preview</div><div style="font-size:1rem;margin-top:8px;">Remote Desktop, Proxy, Device Preview – open in new tab</div></div></div>
-
-    <!-- NEW CATEGORY CARDS (below RDP card) -->
     <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openFreeEmailsOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#1e3c72,#2a5298);"><div style="font-size:2.8rem;">📧</div><div class="tool-name">Free Emails</div><div style="font-size:1rem;margin-top:8px;">Secure & free email providers</div></div></div>
     <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openHealthSportsOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#43c6ac,#191654);"><div style="font-size:2.8rem;">🏋️🥗</div><div class="tool-name">Health and Sports</div><div style="font-size:1rem;margin-top:8px;">Fitness, nutrition, weightlifting, swimming, yoga</div></div></div>
     <div style="display:flex;justify-content:center;margin:20px 0 30px;"><div class="tool-card large" onclick="openMiscOverlay()" style="max-width:100%;width:100%;background:linear-gradient(135deg,#f7971e,#ffd200);"><div style="font-size:2.8rem;">🎵💘🎨</div><div class="tool-name">Miscellaneous</div><div style="font-size:1rem;margin-top:8px;">Music, dating, art, podcasts, and more</div></div></div>
@@ -354,7 +396,6 @@
 <div id="toast" class="toast"></div>
 
 <script>
-// ========== FULL JAVASCRIPT - ALL 50+ TOOLS FULLY FUNCTIONAL ==========
 (function(){
     let darkMode = localStorage.getItem('theme') === 'dark';
     if(darkMode) document.documentElement.setAttribute('data-theme','dark');
@@ -384,7 +425,6 @@
     window.toggleTheme = function(){ darkMode = !darkMode; document.documentElement.setAttribute('data-theme',darkMode?'dark':'light'); localStorage.setItem('theme',darkMode?'dark':'light'); };
     window.rateApp = function(){ showToast('⭐ Thank you! Rate us on Google Play'); window.open('https://play.google.com/store/apps/details?id=multitool.pro2','_blank'); };
 
-    // ========== STARS SEQUENTIAL FILL & FIREWORKS ==========
     let currentStar = 0;
     const starBoxes = document.querySelectorAll('.star-box');
     const totalStars = starBoxes.length;
@@ -425,7 +465,6 @@
     }
     window.addEventListener('load', function() { setTimeout(fillNextStar, 500); });
     
-    // ========== ORIGINAL TOOL FUNCTIONS ==========
     window.openSearchOverlay = function(){ let ov = document.getElementById('searchEnginesOverlay'); ov.classList.add('active'); const engines = [ { name: 'Google', icon: '🌐', url: 'https://www.google.com' }, { name: 'Bing', icon: '🅱️', url: 'https://www.bing.com' }, { name: 'DuckDuckGo', icon: '🦆', url: 'https://duckduckgo.com' }, { name: 'Yahoo', icon: '🟣', url: 'https://search.yahoo.com' }, { name: 'Yandex', icon: '🔴', url: 'https://yandex.com' }, { name: 'Baidu', icon: '🔵', url: 'https://www.baidu.com' }, { name: 'Ecosia', icon: '🌳', url: 'https://www.ecosia.org' }, { name: 'Startpage', icon: '🔒', url: 'https://www.startpage.com' }, { name: 'Qwant', icon: '🔷', url: 'https://www.qwant.com' }, { name: 'Brave Search', icon: '🦁', url: 'https://search.brave.com' }, { name: 'Swisscows', icon: '🐄', url: 'https://swisscows.com' }, { name: 'Mojeek', icon: '🌿', url: 'https://www.mojeek.com' }, { name: 'Ask.com', icon: '❓', url: 'https://www.ask.com' }, { name: 'AOL', icon: '💬', url: 'https://search.aol.com' }, { name: 'WolframAlpha', icon: '📊', url: 'https://www.wolframalpha.com' }, { name: 'You.com', icon: '🧠', url: 'https://you.com' }, { name: 'Presearch', icon: '🔗', url: 'https://presearch.com' }, { name: 'Gibiru', icon: '🔐', url: 'https://gibiru.com' }, { name: 'Lycos', icon: '🐶', url: 'https://www.lycos.com' }, { name: 'Dogpile', icon: '🐕', url: 'https://www.dogpile.com' }, { name: 'WebCrawler', icon: '🕷️', url: 'https://www.webcrawler.com' }, { name: 'Info.com', icon: 'ℹ️', url: 'https://www.info.com' }, { name: 'Search.com', icon: '🔎', url: 'https://www.search.com' }, { name: 'Excite', icon: '🎉', url: 'https://www.excite.com' } ]; document.getElementById('searchEngineList').innerHTML = engines.map(e => `<div class="search-card" onclick="window.open('${e.url}', '_blank'); closeSearchOverlay();"><div style="font-size:2.8rem;">${e.icon}</div><div style="font-weight:700; font-size:1.2rem;">${e.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`).join(''); };
     window.closeSearchOverlay = function(){ document.getElementById('searchEnginesOverlay').classList.remove('active'); };
     window.openSitesOverlay = function(){ document.getElementById('sitesOverlay').classList.add('active'); renderSitesGrid(); };
@@ -473,10 +512,39 @@
     window.openConvertOverlay = function(){ document.getElementById('convertOverlay').classList.add('active'); renderConvertGrid(); };
     window.closeConvertOverlay = function(){ document.getElementById('convertOverlay').classList.remove('active'); };
     function renderConvertGrid() { const container = document.getElementById('convertGrid'); const convertSites = [ { name: 'PDFescape', icon: '📄', url: 'https://www.pdfescape.com', category: 'PDF Tools' }, { name: 'Sejda PDF', icon: '📑', url: 'https://www.sejda.com', category: 'PDF Tools' }, { name: 'PDF24 Tools', icon: '📋', url: 'https://tools.pdf24.org', category: 'PDF Tools' }, { name: 'PDF Candy', icon: '🍬', url: 'https://pdfcandy.com', category: 'PDF Tools' }, { name: 'PDF2Go', icon: '📤', url: 'https://www.pdf2go.com', category: 'PDF Tools' }, { name: 'Soda PDF', icon: '🥤', url: 'https://www.sodapdf.com', category: 'PDF Tools' }, { name: 'Foxit Online', icon: '🦊', url: 'https://www.foxit.com/pdf-editor/', category: 'PDF Tools' }, { name: 'DocHub', icon: '✍️', url: 'https://dochub.com', category: 'PDF Tools' }, { name: 'Fotor', icon: '🖼️', url: 'https://www.fotor.com', category: 'Image Editors' }, { name: 'BeFunky', icon: '🎨', url: 'https://www.befunky.com', category: 'Image Editors' }, { name: 'LunaPic', icon: '🌙', url: 'https://www.lunapic.com', category: 'Image Editors' }, { name: 'Sumopaint', icon: '🖌️', url: 'https://www.sumopaint.com', category: 'Image Editors' }, { name: 'Google Docs', icon: '📝', url: 'https://docs.google.com', category: 'Word & Docs' }, { name: 'Microsoft Office Online', icon: '📊', url: 'https://www.office.com', category: 'Word & Docs' }, { name: 'Zoho Writer', icon: '📃', url: 'https://www.zoho.com/writer/', category: 'Word & Docs' }, { name: 'OnlyOffice', icon: '🏢', url: 'https://www.onlyoffice.com', category: 'Word & Docs' }, { name: 'CryptPad', icon: '🔒', url: 'https://cryptpad.fr', category: 'Word & Docs' }, { name: 'Zamzar', icon: '🔄', url: 'https://www.zamzar.com', category: 'File Converters' }, { name: 'Online-Convert.com', icon: '🔁', url: 'https://www.online-convert.com', category: 'File Converters' }, { name: 'FileZigZag', icon: '⚡', url: 'https://www.filezigzag.com', category: 'File Converters' }, { name: 'Aconvert', icon: '🔄', url: 'https://www.aconvert.com', category: 'File Converters' }, { name: 'FreeFileConvert', icon: '📂', url: 'https://www.freefileconvert.com', category: 'File Converters' }, { name: 'Online Audio Converter', icon: '🎵', url: 'https://online-audio-converter.com', category: 'Audio/Video Tools' }, { name: 'Media.io', icon: '🎬', url: 'https://www.media.io', category: 'Audio/Video Tools' }, { name: 'VEED.io', icon: '✂️', url: 'https://www.veed.io', category: 'Audio/Video Tools' }, { name: 'Clipchamp', icon: '🎞️', url: 'https://clipchamp.com', category: 'Audio/Video Tools' }, { name: '123Apps', icon: '🔧', url: 'https://123apps.com', category: 'Audio/Video Tools' }, { name: 'AudioTrimmer', icon: '✂️', url: 'https://audiotrimmer.com', category: 'Audio/Video Tools' } ]; const grouped = {}; convertSites.forEach(site => { if (!grouped[site.category]) grouped[site.category] = []; grouped[site.category].push(site); }); let html = ''; for (const [cat, sites] of Object.entries(grouped)) { html += `<h3 style="margin-top:36px;text-align:center;border-bottom:2px solid var(--border);padding-bottom:12px;font-size:1.6rem;">${cat}</h3><div class="convert-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:24px;margin-top:24px;">`; sites.forEach(site => { html += `<div class="convert-card" onclick="window.open('${site.url}', '_blank');"><div style="font-size:2.8rem;">${site.icon}</div><div style="font-weight:700; font-size:1.2rem;">${site.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`; }); html += '</div>'; } container.innerHTML = html; }
-    window.openAllAiTranslatorOverlay = function(){ document.getElementById('allAiTranslatorOverlay').classList.add('active'); renderAllAiTranslatorGrid(); };
+    
+    window.renderAllAiTranslatorGrid = function() { 
+        const container = document.getElementById('allAiTranslatorGrid'); 
+        const translatorSites = [ 
+            { name: 'Google Translate', icon: '🌐🔤', url: 'https://translate.google.com' }, 
+            { name: 'Lernix AI', icon: '🦉', url: 'https://lernix.ai' }, 
+            { name: 'Reverso', icon: '🔄', url: 'https://www.reverso.net/text-translation' }, 
+            { name: 'Linguee', icon: '📖', url: 'https://www.linguee.com' }, 
+            { name: 'Microsoft Translator', icon: '🪟', url: 'https://www.bing.com/translator' }, 
+            { name: 'SYSTRAN', icon: '🌐', url: 'https://www.systran.net/translate/' }, 
+            { name: 'PROMT', icon: '📑', url: 'https://www.online-translator.com/' }, 
+            { name: 'iTranslate', icon: '📱', url: 'https://itranslate.com/translate/english-united-states-to-german' }, 
+            { name: 'Cambridge Translator', icon: '🎓', url: 'https://dictionary.cambridge.org/translate/' }, 
+            { name: 'Collins Translator', icon: '📚', url: 'https://www.collinsdictionary.com/translator' }, 
+            { name: 'Papago', icon: '🦜', url: 'https://papago.naver.com/' }, 
+            { name: 'Baidu Translate', icon: '🔵', url: 'https://fanyi.baidu.com/' }, 
+            { name: 'Yandex Translate', icon: '🔴', url: 'https://translate.yandex.com', note: '✨ Also available via the toolbar' } 
+        ]; 
+        let html = '<div class="convert-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:24px;margin-top:20px;">'; 
+        translatorSites.forEach(site => { 
+            html += `<div class="convert-card" style="cursor:pointer;" onclick="window.open('${site.url}', '_blank');">
+                        <div style="font-size:2.8rem;">${site.icon}</div>
+                        <div style="font-weight:700; font-size:1.2rem;">${site.name}</div>
+                        <div style="font-size:0.9rem; margin-top:4px;">Click to open</div>
+                        ${site.note ? `<div style="font-size:0.75rem; color:var(--accent2); margin-top:6px;">${site.note}</div>` : ''}
+                     </div>`; 
+        }); 
+        html += '</div>'; 
+        container.innerHTML = html; 
+    };
+    window.openAllAiTranslatorOverlay = function(){ document.getElementById('allAiTranslatorOverlay').classList.add('active'); window.renderAllAiTranslatorGrid(); };
     window.closeAllAiTranslatorOverlay = function(){ document.getElementById('allAiTranslatorOverlay').classList.remove('active'); };
-    function renderAllAiTranslatorGrid() { const container = document.getElementById('allAiTranslatorGrid'); const translatorSites = [ { name: 'Google Translate', icon: '🌐🔤', url: 'https://translate.google.com' }, { name: 'Lernix AI', icon: '🦉', url: 'https://lernix.ai' }, { name: 'Reverso', icon: '🔄', url: 'https://www.reverso.net/text-translation' }, { name: 'Linguee', icon: '📖', url: 'https://www.linguee.com' }, { name: 'Yandex Translate', icon: '🔴', url: 'https://translate.yandex.com/' },   // Replaced Microsoft Translator with Yandex
-      { name: 'SYSTRAN', icon: '🌐', url: 'https://www.systran.net/translate/' }, { name: 'PROMT', icon: '📑', url: 'https://www.online-translator.com/' }, { name: 'iTranslate', icon: '📱', url: 'https://itranslate.com/web' }, { name: 'Cambridge Translator', icon: '🎓', url: 'https://dictionary.cambridge.org/translate/' }, { name: 'Collins Translator', icon: '📚', url: 'https://www.collinsdictionary.com/translator' }, { name: 'Papago', icon: '🦜', url: 'https://papago.naver.com/' }, { name: 'Baidu Translate', icon: '🔵', url: 'https://fanyi.baidu.com/' } ]; let html = '<div class="convert-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:24px;margin-top:20px;">'; translatorSites.forEach(site => { html += `<div class="convert-card" style="cursor:pointer;" onclick="window.open('${site.url}', '_blank');"><div style="font-size:2.8rem;">${site.icon}</div><div style="font-weight:700; font-size:1.2rem;">${site.name}</div><div style="font-size:0.9rem; margin-top:4px;">Click to open</div></div>`; }); html += '</div>'; container.innerHTML = html; }
+    
     window.openGamesOverlay = function(){ document.getElementById('gamesOverlay').classList.add('active'); renderGamesGrid(); };
     window.closeGamesOverlay = function(){ document.getElementById('gamesOverlay').classList.remove('active'); };
     function renderGamesGrid() { const container = document.getElementById('gamesGrid'); const gamesList = [ { name: 'Steam', icon: '🎮', url: 'https://store.steampowered.com' }, { name: 'Epic Games', icon: '🛒', url: 'https://www.epicgames.com' }, { name: 'GOG.com', icon: '📦', url: 'https://www.gog.com' }, { name: 'itch.io', icon: '🌐', url: 'https://itch.io' }, { name: 'Kongregate', icon: '🕹️', url: 'https://www.kongregate.com' }, { name: 'Miniclip', icon: '🎯', url: 'https://www.miniclip.com' }, { name: 'Addicting Games', icon: '🎲', url: 'https://www.addictinggames.com' }, { name: 'Armor Games', icon: '🛡️', url: 'https://armorgames.com' }, { name: 'Newgrounds', icon: '🎨', url: 'https://www.newgrounds.com' }, { name: 'Poki', icon: '🐶', url: 'https://poki.com' }, { name: 'CrazyGames', icon: '🃏', url: 'https://www.crazygames.com' }, { name: 'Agame', icon: '🕸️', url: 'https://www.agame.com' }, { name: 'Y8', icon: '🚀', url: 'https://www.y8.com' }, { name: 'Friv', icon: '🍭', url: 'https://www.friv.com' }, { name: 'Kizi', icon: '🧩', url: 'https://kizi.com' }, { name: 'Pogo', icon: '🎱', url: 'https://www.pogo.com' }, { name: 'Big Fish Games', icon: '🐟', url: 'https://www.bigfishgames.com' }, { name: 'Roblox', icon: '👾', url: 'https://www.roblox.com' }, { name: 'Minecraft', icon: '⛏️', url: 'https://www.minecraft.net' }, { name: 'League of Legends', icon: '🏆', url: 'https://www.leagueoflegends.com' }, { name: 'Fortnite', icon: '🔫', url: 'https://www.fortnite.com' }, { name: 'PlayStation', icon: '🎧', url: 'https://www.playstation.com' }, { name: 'Xbox', icon: '🖥️', url: 'https://www.xbox.com' }, { name: 'Nintendo', icon: '🍄', url: 'https://www.nintendo.com' }, { name: 'IGN', icon: '📺', url: 'https://www.ign.com' }, { name: 'GameSpot', icon: '🎤', url: 'https://www.gamespot.com' }, { name: 'PC Gamer', icon: '⌨️', url: 'https://www.pcgamer.com' }, { name: 'Kotaku', icon: '🗞️', url: 'https://kotaku.com' }, { name: 'Rock Paper Shotgun', icon: '📰', url: 'https://www.rockpapershotgun.com' }, { name: 'Game Jolt', icon: '⚡', url: 'https://gamejolt.com' } ]; let html = ''; gamesList.forEach(game => { html += `<div class="games-card" onclick="window.open('${game.url}', '_blank');"><div style="font-size:2.8rem;">${game.icon}</div><div style="font-weight:700; font-size:1.2rem;">${game.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`; }); container.innerHTML = html; }
@@ -516,7 +584,31 @@
     function renderOnlineGrid(){ const container = document.getElementById('onlineGrid'); const onlineToolsList = [ { name: 'Canva', icon: '🎨', url: 'https://www.canva.com' }, { name: 'Remove.bg', icon: '🖼️', url: 'https://www.remove.bg' }, { name: 'TinyWow', icon: '✨', url: 'https://tinywow.com' }, { name: 'ILovePDF', icon: '📄', url: 'https://www.ilovepdf.com' }, { name: 'SmallPDF', icon: '📑', url: 'https://smallpdf.com' }, { name: 'OnlineOCR', icon: '🔍', url: 'https://www.onlineocr.net' }, { name: 'Convertio', icon: '🔄', url: 'https://convertio.co' }, { name: 'CloudConvert', icon: '☁️', url: 'https://cloudconvert.com' }, { name: 'EZGIF', icon: '🎞️', url: 'https://ezgif.com' }, { name: 'Kapwing', icon: '✂️', url: 'https://www.kapwing.com' }, { name: 'Pixlr', icon: '🎨', url: 'https://pixlr.com' }, { name: 'Photopea', icon: '🖌️', url: 'https://www.photopea.com' }, { name: 'Cleanup.pictures', icon: '🧹', url: 'https://cleanup.pictures' }, { name: 'Watermark Remover', icon: '💧', url: 'https://www.watermarkremover.io' }, { name: 'QR Code Monkey', icon: '📱', url: 'https://www.qrcode-monkey.com' }, { name: 'Grammarly', icon: '✍️', url: 'https://www.grammarly.com' }, { name: 'QuillBot', icon: '📝', url: 'https://quillbot.com' }, { name: 'Hemingway Editor', icon: '📖', url: 'https://hemingwayapp.com' }, { name: 'DeepL Translator', icon: '🌐', url: 'https://www.deepl.com' }, { name: 'Google Translate', icon: '🔤', url: 'https://translate.google.com' }, { name: 'MyMemory', icon: '🧠', url: 'https://mymemory.translated.net' }, { name: 'Color Hunt', icon: '🎨', url: 'https://colorhunt.co' }, { name: 'Coolors', icon: '🌈', url: 'https://coolors.co' }, { name: 'UI Gradients', icon: '📊', url: 'https://uigradients.com' }, { name: 'CSS Gradient', icon: '🎨', url: 'https://cssgradient.io' }, { name: 'JsonFormatter', icon: '📋', url: 'https://jsonformatter.org' }, { name: 'CodePen', icon: '💻', url: 'https://codepen.io' }, { name: 'JSFiddle', icon: '🔧', url: 'https://jsfiddle.net' }, { name: 'Replit', icon: '🔄', url: 'https://replit.com' } ]; let html = ''; onlineToolsList.forEach(tool => { html += `<div class="online-card" onclick="window.open('${tool.url}', '_blank'); closeOnlineOverlay();"><div style="font-size:2.8rem;">${tool.icon}</div><div style="font-weight:700; font-size:1.2rem;">${tool.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`; }); container.innerHTML = html; }
     function renderAiToolsFull(){ const container = document.getElementById('aiToolsContainer'); const aiSites = [ { name: 'ChatGPT', icon: '🤖', url: 'https://chat.openai.com', category: 'chat' }, { name: 'Google Gemini', icon: '🧠', url: 'https://gemini.google.com', category: 'chat' }, { name: 'Claude', icon: '🧬', url: 'https://claude.ai', category: 'chat' }, { name: 'DeepSeek', icon: '🐋', url: 'https://chat.deepseek.com', category: 'chat' }, { name: 'Microsoft Copilot', icon: '💻', url: 'https://copilot.microsoft.com', category: 'chat' }, { name: 'Poe', icon: '💡', url: 'https://poe.com', category: 'chat' }, { name: 'Pi AI', icon: '😊', url: 'https://pi.ai/talk', category: 'chat' }, { name: 'Character.AI', icon: '🎭', url: 'https://character.ai', category: 'chat' }, { name: 'Perplexity', icon: '🔎', url: 'https://www.perplexity.ai', category: 'search' }, { name: 'You.com', icon: '🔍', url: 'https://you.com', category: 'search' }, { name: 'DALL·E 3', icon: '🖼️', url: 'https://openai.com/dall-e-3', category: 'image' }, { name: 'Midjourney', icon: '🌸', url: 'https://www.midjourney.com', category: 'image' }, { name: 'Stable Diffusion', icon: '🌀', url: 'https://stability.ai', category: 'image' }, { name: 'Leonardo AI', icon: '🦁', url: 'https://leonardo.ai', category: 'image' }, { name: 'DreamStudio', icon: '🌟', url: 'https://beta.dreamstudio.ai', category: 'image' }, { name: 'Bing Image Creator', icon: '🌄', url: 'https://www.bing.com/images/create', category: 'image' }, { name: 'Craiyon', icon: '🎠', url: 'https://www.craiyon.com', category: 'image' }, { name: 'NightCafe', icon: '🌌', url: 'https://creator.nightcafe.studio', category: 'image' }, { name: 'Artbreeder', icon: '🧬', url: 'https://www.artbreeder.com', category: 'image' }, { name: 'Playground AI', icon: '🎮', url: 'https://playgroundai.com', category: 'image' }, { name: 'Runway ML', icon: '🎥', url: 'https://runwayml.com', category: 'video' }, { name: 'Pika', icon: '🎞️', url: 'https://pika.art', category: 'video' }, { name: 'Synthesia', icon: '🎙️', url: 'https://www.synthesia.io', category: 'video' }, { name: 'HeyGen', icon: '👤', url: 'https://www.heygen.com', category: 'video' }, { name: 'Invideo', icon: '📹', url: 'https://invideo.io', category: 'video' }, { name: 'Kapwing', icon: '🎬', url: 'https://www.kapwing.com', category: 'video' }, { name: 'Lumen5', icon: '📽️', url: 'https://www.lumen5.com', category: 'video' }, { name: 'Suno AI', icon: '🎤', url: 'https://suno.ai', category: 'music' }, { name: 'Udio', icon: '🎧', url: 'https://www.udio.com', category: 'music' }, { name: 'AIVA', icon: '🎼', url: 'https://www.aiva.ai', category: 'music' }, { name: 'Boomy', icon: '🎹', url: 'https://boomy.com', category: 'music' }, { name: 'Soundraw', icon: '🎛️', url: 'https://soundraw.io', category: 'music' }, { name: 'Mubert', icon: '🎚️', url: 'https://mubert.com', category: 'music' }, { name: 'GitHub Copilot', icon: '🐙', url: 'https://github.com/features/copilot', category: 'code' }, { name: 'Codeium', icon: '⚡', url: 'https://codeium.com', category: 'code' }, { name: 'Tabnine', icon: '🦊', url: 'https://www.tabnine.com', category: 'code' }, { name: 'Replit Ghostwriter', icon: '👻', url: 'https://replit.com/ghostwriter', category: 'code' }, { name: 'Cody', icon: '🤖', url: 'https://sourcegraph.com/cody', category: 'code' }, { name: 'Jasper', icon: '✍️', url: 'https://www.jasper.ai', category: 'writing' }, { name: 'Writesonic', icon: '📝', url: 'https://writesonic.com', category: 'writing' }, { name: 'Notion AI', icon: '📓', url: 'https://www.notion.so/product/ai', category: 'writing' } ]; const categoryNames = { chat: 'AI Chat & Assistants', search: 'AI Search & Research', image: 'AI Image Generation', video: 'AI Video & Animation', music: 'AI Music & Audio', code: 'AI Code & Development', writing: 'AI Writing & Content' }; const grouped = {}; aiSites.forEach(tool => { if (!grouped[tool.category]) grouped[tool.category] = []; grouped[tool.category].push(tool); }); let html = '<h2 style="font-size:2rem;text-align:center;">🤖 AI Hub · 40+ AI Tools</h2>'; for (const [catKey, catLabel] of Object.entries(categoryNames)) { if (grouped[catKey] && grouped[catKey].length > 0) { html += `<h3 style="margin-top:36px;text-align:center;border-bottom:2px solid var(--border);padding-bottom:12px;font-size:1.6rem;">${catLabel}</h3><div class="ai-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:24px;margin-top:24px;">`; grouped[catKey].forEach(ai => { html += `<div class="ai-card" onclick="window.open('${ai.url}', '_blank'); closeAiOverlay();"><div style="font-size:2.8rem;">${ai.icon}</div><div style="font-weight:700; font-size:1.2rem;">${ai.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`; }); html += '</div>'; } } html += '<div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeAiOverlay()">← Back to main tools</button></div>'; container.innerHTML = html; }
     function renderImagineTools(){ const container = document.getElementById('imagineToolsGrid'); const imagineTools = [ { name: '🖼️ Image to Text (OCR)', icon: '📸', action: 'ocr' }, { name: '🎨 Random Color Palette', icon: '🌈', action: 'randomColor' }, { name: '📻 Morse Code Converter', icon: '📡', action: 'morse' }, { name: '📝 Text Summarizer', icon: '📄', action: 'summarize' }, { name: '🔢 Number Base Converter', icon: '🔢', action: 'baseAny' }, { name: '🧬 UUID Generator', icon: '🆔', action: 'uuid' }, { name: '🔐 Hash Generator', icon: '🔑', action: 'hashGen' }, { name: '📅 Unix Timestamp', icon: '⏲️', action: 'unixTime' }, { name: '🌍 IP Geolocation', icon: '🗺️', action: 'ipGeo' }, { name: '📧 Email Validator', icon: '📨', action: 'emailValidate' }, { name: '📊 CSV to JSON', icon: '📑', action: 'csvToJson' }, { name: '🧮 Quadratic Solver', icon: '📐', action: 'quadratic' }, { name: '⚖️ Weight Converter', icon: '⚖️', action: 'weightConv' }, { name: '🌡️ Temperature Converter', icon: '🌡️', action: 'tempConv' }, { name: '📏 Area Converter', icon: '📐', action: 'areaConv' }, { name: '💾 Data Size Converter', icon: '💾', action: 'dataConv' }, { name: '⏱️ Epoch Time Now', icon: '⏰', action: 'epochNow' }, { name: '🔍 Reverse Text', icon: '🔄', action: 'reverseText' }, { name: '✏️ Leet Speak', icon: '👾', action: 'leetSpeak' }, { name: '🎯 Palindrome Checker', icon: '🔄', action: 'palindrome' }, { name: '🔠 Strong Password', icon: '🔐', action: 'strongPwd' }, { name: '📇 QR Reader (camera)', icon: '📷', action: 'qrReader' }, { name: '🎲 Custom Dice Roll', icon: '🎲', action: 'customDice' }, { name: '💬 Random Advice', icon: '💡', action: 'advice' }, { name: '🔗 URL Shortener', icon: '🔗', action: 'shortener' } ]; let html = ''; imagineTools.forEach(tool => { html += `<div class="imagine-tool-card" onclick="executeImagineTool('${tool.action}')"><div style="font-size:2.8rem;">${tool.icon}</div><div style="font-weight:700; font-size:1.2rem;">${tool.name}</div></div>`; }); container.innerHTML = html; }
-    window.executeImagineTool = function(action){ if(action === 'shortener') { openShortenerOverlay(); return; } let output = ''; switch(action){ case 'ocr': output = '📸 OCR Demo: Upload image<br><input type="file" id="ocrFile" accept="image/*"><button class="tool-btn" onclick="simulateOCR()">Extract Text</button><div id="ocrResult"></div>'; break; case 'randomColor': let r=Math.floor(Math.random()*255), g=Math.floor(Math.random()*255), b=Math.floor(Math.random()*255); output = `<div style="background:rgb(${r},${g},${b});width:120px;height:120px;border-radius:30px;"></div>RGB: ${r},${g},${b} | HEX: #${r.toString(16)}${g.toString(16)}${b.toString(16)}`; break; case 'morse': output = `<textarea id="morseInput" class="search-input" placeholder="Enter text" style="font-size:1rem;"></textarea><button class="tool-btn" onclick="convertToMorse()">To Morse</button><button class="tool-btn" onclick="convertFromMorse()">From Morse</button><div id="morseOut" class="tool-output"></div>`; break; case 'summarize': output = `<textarea id="sumText" class="search-input" placeholder="Long text..." style="font-size:1rem;"></textarea><button class="tool-btn" onclick="summarizeText()">Summarize</button><div id="sumOut" class="tool-output"></div>`; break; case 'baseAny': output = `<input id="baseNum" class="search-input" placeholder="Number"><input id="baseFrom" class="search-input" placeholder="From base (2-36)" value="10"><input id="baseTo" class="search-input" placeholder="To base (2-36)" value="16"><button class="tool-btn" onclick="convertBaseAny()">Convert</button><div id="baseOut" class="tool-output"></div>`; break; case 'uuid': let uuid = crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { let r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8); return v.toString(16); }); output = `UUID: ${uuid}<button class="tool-btn" onclick="copyToClipboard('${uuid}')">Copy</button>`; break; case 'hashGen': output = `<input id="hashInputText" class="search-input" placeholder="Text"><select id="hashAlgo" class="search-input" style="width:auto;"><option>MD5</option><option>SHA-1</option><option>SHA-256</option></select><button class="tool-btn" onclick="generateHash()">Generate</button><div id="hashOut" class="tool-output"></div>`; break; case 'unixTime': output = `<input id="unixInput" class="search-input" placeholder="Unix timestamp"><button class="tool-btn" onclick="unixToDate()">Convert to Date</button><button class="tool-btn" onclick="dateToUnix()">Current Date to Unix</button><div id="unixOut" class="tool-output"></div>`; break; case 'ipGeo': output = `<button class="tool-btn" onclick="getIPGeo()">Get My IP & Geolocation</button><div id="ipGeoOut" class="tool-output"></div>`; break; case 'emailValidate': output = `<input id="emailCheck" class="search-input" placeholder="Enter email"><button class="tool-btn" onclick="validateEmail()">Validate</button><div id="emailOut" class="tool-output"></div>`; break; case 'csvToJson': output = `<textarea id="csvData" class="search-input" rows="4" placeholder="name,age\nJohn,30\nJane,25" style="font-size:1rem;"></textarea><button class="tool-btn" onclick="convertCSVtoJSON()">Convert</button><pre id="csvJsonOut" class="tool-output"></pre>`; break; case 'quadratic': output = `<input id="aVal" class="search-input" placeholder="a"><input id="bVal" class="search-input" placeholder="b"><input id="cVal" class="search-input" placeholder="c"><button class="tool-btn" onclick="solveQuadratic()">Solve</button><div id="quadOut" class="tool-output"></div>`; break; case 'weightConv': output = `<input id="weightVal" type="number" class="search-input"><select id="weightFrom" class="search-input" style="width:auto;"><option value="kg">kg</option><option value="lb">lb</option><option value="oz">oz</option></select> → <select id="weightTo" class="search-input" style="width:auto;"><option value="kg">kg</option><option value="lb">lb</option><option value="oz">oz</option></select><button class="tool-btn" onclick="convertWeight()">Convert</button><div id="weightOut" class="tool-output"></div>`; break; case 'tempConv': output = `<input id="tempVal" type="number" class="search-input"><select id="tempFrom" class="search-input" style="width:auto;"><option value="C">Celsius</option><option value="F">Fahrenheit</option><option value="K">Kelvin</option></select> → <select id="tempTo" class="search-input" style="width:auto;"><option value="C">Celsius</option><option value="F">Fahrenheit</option><option value="K">Kelvin</option></select><button class="tool-btn" onclick="convertTemp()">Convert</button><div id="tempOut" class="tool-output"></div>`; break; case 'areaConv': output = `<input id="areaVal" type="number" class="search-input"><select id="areaFrom" class="search-input" style="width:auto;"><option value="m2">m²</option><option value="ft2">ft²</option><option value="acre">acre</option></select> → <select id="areaTo" class="search-input" style="width:auto;"><option value="m2">m²</option><option value="ft2">ft²</option><option value="acre">acre</option></select><button class="tool-btn" onclick="convertArea()">Convert</button><div id="areaOut" class="tool-output"></div>`; break; case 'dataConv': output = `<input id="dataVal" type="number" class="search-input"><select id="dataFrom" class="search-input" style="width:auto;"><option value="B">Bytes</option><option value="KB">KB</option><option value="MB">MB</option><option value="GB">GB</option></select> → <select id="dataTo" class="search-input" style="width:auto;"><option value="B">Bytes</option><option value="KB">KB</option><option value="MB">MB</option><option value="GB">GB</option></select><button class="tool-btn" onclick="convertData()">Convert</button><div id="dataOut" class="tool-output"></div>`; break; case 'epochNow': output = `Current Unix epoch: ${Math.floor(Date.now()/1000)}<br><button class="tool-btn" onclick="refreshEpoch()">Refresh</button>`; break; case 'reverseText': output = `<input id="reverseInput" class="search-input" placeholder="Text"><button class="tool-btn" onclick="reverseString()">Reverse</button><div id="reverseOut" class="tool-output"></div>`; break; case 'leetSpeak': output = `<input id="leetInput" class="search-input" placeholder="Normal text"><button class="tool-btn" onclick="toLeet()">Convert to Leet</button><div id="leetOut" class="tool-output"></div>`; break; case 'palindrome': output = `<input id="palInput" class="search-input" placeholder="Word or phrase"><button class="tool-btn" onclick="checkPalindrome()">Check</button><div id="palOut" class="tool-output"></div>`; break; case 'strongPwd': output = `<button class="tool-btn" onclick="genStrongPwd()">Generate Strong Password</button><div id="strongPwdOut" class="tool-output"></div>`; break; case 'qrReader': output = `<input type="file" id="qrFile" accept="image/*"><button class="tool-btn" onclick="readQRCode()">Read QR</button><div id="qrReadOut" class="tool-output"></div>`; break; case 'customDice': output = `<input id="diceSides" type="number" value="6" class="search-input"><button class="tool-btn" onclick="rollCustomDice()">Roll</button><div id="customDiceOut" class="tool-output"></div>`; break; case 'advice': output = `<button class="tool-btn" onclick="getAdvice()">Get Random Advice</button><div id="dynamicOutput" class="tool-output"></div>`; break; default: output = 'Tool ready'; } let modal = document.createElement('div'); modal.style.position = 'fixed'; modal.style.top = '50%'; modal.style.left = '50%'; modal.style.transform = 'translate(-50%, -50%)'; modal.style.backgroundColor = 'var(--surface)'; modal.style.borderRadius = '32px'; modal.style.padding = '28px'; modal.style.zIndex = '2000'; modal.style.maxWidth = '90%'; modal.style.width = '480px'; modal.style.boxShadow = 'var(--shadow-lg)'; modal.style.border = '2px solid var(--primary)'; modal.innerHTML = `<div style="text-align:right;"><button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;font-size:1.8rem;cursor:pointer;">×</button></div><div id="modalContent">${output}</div>`; document.body.appendChild(modal); window.convertToMorse = function(){ const morseMap = { 'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.', 'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..', 'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.', 'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-', 'Y': '-.--', 'Z': '--..', '0': '-----', '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.', ' ': '/' }; let text = document.getElementById('morseInput').value.toUpperCase(); let morse = text.split('').map(c => morseMap[c] || c).join(' '); document.getElementById('morseOut').innerHTML = morse; }; window.convertFromMorse = function(){ const morseMap = { '.-': 'A', '-...': 'B', '-.-.': 'C', '-..': 'D', '.': 'E', '..-.': 'F', '--.': 'G', '....': 'H', '..': 'I', '.---': 'J', '-.-': 'K', '.-..': 'L', '--': 'M', '-.': 'N', '---': 'O', '.--.': 'P', '--.-': 'Q', '.-.': 'R', '...': 'S', '-': 'T', '..-': 'U', '...-': 'V', '.--': 'W', '-..-': 'X', '-.--': 'Y', '--..': 'Z', '-----': '0', '.----': '1', '..---': '2', '...--': '3', '....-': '4', '.....': '5', '-....': '6', '--...': '7', '---..': '8', '----.': '9', '/': ' ' }; let morse = document.getElementById('morseInput').value.trim().split(' '); let text = morse.map(code => morseMap[code] || code).join(''); document.getElementById('morseOut').innerHTML = text; }; window.simulateOCR = function(){ let file = document.getElementById('ocrFile').files[0]; document.getElementById('ocrResult').innerHTML = file ? 'OCR simulation: Text extracted from image (demo).' : 'No file selected.'; }; window.summarizeText = function(){ let txt = document.getElementById('sumText').value; document.getElementById('sumOut').innerHTML = txt.length > 100 ? txt.substring(0,100)+'... (summary demo)' : txt; }; window.convertBaseAny = function(){ let num = parseInt(document.getElementById('baseNum').value, parseInt(document.getElementById('baseFrom').value)); let toBase = parseInt(document.getElementById('baseTo').value); document.getElementById('baseOut').innerHTML = isNaN(num) ? 'Invalid' : num.toString(toBase); }; window.generateHash = async function(){ let text = document.getElementById('hashInputText').value; let algo = document.getElementById('hashAlgo').value; if(!text) { document.getElementById('hashOut').innerHTML = 'Enter text'; return; } const encoder = new TextEncoder(); const data = encoder.encode(text); let hash; if(algo === 'MD5') hash = btoa(text).slice(0,32); else if(algo === 'SHA-1') hash = await crypto.subtle.digest('SHA-1', data).then(b=>Array.from(new Uint8Array(b)).map(b=>b.toString(16).padStart(2,'0')).join('')); else hash = await crypto.subtle.digest('SHA-256', data).then(b=>Array.from(new Uint8Array(b)).map(b=>b.toString(16).padStart(2,'0')).join('')); document.getElementById('hashOut').innerHTML = hash; }; window.unixToDate = function(){ let ts = parseInt(document.getElementById('unixInput').value); document.getElementById('unixOut').innerHTML = new Date(ts*1000).toString(); }; window.dateToUnix = function(){ document.getElementById('unixOut').innerHTML = Math.floor(Date.now()/1000); }; window.getIPGeo = async function(){ let res = await fetch('https://api.ipify.org?format=json'); let data = await res.json(); document.getElementById('ipGeoOut').innerHTML = `IP: ${data.ip}<br>Geo: Approximate location (demo)`; }; window.validateEmail = function(){ let email = document.getElementById('emailCheck').value; let regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; document.getElementById('emailOut').innerHTML = regex.test(email) ? 'Valid email' : 'Invalid email'; }; window.convertCSVtoJSON = function(){ let csv = document.getElementById('csvData').value; let lines = csv.split('\n'); let headers = lines[0].split(','); let result = []; for(let i=1;i<lines.length;i++){ let obj = {}; let row = lines[i].split(','); for(let j=0;j<headers.length;j++) obj[headers[j].trim()] = row[j]?.trim(); result.push(obj); } document.getElementById('csvJsonOut').innerHTML = JSON.stringify(result, null, 2); }; window.solveQuadratic = function(){ let a=parseFloat(document.getElementById('aVal').value), b=parseFloat(document.getElementById('bVal').value), c=parseFloat(document.getElementById('cVal').value); let d = b*b - 4*a*c; if(d<0) document.getElementById('quadOut').innerHTML = 'No real roots'; else { let x1 = (-b + Math.sqrt(d))/(2*a); let x2 = (-b - Math.sqrt(d))/(2*a); document.getElementById('quadOut').innerHTML = `x1 = ${x1}, x2 = ${x2}`; } }; window.convertWeight = function(){ let val=parseFloat(document.getElementById('weightVal').value), from=document.getElementById('weightFrom').value, to=document.getElementById('weightTo').value; let kg = val * (from==='kg'?1:from==='lb'?0.453592:0.0283495); let result = kg * (to==='kg'?1:to==='lb'?2.20462:35.274); document.getElementById('weightOut').innerHTML = result.toFixed(4); }; window.convertTemp = function(){ let val=parseFloat(document.getElementById('tempVal').value), from=document.getElementById('tempFrom').value, to=document.getElementById('tempTo').value; let celsius; if(from==='C') celsius=val; else if(from==='F') celsius=(val-32)*5/9; else celsius=val-273.15; let result; if(to==='C') result=celsius; else if(to==='F') result=celsius*9/5+32; else result=celsius+273.15; document.getElementById('tempOut').innerHTML = result.toFixed(2); }; window.convertArea = function(){ let val=parseFloat(document.getElementById('areaVal').value), from=document.getElementById('areaFrom').value, to=document.getElementById('areaTo').value; let sqm = from==='m2'?val:from==='ft2'?val*0.092903:val*4046.86; let result = to==='m2'?sqm:to==='ft2'?sqm*10.7639:sqm/4046.86; document.getElementById('areaOut').innerHTML = result.toFixed(4); }; window.convertData = function(){ let val=parseFloat(document.getElementById('dataVal').value), from=document.getElementById('dataFrom').value, to=document.getElementById('dataTo').value; let bytes = from==='B'?val:from==='KB'?val*1024:from==='MB'?val*1048576:val*1073741824; let result = to==='B'?bytes:to==='KB'?bytes/1024:to==='MB'?bytes/1048576:bytes/1073741824; document.getElementById('dataOut').innerHTML = result.toFixed(4); }; window.refreshEpoch = function(){ let epochDiv = document.querySelector('#modalContent #epochNowDiv'); if(epochDiv) epochDiv.innerHTML = Math.floor(Date.now()/1000); else location.reload(); }; window.reverseString = function(){ let t=document.getElementById('reverseInput').value; document.getElementById('reverseOut').innerHTML = t.split('').reverse().join(''); }; window.toLeet = function(){ let t=document.getElementById('leetInput').value; document.getElementById('leetOut').innerHTML = t.replace(/a/gi,'4').replace(/e/gi,'3').replace(/i/gi,'1').replace(/o/gi,'0').replace(/s/gi,'5'); }; window.checkPalindrome = function(){ let t=document.getElementById('palInput').value; let rev=t.split('').reverse().join(''); document.getElementById('palOut').innerHTML = t===rev ? 'Palindrome!' : 'Not a palindrome'; }; window.genStrongPwd = function(){ let chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+'; let pwd=''; for(let i=0;i<16;i++) pwd+=chars[Math.floor(Math.random()*chars.length)]; document.getElementById('strongPwdOut').innerHTML = pwd; }; window.readQRCode = function(){ let file = document.getElementById('qrFile').files[0]; document.getElementById('qrReadOut').innerHTML = file ? 'QR read simulation: "https://multitool.pro"' : 'No file selected.'; }; window.rollCustomDice = function(){ let sides=parseInt(document.getElementById('diceSides').value); let result=Math.floor(Math.random()*sides)+1; document.getElementById('customDiceOut').innerHTML = `🎲 ${result}`; }; window.getAdvice = async function(){ let res=await fetch('https://api.adviceslip.com/advice'); let data=await res.json(); document.getElementById('dynamicOutput').innerHTML = data.slip.advice; }; };
+    window.executeImagineTool = function(action){ if(action === 'shortener') { openShortenerOverlay(); return; } let output = ''; switch(action){ case 'ocr': output = '📸 OCR Demo: Upload image<br><input type="file" id="ocrFile" accept="image/*"><button class="tool-btn" onclick="simulateOCR()">Extract Text</button><div id="ocrResult"></div>'; break;
+        case 'randomColor': let r=Math.floor(Math.random()*255), g=Math.floor(Math.random()*255), b=Math.floor(Math.random()*255); output = `<div style="background:rgb(${r},${g},${b});width:120px;height:120px;border-radius:30px;"></div>RGB: ${r},${g},${b} | HEX: #${r.toString(16)}${g.toString(16)}${b.toString(16)}`; break;
+        case 'morse': output = `<textarea id="morseInput" class="search-input" placeholder="Enter text" style="font-size:1rem;"></textarea><button class="tool-btn" onclick="convertToMorse()">To Morse</button><button class="tool-btn" onclick="convertFromMorse()">From Morse</button><div id="morseOut" class="tool-output"></div>`; break;
+        case 'summarize': output = `<textarea id="sumText" class="search-input" placeholder="Long text..." style="font-size:1rem;"></textarea><button class="tool-btn" onclick="summarizeText()">Summarize</button><div id="sumOut" class="tool-output"></div>`; break;
+        case 'baseAny': output = `<input id="baseNum" class="search-input" placeholder="Number"><input id="baseFrom" class="search-input" placeholder="From base (2-36)" value="10"><input id="baseTo" class="search-input" placeholder="To base (2-36)" value="16"><button class="tool-btn" onclick="convertBaseAny()">Convert</button><div id="baseOut" class="tool-output"></div>`; break;
+        case 'uuid': let uuid = crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { let r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8); return v.toString(16); }); output = `UUID: ${uuid}<button class="tool-btn" onclick="copyToClipboard('${uuid}')">Copy</button>`; break;
+        case 'hashGen': output = `<input id="hashInputText" class="search-input" placeholder="Text"><select id="hashAlgo" class="search-input" style="width:auto;"><option>MD5</option><option>SHA-1</option><option>SHA-256</option></select><button class="tool-btn" onclick="generateHash()">Generate</button><div id="hashOut" class="tool-output"></div>`; break;
+        case 'unixTime': output = `<input id="unixInput" class="search-input" placeholder="Unix timestamp"><button class="tool-btn" onclick="unixToDate()">Convert to Date</button><button class="tool-btn" onclick="dateToUnix()">Current Date to Unix</button><div id="unixOut" class="tool-output"></div>`; break;
+        case 'ipGeo': output = `<button class="tool-btn" onclick="getIPGeo()">Get My IP & Geolocation</button><div id="ipGeoOut" class="tool-output"></div>`; break;
+        case 'emailValidate': output = `<input id="emailCheck" class="search-input" placeholder="Enter email"><button class="tool-btn" onclick="validateEmail()">Validate</button><div id="emailOut" class="tool-output"></div>`; break;
+        case 'csvToJson': output = `<textarea id="csvData" class="search-input" rows="4" placeholder="name,age\nJohn,30\nJane,25" style="font-size:1rem;"></textarea><button class="tool-btn" onclick="convertCSVtoJSON()">Convert</button><pre id="csvJsonOut" class="tool-output"></pre>`; break;
+        case 'quadratic': output = `<input id="aVal" class="search-input" placeholder="a"><input id="bVal" class="search-input" placeholder="b"><input id="cVal" class="search-input" placeholder="c"><button class="tool-btn" onclick="solveQuadratic()">Solve</button><div id="quadOut" class="tool-output"></div>`; break;
+        case 'weightConv': output = `<input id="weightVal" type="number" class="search-input"><select id="weightFrom" class="search-input" style="width:auto;"><option value="kg">kg</option><option value="lb">lb</option><option value="oz">oz</option></select> → <select id="weightTo" class="search-input" style="width:auto;"><option value="kg">kg</option><option value="lb">lb</option><option value="oz">oz</option></select><button class="tool-btn" onclick="convertWeight()">Convert</button><div id="weightOut" class="tool-output"></div>`; break;
+        case 'tempConv': output = `<input id="tempVal" type="number" class="search-input"><select id="tempFrom" class="search-input" style="width:auto;"><option value="C">Celsius</option><option value="F">Fahrenheit</option><option value="K">Kelvin</option></select> → <select id="tempTo" class="search-input" style="width:auto;"><option value="C">Celsius</option><option value="F">Fahrenheit</option><option value="K">Kelvin</option></select><button class="tool-btn" onclick="convertTemp()">Convert</button><div id="tempOut" class="tool-output"></div>`; break;
+        case 'areaConv': output = `<input id="areaVal" type="number" class="search-input"><select id="areaFrom" class="search-input" style="width:auto;"><option value="m2">m²</option><option value="ft2">ft²</option><option value="acre">acre</option></select> → <select id="areaTo" class="search-input" style="width:auto;"><option value="m2">m²</option><option value="ft2">ft²</option><option value="acre">acre</option></select><button class="tool-btn" onclick="convertArea()">Convert</button><div id="areaOut" class="tool-output"></div>`; break;
+        case 'dataConv': output = `<input id="dataVal" type="number" class="search-input"><select id="dataFrom" class="search-input" style="width:auto;"><option value="B">Bytes</option><option value="KB">KB</option><option value="MB">MB</option><option value="GB">GB</option></select> → <select id="dataTo" class="search-input" style="width:auto;"><option value="B">Bytes</option><option value="KB">KB</option><option value="MB">MB</option><option value="GB">GB</option></select><button class="tool-btn" onclick="convertData()">Convert</button><div id="dataOut" class="tool-output"></div>`; break;
+        case 'epochNow': output = `Current Unix epoch: ${Math.floor(Date.now()/1000)}<br><button class="tool-btn" onclick="refreshEpoch()">Refresh</button>`; break;
+        case 'reverseText': output = `<input id="reverseInput" class="search-input" placeholder="Text"><button class="tool-btn" onclick="reverseString()">Reverse</button><div id="reverseOut" class="tool-output"></div>`; break;
+        case 'leetSpeak': output = `<input id="leetInput" class="search-input" placeholder="Normal text"><button class="tool-btn" onclick="toLeet()">Convert to Leet</button><div id="leetOut" class="tool-output"></div>`; break;
+        case 'palindrome': output = `<input id="palInput" class="search-input" placeholder="Word or phrase"><button class="tool-btn" onclick="checkPalindrome()">Check</button><div id="palOut" class="tool-output"></div>`; break;
+        case 'strongPwd': output = `<button class="tool-btn" onclick="genStrongPwd()">Generate Strong Password</button><div id="strongPwdOut" class="tool-output"></div>`; break;
+        case 'qrReader': output = `<input type="file" id="qrFile" accept="image/*"><button class="tool-btn" onclick="readQRCode()">Read QR</button><div id="qrReadOut" class="tool-output"></div>`; break;
+        case 'customDice': output = `<input id="diceSides" type="number" value="6" class="search-input"><button class="tool-btn" onclick="rollCustomDice()">Roll</button><div id="customDiceOut" class="tool-output"></div>`; break;
+        case 'advice': output = `<button class="tool-btn" onclick="getAdvice()">Get Random Advice</button><div id="dynamicOutput" class="tool-output"></div>`; break;
+        default: output = 'Tool ready'; } let modal = document.createElement('div'); modal.style.position = 'fixed'; modal.style.top = '50%'; modal.style.left = '50%'; modal.style.transform = 'translate(-50%, -50%)'; modal.style.backgroundColor = 'var(--surface)'; modal.style.borderRadius = '32px'; modal.style.padding = '28px'; modal.style.zIndex = '2000'; modal.style.maxWidth = '90%'; modal.style.width = '480px'; modal.style.boxShadow = 'var(--shadow-lg)'; modal.style.border = '2px solid var(--primary)'; modal.innerHTML = `<div style="text-align:right;"><button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;font-size:1.8rem;cursor:pointer;">×</button></div><div id="modalContent">${output}</div>`; document.body.appendChild(modal); window.convertToMorse = function(){ const morseMap = { 'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.', 'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..', 'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.', 'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-', 'Y': '-.--', 'Z': '--..', '0': '-----', '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.', ' ': '/' }; let text = document.getElementById('morseInput').value.toUpperCase(); let morse = text.split('').map(c => morseMap[c] || c).join(' '); document.getElementById('morseOut').innerHTML = morse; }; window.convertFromMorse = function(){ const morseMap = { '.-': 'A', '-...': 'B', '-.-.': 'C', '-..': 'D', '.': 'E', '..-.': 'F', '--.': 'G', '....': 'H', '..': 'I', '.---': 'J', '-.-': 'K', '.-..': 'L', '--': 'M', '-.': 'N', '---': 'O', '.--.': 'P', '--.-': 'Q', '.-.': 'R', '...': 'S', '-': 'T', '..-': 'U', '...-': 'V', '.--': 'W', '-..-': 'X', '-.--': 'Y', '--..': 'Z', '-----': '0', '.----': '1', '..---': '2', '...--': '3', '....-': '4', '.....': '5', '-....': '6', '--...': '7', '---..': '8', '----.': '9', '/': ' ' }; let morse = document.getElementById('morseInput').value.trim().split(' '); let text = morse.map(code => morseMap[code] || code).join(''); document.getElementById('morseOut').innerHTML = text; }; window.simulateOCR = function(){ let file = document.getElementById('ocrFile').files[0]; document.getElementById('ocrResult').innerHTML = file ? 'OCR simulation: Text extracted from image (demo).' : 'No file selected.'; }; window.summarizeText = function(){ let txt = document.getElementById('sumText').value; document.getElementById('sumOut').innerHTML = txt.length > 100 ? txt.substring(0,100)+'... (summary demo)' : txt; }; window.convertBaseAny = function(){ let num = parseInt(document.getElementById('baseNum').value, parseInt(document.getElementById('baseFrom').value)); let toBase = parseInt(document.getElementById('baseTo').value); document.getElementById('baseOut').innerHTML = isNaN(num) ? 'Invalid' : num.toString(toBase); }; window.generateHash = async function(){ let text = document.getElementById('hashInputText').value; let algo = document.getElementById('hashAlgo').value; if(!text) { document.getElementById('hashOut').innerHTML = 'Enter text'; return; } const encoder = new TextEncoder(); const data = encoder.encode(text); let hash; if(algo === 'MD5') hash = btoa(text).slice(0,32); else if(algo === 'SHA-1') hash = await crypto.subtle.digest('SHA-1', data).then(b=>Array.from(new Uint8Array(b)).map(b=>b.toString(16).padStart(2,'0')).join('')); else hash = await crypto.subtle.digest('SHA-256', data).then(b=>Array.from(new Uint8Array(b)).map(b=>b.toString(16).padStart(2,'0')).join('')); document.getElementById('hashOut').innerHTML = hash; }; window.unixToDate = function(){ let ts = parseInt(document.getElementById('unixInput').value); document.getElementById('unixOut').innerHTML = new Date(ts*1000).toString(); }; window.dateToUnix = function(){ document.getElementById('unixOut').innerHTML = Math.floor(Date.now()/1000); }; window.getIPGeo = async function(){ let res = await fetch('https://api.ipify.org?format=json'); let data = await res.json(); document.getElementById('ipGeoOut').innerHTML = `IP: ${data.ip}<br>Geo: Approximate location (demo)`; }; window.validateEmail = function(){ let email = document.getElementById('emailCheck').value; let regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; document.getElementById('emailOut').innerHTML = regex.test(email) ? 'Valid email' : 'Invalid email'; }; window.convertCSVtoJSON = function(){ let csv = document.getElementById('csvData').value; let lines = csv.split('\n'); let headers = lines[0].split(','); let result = []; for(let i=1;i<lines.length;i++){ let obj = {}; let row = lines[i].split(','); for(let j=0;j<headers.length;j++) obj[headers[j].trim()] = row[j]?.trim(); result.push(obj); } document.getElementById('csvJsonOut').innerHTML = JSON.stringify(result, null, 2); }; window.solveQuadratic = function(){ let a=parseFloat(document.getElementById('aVal').value), b=parseFloat(document.getElementById('bVal').value), c=parseFloat(document.getElementById('cVal').value); let d = b*b - 4*a*c; if(d<0) document.getElementById('quadOut').innerHTML = 'No real roots'; else { let x1 = (-b + Math.sqrt(d))/(2*a); let x2 = (-b - Math.sqrt(d))/(2*a); document.getElementById('quadOut').innerHTML = `x1 = ${x1}, x2 = ${x2}`; } }; window.convertWeight = function(){ let val=parseFloat(document.getElementById('weightVal').value), from=document.getElementById('weightFrom').value, to=document.getElementById('weightTo').value; let kg = val * (from==='kg'?1:from==='lb'?0.453592:0.0283495); let result = kg * (to==='kg'?1:to==='lb'?2.20462:35.274); document.getElementById('weightOut').innerHTML = result.toFixed(4); }; window.convertTemp = function(){ let val=parseFloat(document.getElementById('tempVal').value), from=document.getElementById('tempFrom').value, to=document.getElementById('tempTo').value; let celsius; if(from==='C') celsius=val; else if(from==='F') celsius=(val-32)*5/9; else celsius=val-273.15; let result; if(to==='C') result=celsius; else if(to==='F') result=celsius*9/5+32; else result=celsius+273.15; document.getElementById('tempOut').innerHTML = result.toFixed(2); }; window.convertArea = function(){ let val=parseFloat(document.getElementById('areaVal').value), from=document.getElementById('areaFrom').value, to=document.getElementById('areaTo').value; let sqm = from==='m2'?val:from==='ft2'?val*0.092903:val*4046.86; let result = to==='m2'?sqm:to==='ft2'?sqm*10.7639:sqm/4046.86; document.getElementById('areaOut').innerHTML = result.toFixed(4); }; window.convertData = function(){ let val=parseFloat(document.getElementById('dataVal').value), from=document.getElementById('dataFrom').value, to=document.getElementById('dataTo').value; let bytes = from==='B'?val:from==='KB'?val*1024:from==='MB'?val*1048576:val*1073741824; let result = to==='B'?bytes:to==='KB'?bytes/1024:to==='MB'?bytes/1048576:bytes/1073741824; document.getElementById('dataOut').innerHTML = result.toFixed(4); }; window.refreshEpoch = function(){ let epochDiv = document.querySelector('#modalContent #epochNowDiv'); if(epochDiv) epochDiv.innerHTML = Math.floor(Date.now()/1000); else location.reload(); }; window.reverseString = function(){ let t=document.getElementById('reverseInput').value; document.getElementById('reverseOut').innerHTML = t.split('').reverse().join(''); }; window.toLeet = function(){ let t=document.getElementById('leetInput').value; document.getElementById('leetOut').innerHTML = t.replace(/a/gi,'4').replace(/e/gi,'3').replace(/i/gi,'1').replace(/o/gi,'0').replace(/s/gi,'5'); }; window.checkPalindrome = function(){ let t=document.getElementById('palInput').value; let rev=t.split('').reverse().join(''); document.getElementById('palOut').innerHTML = t===rev ? 'Palindrome!' : 'Not a palindrome'; }; window.genStrongPwd = function(){ let chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+'; let pwd=''; for(let i=0;i<16;i++) pwd+=chars[Math.floor(Math.random()*chars.length)]; document.getElementById('strongPwdOut').innerHTML = pwd; }; window.readQRCode = function(){ let file = document.getElementById('qrFile').files[0]; document.getElementById('qrReadOut').innerHTML = file ? 'QR read simulation: "https://multitool.pro"' : 'No file selected.'; }; window.rollCustomDice = function(){ let sides=parseInt(document.getElementById('diceSides').value); let result=Math.floor(Math.random()*sides)+1; document.getElementById('customDiceOut').innerHTML = `🎲 ${result}`; }; window.getAdvice = async function(){ let res=await fetch('https://api.adviceslip.com/advice'); let data=await res.json(); document.getElementById('dynamicOutput').innerHTML = data.slip.advice; }; };
     window.copyToClipboard = function(text){ navigator.clipboard.writeText(text); showToast('Copied!'); };
     function getAllTimeZones() { try { return Intl.supportedValuesOf('timeZone'); } catch(e) { return ['UTC', 'America/New_York', 'Europe/London', 'Asia/Tokyo']; } }
     function updateWorldClock() { const container = document.getElementById('worldClockContainer'); if(!container) return; const zones = getAllTimeZones().sort(); const now = new Date(); let html = '<div class="timezone-grid">'; zones.forEach(zone => { try { let time = now.toLocaleTimeString('en-US', { timeZone: zone, hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' }); let date = now.toLocaleDateString('en-US', { timeZone: zone }); let displayName = zone.replace(/_/g, ' ').split('/').pop() + ' (' + zone.split('/')[0] + ')'; html += `<div class="timezone-item"><strong>${displayName}</strong><span>${date} ${time}</span></div>`; } catch(e) {} }); html += '</div>'; container.innerHTML = html; }
@@ -592,9 +684,8 @@
     if (translateBtn && langSelect) {
         translateBtn.addEventListener('click', function() {
             const targetLang = langSelect.value;
-            // Microsoft Translator (Bing) – whole page translation
-            const msUrl = `https://www.bing.com/translator?from=en&to=${targetLang}&url=${encodeURIComponent(PAGE_URL)}`;
-            window.open(msUrl, '_blank');
+            const yandexUrl = `https://translate.yandex.com/translate?url=${encodeURIComponent(PAGE_URL)}&lang=en-${targetLang}`;
+            window.open(yandexUrl, '_blank');
         });
     }
 })();
@@ -614,7 +705,6 @@
     if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', () => { scheduleChecks(); setupMutationObserver(); }); } else { scheduleChecks(); setupMutationObserver(); }
 })();
 </script>
-<!-- Additional script to populate new category grids -->
 <script>
 function openFreeEmailsOverlay() { document.getElementById('freeEmailsOverlay').classList.add('active'); }
 function closeFreeEmailsOverlay() { document.getElementById('freeEmailsOverlay').classList.remove('active'); }
@@ -645,7 +735,6 @@ function closeCryptoOverlay() { document.getElementById('cryptoOverlay').classLi
 function openNewsOverlay() { document.getElementById('newsOverlay').classList.add('active'); }
 function closeNewsOverlay() { document.getElementById('newsOverlay').classList.remove('active'); }
 
-// Populate Free Emails
 const freeEmails = [
     { name: 'ProtonMail', icon: '🔒', url: 'https://protonmail.com', cat: 'Secure Email' },
     { name: 'Tutanota', icon: '📧', url: 'https://tutanota.com', cat: 'Secure Email' },
@@ -657,7 +746,6 @@ const freeEmails = [
 ];
 document.getElementById('freeEmailsGrid').innerHTML = freeEmails.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
 
-// Health and Sports (with subcategories)
 const healthSports = [
     { name: 'MyFitnessPal', icon: '🍏', url: 'https://www.myfitnesspal.com', cat: 'Nutrition' },
     { name: 'Bodybuilding.com', icon: '💪', url: 'https://www.bodybuilding.com', cat: 'Weightlifting' },
@@ -672,7 +760,6 @@ const healthSports = [
 ];
 document.getElementById('healthSportsGrid').innerHTML = healthSports.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
 
-// Miscellaneous (Music, Dating, Art)
 const miscSites = [
     { name: 'Last.fm', icon: '🎵', url: 'https://www.last.fm', cat: 'Music' },
     { name: 'Audiomack', icon: '🎧', url: 'https://audiomack.com', cat: 'Music' },
@@ -687,7 +774,6 @@ const miscSites = [
 ];
 document.getElementById('miscGrid').innerHTML = miscSites.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
 
-// Travel and Books
 const travelBooks = [
     { name: 'Project Gutenberg', icon: '📚', url: 'https://www.gutenberg.org', cat: 'Free Books' },
     { name: 'Open Library', icon: '📖', url: 'https://openlibrary.org', cat: 'Free Books' },
@@ -700,7 +786,6 @@ const travelBooks = [
 ];
 document.getElementById('travelBooksGrid').innerHTML = travelBooks.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
 
-// Movies Series Shows (Free)
 const moviesSeries = [
     { name: 'Popcornflix', icon: '🍿', url: 'https://www.popcornflix.com', cat: 'Free Movies' },
     { name: 'Viewster', icon: '🎬', url: 'https://www.viewster.com', cat: 'Free Movies' },
@@ -713,7 +798,6 @@ const moviesSeries = [
 ];
 document.getElementById('moviesSeriesGrid').innerHTML = moviesSeries.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
 
-// Culture and Fashion
 const cultureFashion = [
     { name: 'Vogue', icon: '👗', url: 'https://www.vogue.com', cat: 'Fashion' },
     { name: 'Harper\'s Bazaar', icon: '💄', url: 'https://www.harpersbazaar.com', cat: 'Fashion' },
@@ -724,7 +808,6 @@ const cultureFashion = [
 ];
 document.getElementById('cultureFashionGrid').innerHTML = cultureFashion.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
 
-// Jobs
 const jobs = [
     { name: 'Indeed', icon: '💼', url: 'https://www.indeed.com', cat: 'Job Search' },
     { name: 'LinkedIn Jobs', icon: '🔗', url: 'https://www.linkedin.com/jobs', cat: 'Professional' },
@@ -737,7 +820,6 @@ const jobs = [
 ];
 document.getElementById('jobsGrid').innerHTML = jobs.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
 
-// TECH
 const tech = [
     { name: 'TechCrunch', icon: '📱', url: 'https://techcrunch.com', cat: 'Tech News' },
     { name: 'The Verge', icon: '💻', url: 'https://www.theverge.com', cat: 'Tech News' },
@@ -750,7 +832,6 @@ const tech = [
 ];
 document.getElementById('techGrid').innerHTML = tech.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
 
-// Building & Home Life
 const buildingHome = [
     { name: 'Houzz', icon: '🏠', url: 'https://www.houzz.com', cat: 'Home Design' },
     { name: 'Family Handyman', icon: '🔨', url: 'https://www.familyhandyman.com', cat: 'DIY' },
@@ -761,7 +842,6 @@ const buildingHome = [
 ];
 document.getElementById('buildingHomeGrid').innerHTML = buildingHome.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
 
-// SURF Internet
 const surfInternet = [
     { name: 'Speedtest', icon: '📶', url: 'https://www.speedtest.net', cat: 'Speed Test' },
     { name: 'WhatIsMyIP', icon: '🌐', url: 'https://whatismyip.com', cat: 'IP Tool' },
@@ -772,7 +852,6 @@ const surfInternet = [
 ];
 document.getElementById('surfInternetGrid').innerHTML = surfInternet.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
 
-// Cooking & Kitchen
 const cookingKitchen = [
     { name: 'Allrecipes', icon: '🍲', url: 'https://www.allrecipes.com', cat: 'Recipes' },
     { name: 'Epicurious', icon: '🍽️', url: 'https://www.epicurious.com', cat: 'Recipes' },
@@ -783,7 +862,6 @@ const cookingKitchen = [
 ];
 document.getElementById('cookingKitchenGrid').innerHTML = cookingKitchen.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
 
-// Wilderness and Oceans
 const wildernessOceans = [
     { name: 'National Geographic', icon: '🐘', url: 'https://www.nationalgeographic.com', cat: 'Wildlife' },
     { name: 'WWF', icon: '🐼', url: 'https://www.worldwildlife.org', cat: 'Conservation' },
@@ -794,7 +872,6 @@ const wildernessOceans = [
 ];
 document.getElementById('wildernessOceansGrid').innerHTML = wildernessOceans.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
 
-// Crypto
 const crypto = [
     { name: 'CoinMarketCap', icon: '📊', url: 'https://coinmarketcap.com', cat: 'Prices' },
     { name: 'CoinGecko', icon: '🦎', url: 'https://www.coingecko.com', cat: 'Prices' },
@@ -805,7 +882,6 @@ const crypto = [
 ];
 document.getElementById('cryptoGrid').innerHTML = crypto.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
 
-// NEWS
 const news = [
     { name: 'BBC News', icon: '📡', url: 'https://www.bbc.com/news', cat: 'World' },
     { name: 'CNN', icon: '📺', url: 'https://www.cnn.com', cat: 'World' },
