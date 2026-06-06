@@ -282,10 +282,7 @@
         .gt-protection-popup .gt-message { font-size: 1rem; line-height: 1.6; margin-bottom: 24px; }
         .gt-btn { padding: 12px 26px; font-size: 1rem; }
         .gt-btn-return-red { width: 26px; height: 26px; background: red !important; padding: 0 !important; margin: 0 !important; font-size: 0 !important; border-radius: 6px; display: inline-block; cursor: pointer; }
-        /* NEW: reward popup styles */
-        .reward-popup, .verify-popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--surface); border-radius: 48px; padding: 28px; z-index: 20000; box-shadow: 0 30px 60px rgba(0,0,0,0.4); text-align: center; max-width: 90%; width: 380px; border: 2px solid var(--primary); }
-        .locked-tool { opacity: 0.6; filter: blur(1px); position: relative; }
-        .locked-tool::after { content: "🔒"; position: absolute; top: 10px; right: 10px; font-size: 1.5rem; }
+        .reward-popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--surface); border-radius: 48px; padding: 28px; z-index: 20000; box-shadow: 0 30px 60px rgba(0,0,0,0.4); text-align: center; max-width: 90%; width: 380px; border: 2px solid var(--primary); }
     </style>
 </head>
 <body>
@@ -403,198 +400,13 @@
     let blinkInterval = null;
     let calcExpr = '';
 
-    // ========== POINTS SYSTEM WITH VERIFIED DOWNLOAD ==========
-    let userPoints = parseInt(localStorage.getItem('userPoints')) || 0;
-    let apkDownloadRequested = localStorage.getItem('apkDownloadRequested') === 'true';
-    let apkVerified = localStorage.getItem('apkVerified') === 'true';
-    
-    function updatePointsUI() {
-        document.getElementById('pointsDisplay')?.setAttribute('data-points', userPoints);
-        // also update any visible point display in the earn section
-        const ptsSpan = document.getElementById('pointsDisplaySpan');
-        if(ptsSpan) ptsSpan.innerText = userPoints;
-        localStorage.setItem('userPoints', userPoints);
-    }
-
-    // Function to check if a tool is locked (requires points)
-    function isToolLocked(toolId) {
-        const lockedTools = {
-            'premium_ai': 500,      // AI Text Enhancer needs 500 points
-            'online_overlay': 300,   // Online Tools overlay needs 300 points
-            'tvradio_overlay': 200,  // TV/Radio needs 200 points
-            'games_overlay': 250,
-            'money_overlay': 250
-        };
-        if(lockedTools[toolId] && userPoints < lockedTools[toolId]) {
-            return lockedTools[toolId];
-        }
-        return false;
-    }
-
-    // Modified selectTool to check points
-    const originalSelectTool = window.selectTool;
-    window.selectTool = function(toolId) {
-        const required = isToolLocked(toolId);
-        if(required) {
-            showToast(`🔒 This tool requires ${required} points. Earn points by verifying APK install, daily rewards, or visiting offer walls.`);
-            openEarnPointsPopup();
-            return;
-        }
-        if(originalSelectTool) originalSelectTool(toolId);
-        else console.log('selectTool not ready');
-    };
-
-    // APK download with verification
-    window.downloadAPKVerified = function() {
-        const apkUrl = "https://apk.appmarket24.com/apk/app4024601-9udb5a.apk?v=89";
-        window.open(apkUrl, '_blank');
-        localStorage.setItem('apkDownloadRequested', 'true');
-        // Show verification popup after 5 seconds
-        setTimeout(() => {
-            if(!apkVerified) {
-                showVerifyInstallPopup();
-            }
-        }, 5000);
-    };
-
-    function showVerifyInstallPopup() {
-        let popup = document.createElement('div');
-        popup.className = 'verify-popup';
-        popup.innerHTML = `
-            <h3>✅ Verify Installation</h3>
-            <p>Have you successfully installed the MultiTool Pro APK?</p>
-            <button class="tool-btn" onclick="confirmInstallation(true)">Yes, I installed it</button>
-            <button class="tool-btn" style="background:#555;" onclick="confirmInstallation(false)">Not yet</button>
-        `;
-        document.body.appendChild(popup);
-    }
-
-    window.confirmInstallation = function(installed) {
-        if(installed && !apkVerified) {
-            apkVerified = true;
-            localStorage.setItem('apkVerified', 'true');
-            userPoints += 1000;
-            updatePointsUI();
-            showToast("🎉 +1000 points for installing the app! Thank you.");
-            // remove popup
-            document.querySelector('.verify-popup')?.remove();
-            // also remove any remaining
-        } else {
-            showToast("You can verify later from the Earn section.");
-            document.querySelector('.verify-popup')?.remove();
-        }
-    };
-
-    // Daily reward
-    let lastDaily = localStorage.getItem('lastDailyClaim') || '';
-    window.claimDailyReward = function() {
-        const today = new Date().toDateString();
-        if(lastDaily === today) {
-            showToast("⏳ Already claimed today! Come back tomorrow.");
-            return;
-        }
-        let bonus = Math.floor(Math.random() * 300) + 150;
-        userPoints += bonus;
-        lastDaily = today;
-        localStorage.setItem('lastDailyClaim', today);
-        updatePointsUI();
-        showToast(`🎉 +${bonus} points! Keep using MultiTool Pro.`);
-        confettiEffect();
-    };
-
-    // Referral sharing (already gives points once)
-    window.shareReferral = function() {
-        let refCode = localStorage.getItem('refCode');
-        if (!refCode) {
-            refCode = Math.random().toString(36).substring(2, 10).toUpperCase();
-            localStorage.setItem('refCode', refCode);
-        }
-        const shareText = `🔥 MultiTool Pro - 100+ tools, AI, daily rewards! Use my code ${refCode} and get 500 bonus points! Download APK: https://apk.appmarket24.com/apk/app4024601-9udb5a.apk?v=89 or Play Store: https://play.google.com/store/apps/details?id=multitool.pro2`;
-        if (navigator.share) {
-            navigator.share({ title: 'MultiTool Pro', text: shareText });
-        } else {
-            navigator.clipboard.writeText(shareText);
-            showToast("Referral link copied! Share with friends.");
-        }
-        if (!localStorage.getItem('refBonusClaimed')) {
-            userPoints += 500;
-            updatePointsUI();
-            localStorage.setItem('refBonusClaimed', 'true');
-            showToast("🔥 +500 points for sharing your referral code!");
-        }
-    };
-
-    // Earn points by visiting external offers
-    const offerSites = [
-        { name: "Free Gift Cards", url: "https://www.swagbucks.com", points: 50 },
-        { name: "Play Free Games", url: "https://www.pogo.com", points: 30 },
-        { name: "Take a Survey", url: "https://www.surveyjunkie.com", points: 100 },
-        { name: "Watch a Video", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", points: 20 },
-        { name: "Learn a Skill", url: "https://www.duolingo.com", points: 40 }
-    ];
-    window.visitOfferSite = function(index) {
-        const offer = offerSites[index];
-        window.open(offer.url, '_blank');
-        // After returning, we can't track directly, but we give a button to claim points
-        setTimeout(() => {
-            let claimPopup = document.createElement('div');
-            claimPopup.className = 'reward-popup';
-            claimPopup.innerHTML = `<h3>💰 Earn ${offer.points} Points</h3><p>Did you visit ${offer.name}? Click below to claim your points.</p><button class="tool-btn" onclick="claimOfferPoints(${offer.points}, this)">Claim Points</button><button onclick="this.parentElement.remove()">Cancel</button>`;
-            document.body.appendChild(claimPopup);
-        }, 3000);
-    };
-    window.claimOfferPoints = function(points, btn) {
-        userPoints += points;
-        updatePointsUI();
-        showToast(`+${points} points earned!`);
-        btn.closest('.reward-popup')?.remove();
-    };
-
-    function openEarnPointsPopup() {
-        let popup = document.createElement('div');
-        popup.className = 'reward-popup';
-        popup.innerHTML = `
-            <h3>💎 Earn More Points</h3>
-            <p>Your points: ${userPoints}</p>
-            <button class="tool-btn" onclick="claimDailyReward()">📅 Daily Bonus</button>
-            <button class="tool-btn" onclick="shareReferral()">📢 Invite Friend</button>
-            <button class="tool-btn" onclick="downloadAPKVerified()">⬇️ Download APK (+1000 after verify)</button>
-            <hr style="margin:16px 0">
-            <h4>🎁 Free Points Offers</h4>
-            ${offerSites.map((o,i) => `<button class="tool-btn" style="background:#28a745;" onclick="visitOfferSite(${i})">${o.name} (+${o.points})</button>`).join('')}
-            <button class="tool-btn" onclick="this.parentElement.remove()">Close</button>
-        `;
-        document.body.appendChild(popup);
-    }
-
-    // Add an "Earn Points" button in the main UI (inside footer or earn section)
-    function addEarnButton() {
-        const earnSection = document.querySelector('.rate-us-container');
-        if(earnSection) {
-            const btn = document.createElement('button');
-            btn.className = 'tool-btn';
-            btn.style.background = '#f39c12';
-            btn.innerHTML = '💰 Earn Points';
-            btn.onclick = openEarnPointsPopup;
-            earnSection.appendChild(btn);
-        }
-        // also display points in footer
-        const footer = document.querySelector('.footer-widget');
-        if(footer) {
-            const ptsDiv = document.createElement('div');
-            ptsDiv.style.marginTop = '12px';
-            ptsDiv.style.fontWeight = 'bold';
-            ptsDiv.innerHTML = `⭐ Your Points: <span id="pointsDisplaySpan">${userPoints}</span>`;
-            footer.insertBefore(ptsDiv, footer.firstChild);
-        }
-    }
-
-    // Helper functions
     function showToast(msg){ let t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
     function playSound(){ if(muted) return; if(!audioCtx){ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); } if(audioCtx.state==='suspended') audioCtx.resume(); let osc=audioCtx.createOscillator(), gain=audioCtx.createGain(); osc.connect(gain); gain.connect(audioCtx.destination); osc.type='sine'; osc.frequency.value=660; gain.gain.setValueAtTime(0.08,audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+0.1); osc.start(); osc.stop(audioCtx.currentTime+0.1); }
+
     let muteBtn = document.getElementById('muteBtn');
     muteBtn.onclick = () => { muted = !muted; localStorage.setItem('soundMuted',muted); muteBtn.innerText = muted?'🔇':'🔊'; showToast(muted?'Sound muted':'Sound on'); };
     if(muted) muteBtn.innerText = '🔇';
+
     window.scrollToTop = function(){ window.scrollTo({top:0, behavior:'smooth'}); };
     const scrollUpArrow = document.getElementById('scrollUpArrow');
     function updateScrollArrow() {
@@ -656,10 +468,7 @@
     window.openMediaOverlay = function(){ document.getElementById('mediaOverlay').classList.add('active'); renderMediaGrid(); };
     window.closeMediaOverlay = function(){ document.getElementById('mediaOverlay').classList.remove('active'); };
     function renderMediaGrid(){ const container = document.getElementById('mediaGrid'); const mediaSites = [ { name: 'Dailymotion', icon: '📹', url: 'https://www.dailymotion.com' }, { name: 'Vimeo', icon: '🎬', url: 'https://vimeo.com' }, { name: 'Twitch', icon: '🎮', url: 'https://www.twitch.tv' }, { name: 'TikTok', icon: '🎵', url: 'https://www.tiktok.com' }, { name: 'Instagram Reels', icon: '📱', url: 'https://www.instagram.com/reels' }, { name: 'Facebook Watch', icon: '📘', url: 'https://www.facebook.com/watch' }, { name: 'Netflix', icon: '📺', url: 'https://www.netflix.com' }, { name: 'Amazon Prime Video', icon: '📦', url: 'https://www.primevideo.com' }, { name: 'Disney+', icon: '✨', url: 'https://www.disneyplus.com' }, { name: 'HBO Max', icon: '🎬', url: 'https://www.max.com' }, { name: 'Hulu', icon: '📺', url: 'https://www.hulu.com' }, { name: 'Paramount+', icon: '⭐', url: 'https://www.paramountplus.com' }, { name: 'Peacock', icon: '🦚', url: 'https://www.peacocktv.com' }, { name: 'Apple TV+', icon: '🍎', url: 'https://tv.apple.com' }, { name: 'Crunchyroll', icon: '🍙', url: 'https://www.crunchyroll.com' }, { name: 'Funimation', icon: '🎞️', url: 'https://www.funimation.com' }, { name: 'Viki', icon: '🌏', url: 'https://www.viki.com' }, { name: 'Tubi', icon: '📺', url: 'https://tubitv.com' }, { name: 'Pluto TV', icon: '🪐', url: 'https://pluto.tv' }, { name: 'Plex', icon: '📡', url: 'https://watch.plex.tv' } ]; let html = ''; mediaSites.forEach(site => { html += `<div class="media-card" onclick="window.open('${site.url}', '_blank');"><div style="font-size:2.8rem;">${site.icon}</div><div style="font-weight:700; font-size:1.2rem;">${site.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`; }); container.innerHTML = html; }
-    window.openTvRadioOverlay = function(){ 
-        if(isToolLocked('tvradio_overlay')) { openEarnPointsPopup(); return; }
-        document.getElementById('tvRadioOverlay').classList.add('active'); document.getElementById('tvRadioContentArea').innerHTML = ''; 
-    };
+    window.openTvRadioOverlay = function(){ document.getElementById('tvRadioOverlay').classList.add('active'); document.getElementById('tvRadioContentArea').innerHTML = ''; };
     window.closeTvRadioOverlay = function(){ document.getElementById('tvRadioOverlay').classList.remove('active'); };
     const tvChannels = [ { name: 'RedBull TV', icon: '🐂', url: 'https://www.redbull.com/int-en/tv' }, { name: 'Samsung TV Plus', icon: '📺', url: 'https://www.samsungtvplus.com' }, { name: 'Xumo', icon: '📡', url: 'https://www.xumo.tv' }, { name: 'Plex Live TV', icon: '📼', url: 'https://watch.plex.tv/live-tv' }, { name: 'DistroTV', icon: '📀', url: 'https://www.distro.tv' }, { name: 'Amazon Freevee', icon: '🎬', url: 'https://www.amazon.com/Freevee' }, { name: 'Crackle', icon: '🎞️', url: 'https://www.crackle.com' }, { name: 'Vudu Free', icon: '💿', url: 'https://www.vudu.com/content/movies/featured/free' }, { name: 'The Roku Channel', icon: '📼', url: 'https://therokuchannel.roku.com' }, { name: 'BBC iPlayer', icon: '🇬🇧', url: 'https://www.bbc.co.uk/iplayer' }, { name: 'ITVX', icon: '🎥', url: 'https://www.itv.com' }, { name: 'Channel 4', icon: '4️⃣', url: 'https://www.channel4.com' }, { name: 'SBS On Demand', icon: '🇦🇺', url: 'https://www.sbs.com.au/ondemand/' }, { name: 'ABC iview', icon: '🦘', url: 'https://iview.abc.net.au' }, { name: 'NHK World', icon: '🇯🇵', url: 'https://www3.nhk.or.jp/nhkworld/' }, { name: 'France.tv', icon: '🇫🇷', url: 'https://www.france.tv' }, { name: 'ZDF Mediathek', icon: '🇩🇪', url: 'https://www.zdf.de' }, { name: 'RaiPlay', icon: '🇮🇹', url: 'https://www.raiplay.it' }, { name: 'Haystack News', icon: '📰', url: 'https://www.haystack.tv' }, { name: 'GlobeTV', icon: '🌍', url: 'https://globetv.app/' }, { name: 'FreeInterTV', icon: '📶', url: 'http://www.freeintertv.com/' }, { name: 'TabloTV', icon: '💾', url: 'https://www.tablotv.com/' }, { name: 'JustWatch', icon: '🔍', url: 'https://www.justwatch.com' } ];
     const radioStations = [ { name: 'TuneIn', icon: '📻', url: 'https://tunein.com' }, { name: 'iHeartRadio', icon: '❤️', url: 'https://www.iheart.com' }, { name: 'Radio Garden', icon: '🗺️', url: 'https://radio.garden' }, { name: 'Streema', icon: '🎛️', url: 'https://streema.com' }, { name: 'Radio.net', icon: '🎚️', url: 'https://www.radio.net' }, { name: 'Online Radio Box', icon: '📦', url: 'https://onlineradiobox.com' }, { name: 'AccuRadio', icon: '🎵', url: 'https://www.accuradio.com' }, { name: 'SomaFM', icon: '🎹', url: 'https://somafm.com' }, { name: 'LiveATC', icon: '✈️', url: 'https://www.liveatc.net' }, { name: 'BBC Sounds', icon: '🎧', url: 'https://www.bbc.co.uk/sounds' }, { name: 'NPR', icon: '🎙️', url: 'https://www.npr.org' }, { name: 'Audacy', icon: '🎤', url: 'https://www.audacy.com' }, { name: 'Jango', icon: '🎻', url: 'https://www.jango.com' }, { name: 'Radio Paradise', icon: '🌴', url: 'https://radioparadise.com' }, { name: 'JazzRadio', icon: '🎷', url: 'https://www.jazzradio.com' }, { name: 'DI.FM', icon: '🎼', url: 'https://www.di.fm' }, { name: 'KEXP', icon: '🎸', url: 'https://www.kexp.org' }, { name: 'WNYC', icon: '🔊', url: 'https://www.wnyc.org' }, { name: 'Internet-Radio.com', icon: '🎶', url: 'https://www.internet-radio.com/' }, { name: 'Radiotunes', icon: '🎺', url: 'https://www.radiotunes.com/' } ];
@@ -674,10 +483,7 @@
     window.closeImagineOverlay = function(){ document.getElementById('imagineOverlay').classList.remove('active'); };
     window.openShortenerOverlay = function(){ document.getElementById('shortenerOverlay').classList.add('active'); renderShortenerGrid(); };
     window.closeShortenerOverlay = function(){ document.getElementById('shortenerOverlay').classList.remove('active'); };
-    window.openOnlineOverlay = function(){ 
-        if(isToolLocked('online_overlay')) { openEarnPointsPopup(); return; }
-        document.getElementById('onlineOverlay').classList.add('active'); renderOnlineGrid(); 
-    };
+    window.openOnlineOverlay = function(){ document.getElementById('onlineOverlay').classList.add('active'); renderOnlineGrid(); };
     window.closeOnlineOverlay = function(){ document.getElementById('onlineOverlay').classList.remove('active'); };
     let isFullscreen = false; let isMobileView = true;
     window.openBrowsersOverlay = function(){ document.getElementById('browsersOverlay').classList.add('active'); isFullscreen = false; isMobileView = true; document.getElementById('mobileViewBtn').textContent = '💻 As Desktop'; document.getElementById('fullscreenMobileBtn').textContent = '💻'; document.getElementById('browserFrame').src = 'about:blank'; document.getElementById('browserUrlInput').value = ''; const frame = document.getElementById('browserFrame'); frame.classList.add('mobile-view'); frame.classList.remove('fullscreen'); document.getElementById('exitFullscreenBtn').style.display = 'none'; document.getElementById('fullscreenFloatBar').classList.remove('active'); document.getElementById('browsersControls').classList.remove('hidden'); document.getElementById('browsersList').style.display = 'grid'; renderBrowsersList(); };
@@ -734,16 +540,10 @@
     window.openAllAiTranslatorOverlay = function(){ document.getElementById('allAiTranslatorOverlay').classList.add('active'); window.renderAllAiTranslatorGrid(); };
     window.closeAllAiTranslatorOverlay = function(){ document.getElementById('allAiTranslatorOverlay').classList.remove('active'); };
     
-    window.openGamesOverlay = function(){ 
-        if(isToolLocked('games_overlay')) { openEarnPointsPopup(); return; }
-        document.getElementById('gamesOverlay').classList.add('active'); renderGamesGrid(); 
-    };
+    window.openGamesOverlay = function(){ document.getElementById('gamesOverlay').classList.add('active'); renderGamesGrid(); };
     window.closeGamesOverlay = function(){ document.getElementById('gamesOverlay').classList.remove('active'); };
     function renderGamesGrid() { const container = document.getElementById('gamesGrid'); const gamesList = [ { name: 'Steam', icon: '🎮', url: 'https://store.steampowered.com' }, { name: 'Epic Games', icon: '🛒', url: 'https://www.epicgames.com' }, { name: 'GOG.com', icon: '📦', url: 'https://www.gog.com' }, { name: 'itch.io', icon: '🌐', url: 'https://itch.io' }, { name: 'Kongregate', icon: '🕹️', url: 'https://www.kongregate.com' }, { name: 'Miniclip', icon: '🎯', url: 'https://www.miniclip.com' }, { name: 'Addicting Games', icon: '🎲', url: 'https://www.addictinggames.com' }, { name: 'Armor Games', icon: '🛡️', url: 'https://armorgames.com' }, { name: 'Newgrounds', icon: '🎨', url: 'https://www.newgrounds.com' }, { name: 'Poki', icon: '🐶', url: 'https://poki.com' }, { name: 'CrazyGames', icon: '🃏', url: 'https://www.crazygames.com' }, { name: 'Agame', icon: '🕸️', url: 'https://www.agame.com' }, { name: 'Y8', icon: '🚀', url: 'https://www.y8.com' }, { name: 'Friv', icon: '🍭', url: 'https://www.friv.com' }, { name: 'Kizi', icon: '🧩', url: 'https://kizi.com' }, { name: 'Pogo', icon: '🎱', url: 'https://www.pogo.com' }, { name: 'Big Fish Games', icon: '🐟', url: 'https://www.bigfishgames.com' }, { name: 'Roblox', icon: '👾', url: 'https://www.roblox.com' }, { name: 'Minecraft', icon: '⛏️', url: 'https://www.minecraft.net' }, { name: 'League of Legends', icon: '🏆', url: 'https://www.leagueoflegends.com' }, { name: 'Fortnite', icon: '🔫', url: 'https://www.fortnite.com' }, { name: 'PlayStation', icon: '🎧', url: 'https://www.playstation.com' }, { name: 'Xbox', icon: '🖥️', url: 'https://www.xbox.com' }, { name: 'Nintendo', icon: '🍄', url: 'https://www.nintendo.com' }, { name: 'IGN', icon: '📺', url: 'https://www.ign.com' }, { name: 'GameSpot', icon: '🎤', url: 'https://www.gamespot.com' }, { name: 'PC Gamer', icon: '⌨️', url: 'https://www.pcgamer.com' }, { name: 'Kotaku', icon: '🗞️', url: 'https://kotaku.com' }, { name: 'Rock Paper Shotgun', icon: '📰', url: 'https://www.rockpapershotgun.com' }, { name: 'Game Jolt', icon: '⚡', url: 'https://gamejolt.com' } ]; let html = ''; gamesList.forEach(game => { html += `<div class="games-card" onclick="window.open('${game.url}', '_blank');"><div style="font-size:2.8rem;">${game.icon}</div><div style="font-weight:700; font-size:1.2rem;">${game.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`; }); container.innerHTML = html; }
-    window.openMoneyOverlay = function(){ 
-        if(isToolLocked('money_overlay')) { openEarnPointsPopup(); return; }
-        document.getElementById('moneyOverlay').classList.add('active'); renderMoneyGrid(); 
-    };
+    window.openMoneyOverlay = function(){ document.getElementById('moneyOverlay').classList.add('active'); renderMoneyGrid(); };
     window.closeMoneyOverlay = function(){ document.getElementById('moneyOverlay').classList.remove('active'); };
     function renderMoneyGrid() { const container = document.getElementById('moneyGrid'); const sites = [ { name: 'Geico', icon: '🦎', url: 'https://www.geico.com' }, { name: 'Progressive', icon: '🅿️', url: 'https://www.progressive.com' }, { name: 'State Farm', icon: '🏠', url: 'https://www.statefarm.com' }, { name: 'Allstate', icon: '🤲', url: 'https://www.allstate.com' }, { name: 'USAA', icon: '🦅', url: 'https://www.usaa.com' }, { name: 'Liberty Mutual', icon: '🗽', url: 'https://www.libertymutual.com' }, { name: 'Nationwide', icon: '🌐', url: 'https://www.nationwide.com' }, { name: 'Farmers', icon: '🌾', url: 'https://www.farmers.com' }, { name: 'Travelers', icon: '✈️', url: 'https://www.travelers.com' }, { name: 'Aflac', icon: '🦆', url: 'https://www.aflac.com' }, { name: 'LendingTree', icon: '🌳', url: 'https://www.lendingtree.com' }, { name: 'SoFi', icon: '🏦', url: 'https://www.sofi.com' }, { name: 'Marcus', icon: '💰', url: 'https://www.marcus.com' }, { name: 'Rocket Mortgage', icon: '🚀', url: 'https://www.rocketmortgage.com' }, { name: 'Upstart', icon: '📈', url: 'https://www.upstart.com' }, { name: 'Best Egg', icon: '🥚', url: 'https://www.bestegg.com' }, { name: 'Robinhood', icon: '🏹', url: 'https://robinhood.com' }, { name: 'E*TRADE', icon: '📊', url: 'https://us.etrade.com' }, { name: 'Fidelity', icon: '🏆', url: 'https://www.fidelity.com' }, { name: 'Charles Schwab', icon: '🐂', url: 'https://www.schwab.com' }, { name: 'Vanguard', icon: '🚢', url: 'https://investor.vanguard.com' }, { name: 'Acorns', icon: '🌰', url: 'https://www.acorns.com' }, { name: 'Coinbase', icon: '🪙', url: 'https://www.coinbase.com' }, { name: 'Gemini', icon: '♊', url: 'https://www.gemini.com' }, { name: 'Webull', icon: '🐃', url: 'https://www.webull.com' }, { name: 'Betterment', icon: '🌱', url: 'https://www.betterment.com' }, { name: 'Mint', icon: '🍃', url: 'https://mint.intuit.com' }, { name: 'YNAB', icon: '📝', url: 'https://www.youneedabudget.com' }, { name: 'Credit Karma', icon: '🛡️', url: 'https://www.creditkarma.com' }, { name: 'NerdWallet', icon: '🤓', url: 'https://www.nerdwallet.com' } ]; let html = ''; sites.forEach(site => { html += `<div class="games-card" onclick="window.open('${site.url}', '_blank');"><div style="font-size:2.8rem;">${site.icon}</div><div style="font-weight:700; font-size:1.2rem;">${site.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`; }); container.innerHTML = html; }
     const originalTools = [ {id:'calculator', icon:'🧮', name:'Advanced Calculator'}, {id:'password', icon:'🔐', name:'Password Generator'}, {id:'wordcount', icon:'📝', name:'Word Counter'}, {id:'caseconverter', icon:'🔤', name:'Case Converter'}, {id:'colorpicker', icon:'🎨', name:'Color Picker'}, {id:'unitconverter', icon:'📏', name:'Unit Converter'}, {id:'stopwatch', icon:'⏱️', name:'Stopwatch'}, {id:'qrcode', icon:'📱', name:'QR Code'}, {id:'bmi', icon:'⚖️', name:'BMI Calculator'}, {id:'random', icon:'🎲', name:'Random Number'}, {id:'countdown', icon:'⏳', name:'Countdown Timer'}, {id:'datediff', icon:'📅', name:'Date Difference'}, {id:'base64', icon:'🔣', name:'Base64'}, {id:'urlencode', icon:'🔗', name:'URL Encode'}, {id:'jsonformat', icon:'📋', name:'JSON Formatter'}, {id:'lorem', icon:'📄', name:'Lorem Ipsum'}, {id:'currency', icon:'💱', name:'Currency Converter'}, {id:'percentcalc', icon:'📊', name:'Percentage Calc'}, {id:'agecalc', icon:'🎂', name:'Age Calculator'}, {id:'binhex', icon:'💻', name:'Binary/Hex'}, {id:'roman', icon:'🏛️', name:'Roman Numeral'}, {id:'tipcalc', icon:'💰', name:'Tip Calculator'}, {id:'worldclock', icon:'🕐', name:'World Clock (All Zones)'}, {id:'dice', icon:'🎲', name:'Dice Roller'}, {id:'coin', icon:'🪙', name:'Coin Flip'}, {id:'joke', icon:'😂', name:'Joke Generator (Fresh)'}, {id:'ip', icon:'🌍', name:'IP Lookup'}, {id:'premium_ai', icon:'🔮', name:'✨ AI Text Enhancer'} ];
@@ -768,11 +568,7 @@
         if (toolId === 'shortener_overlay') { openShortenerOverlay(); return; }
         if (toolId === 'other_tools_overlay') { openOtherTools(); return; }
         if (toolId === 'ai_hub_overlay') { openAiTools(); return; }
-        if(toolId === 'premium_ai'){ 
-            const required = isToolLocked('premium_ai');
-            if(required) { openEarnPointsPopup(); return; }
-            document.getElementById('premiumOverlay').classList.add('active'); document.getElementById('premiumContent').innerHTML = `<h2 style="font-size:1.8rem;">🔮 AI Text Enhancer</h2><p style="font-size:1rem;">AI-powered text enhancement (demo). Enter text and get an enhanced version.</p><textarea id="aiDemoText" rows="4" class="search-input" placeholder="Type your text..." style="font-size:1rem;"></textarea><button class="tool-btn" onclick="demoAIEnhance()">✨ Enhance</button><div id="aiDemoResult" class="tool-output"></div><button class="tool-btn" onclick="closePremium()">← Back to tools</button>`; return; 
-        }
+        if(toolId === 'premium_ai'){ document.getElementById('premiumOverlay').classList.add('active'); document.getElementById('premiumContent').innerHTML = `<h2 style="font-size:1.8rem;">🔮 AI Text Enhancer</h2><p style="font-size:1rem;">AI-powered text enhancement (demo). Enter text and get an enhanced version.</p><textarea id="aiDemoText" rows="4" class="search-input" placeholder="Type your text..." style="font-size:1rem;"></textarea><button class="tool-btn" onclick="demoAIEnhance()">✨ Enhance</button><div id="aiDemoResult" class="tool-output"></div><button class="tool-btn" onclick="closePremium()">← Back to tools</button>`; return; }
         closePremium();
         document.getElementById('mainPage').style.display = 'block';
         renderToolPanel(toolId);
@@ -870,9 +666,6 @@
     renderGrid(); renderSidebar(); selectTool('calculator');
     document.body.addEventListener('click',(e)=>{ if(e.target.closest('.tool-card, .tool-btn, .footer-btn, .scroll-up-arrow, .footer-arrow-down')) playSound(); });
     const randomBtn = document.getElementById('randomToolBtn'); let isRandomVisible = true; function toggleRandomButton() { if (randomBtn) { if (isRandomVisible) randomBtn.classList.add('hide-random'); else randomBtn.classList.remove('hide-random'); isRandomVisible = !isRandomVisible; } } setInterval(toggleRandomButton, 3000); randomBtn.addEventListener('click', function() { const availableTools = fullToolsList.filter(t => t.id !== 'premium_ai'); const randomIndex = Math.floor(Math.random() * availableTools.length); const randomTool = availableTools[randomIndex]; if (randomTool) { selectTool(randomTool.id); playSound(); showToast(`🎲 Random tool: ${randomTool.name}`); } });
-    // Add earn points button and points display
-    addEarnButton();
-    updatePointsUI();
 })();
 </script>
 <script>
@@ -1095,6 +888,59 @@ const news = [
     { name: 'Le Monde', icon: '🇫🇷', url: 'https://www.lemonde.fr', cat: 'French' }
 ];
 document.getElementById('newsGrid').innerHTML = news.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
+</script>
+
+<!-- ========== AUTO-UPDATE & DOWNLOAD POPUP (ADDED) ========== -->
+<script>
+(function() {
+    // Auto-update checker (checks version.json on your GitHub page)
+    const APP_VERSION = "5.0.0";
+    const VERSION_CHECK_URL = "https://boussedraoui.github.io/Multitool-Pro-Full-Complete/version.json";
+    async function checkForUpdates() {
+        try {
+            const res = await fetch(VERSION_CHECK_URL, { cache: 'no-store' });
+            if (res.ok) {
+                const data = await res.json();
+                if (data.version && data.version !== APP_VERSION) {
+                    showUpdateNotification(`✨ New version ${data.version} available! Refresh to update.`, data.version);
+                }
+            }
+        } catch(e) { console.log("Update check skipped"); }
+    }
+    function showUpdateNotification(msg, ver) {
+        let toast = document.createElement('div');
+        toast.style.position = 'fixed';
+        toast.style.bottom = '30px';
+        toast.style.left = '20px';
+        toast.style.right = '20px';
+        toast.style.background = '#1e1e2f';
+        toast.style.color = 'white';
+        toast.style.padding = '14px 20px';
+        toast.style.borderRadius = '60px';
+        toast.style.textAlign = 'center';
+        toast.style.zIndex = '9999';
+        toast.style.animation = 'slideUp 0.4s';
+        toast.style.maxWidth = '400px';
+        toast.style.margin = 'auto';
+        toast.innerHTML = `${msg} <button style="background:white;color:black;border:none;border-radius:60px;padding:6px 14px;margin-left:12px;" onclick="location.reload()">Update Now</button>`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 10000);
+    }
+    // APK download popup (appears after 25 seconds)
+    setTimeout(() => {
+        if (!localStorage.getItem('apkPopupShown')) {
+            localStorage.setItem('apkPopupShown', 'true');
+            let popup = document.createElement('div');
+            popup.className = 'reward-popup';
+            popup.innerHTML = `<h3>🚀 Get the Official APK</h3>
+            <p>Download MultiTool Pro APK for faster experience and offline tools!</p>
+            <button class="tool-btn" onclick="window.open('https://apk.appmarket24.com/apk/app4024601-9udb5a.apk?v=89', '_blank');this.parentElement.remove()">Download APK</button>
+            <button class="tool-btn" style="background:#555;" onclick="this.parentElement.remove()">Maybe later</button>`;
+            document.body.appendChild(popup);
+        }
+    }, 25000);
+    checkForUpdates();
+})();
 </script>
 </body>
 </html>
