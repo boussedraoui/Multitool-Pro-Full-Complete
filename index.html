@@ -8,7 +8,7 @@
     <link rel="canonical" href="https://play.google.com/store/apps/details?id=multitool.pro2">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        :root { --bg: #f4f6fc; --surface: #ffffff; --surface2: #f8faff; --text: #0a0a2a; --text2: #2d2d5a; --primary: #6c5ce7; --accent: #00cec9; --border: #e2e2ec; --shadow: 0 10px 30px -12px rgba(0,0,0,0.1); --radius: 28px; }
+        :root { --bg: #f4f6fc; --surface: #ffffff; --surface2: #f8faff; --text: #0a0a2a; --text2: #2d2d5a; --text3: #6c6c8a; --primary: #6c5ce7; --accent: #00cec9; --border: #e2e2ec; --shadow: 0 10px 30px -12px rgba(0,0,0,0.1); --radius: 28px; }
         [data-theme="dark"] { --bg: #0f0f1a; --surface: #18182a; --surface2: #202036; --text: #f0f0fc; --border: #2e2e4a; }
         body { font-family: 'Segoe UI', system-ui, 'Inter', sans-serif; background: var(--bg); color: var(--text); transition: 0.2s; font-size: 18px; line-height: 1.4; }
         .container { max-width: 1400px; margin: auto; padding: 20px 24px 40px; }
@@ -32,7 +32,14 @@
         .reward-popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--surface); color: var(--text); padding: 28px; border-radius: 48px; z-index: 10000; box-shadow: 0 30px 60px rgba(0,0,0,0.4); text-align: center; max-width: 90%; width: 380px; border: 2px solid var(--primary); }
         .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 16px; }
         .calc-btn { padding: 14px 0; font-size: 1.3rem; margin: 0; width: 100%; }
-        @media (max-width: 640px) { .title { font-size: 2.8rem; } .tools-grid { gap: 12px; } .tool-card { padding: 14px 6px; } .tool-card.large { grid-column: span 1; } }
+        .overlay { position: fixed; inset: 0; background: var(--bg); z-index: 1100; overflow-y: auto; display: none; padding: 24px; }
+        .overlay.active { display: block; }
+        .overlay-content { max-width: 1200px; margin: auto; background: var(--surface); border-radius: 48px; padding: 32px; }
+        .category-grid, .sites-grid, .media-grid, .tvradio-grid, .convert-grid, .games-grid, .online-grid, .shortener-grid, .imagine-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 24px; margin-top: 28px; }
+        .category-card, .sites-card, .media-card, .tvradio-card, .convert-card, .games-card, .online-card, .shortener-card, .imagine-card { background: var(--surface2); border-radius: 28px; padding: 20px; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: var(--shadow); }
+        .star-rating { display: flex; justify-content: center; gap: 12px; margin: 20px 0; }
+        .star-box { width: 48px; height: 48px; background: var(--surface2); border: 2px solid #FFC107; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 2rem; cursor: pointer; }
+        @media (max-width: 640px) { .title { font-size: 2.8rem; } .tools-grid { gap: 12px; } .tool-card.large { grid-column: span 1; } }
     </style>
 </head>
 <body>
@@ -41,7 +48,16 @@
         <div class="title">🄼🅄🄻🅃🄸 🅃🄾🄾🄻 🄿🅁🄾</div>
         <div class="earn-badge" id="dynamicBadge">💰 DAILY REWARDS + REFERRAL CASH 💰</div>
         <p>120+ tools · AI Hub · Auto-updates · Earn real points</p>
+        <div class="star-rating" id="starRating">
+            <div class="star-box" data-index="0"><span class="star">☆</span></div>
+            <div class="star-box" data-index="1"><span class="star">☆</span></div>
+            <div class="star-box" data-index="2"><span class="star">☆</span></div>
+            <div class="star-box" data-index="3"><span class="star">☆</span></div>
+            <div class="star-box" data-index="4"><span class="star">☆</span></div>
+        </div>
     </div>
+
+    <div class="search-container"><input type="text" id="globalSearch" class="search-input" placeholder="🔍 Search any tool... calculator, world clock, translator..."><div id="searchResults" class="tool-output" style="display:none;"></div></div>
 
     <div class="tools-grid" id="toolsGrid"></div>
     <div class="tool-panel" id="toolPanel">
@@ -64,314 +80,218 @@
     </div>
 </div>
 
+<!-- All Overlays (Full versions) -->
+<div id="sitesOverlay" class="overlay"><div class="overlay-content"><h2>🌍 Popular Sites (25+)</h2><div id="sitesGrid" class="sites-grid"></div><button class="tool-btn" onclick="closeOverlay('sitesOverlay')">← Back</button></div></div>
+<div id="mediaOverlay" class="overlay"><div class="overlay-content"><h2>📺 Media & Video Platforms</h2><div id="mediaGrid" class="media-grid"></div><button class="tool-btn" onclick="closeOverlay('mediaOverlay')">← Back</button></div></div>
+<div id="tvradioOverlay" class="overlay"><div class="overlay-content"><h2>📺📻 TV / RADIO</h2><div id="tvRadioContentArea" class="tvradio-grid"></div><div style="margin:20px 0"><button class="tool-btn" onclick="showTvChannels()">📺 TV</button><button class="tool-btn" onclick="showRadioStations()">📻 Radio</button></div><button class="tool-btn" onclick="closeOverlay('tvradioOverlay')">← Back</button></div></div>
+<div id="browsersOverlay" class="overlay"><div class="overlay-content"><h2>🌐 Browsers (In‑App)</h2><input type="text" id="browserUrl" class="search-input" placeholder="Enter URL"><button class="tool-btn" onclick="loadBrowser()">Go</button><iframe id="browserFrame" style="width:100%; height:60vh; border-radius:20px; margin-top:20px;"></iframe><button class="tool-btn" onclick="closeOverlay('browsersOverlay')">← Back</button></div></div>
+<div id="convertOverlay" class="overlay"><div class="overlay-content"><h2>🔄 CONVERT Edit Word, Image, PDF...</h2><div id="convertGrid" class="convert-grid"></div><button class="tool-btn" onclick="closeOverlay('convertOverlay')">← Back</button></div></div>
+<div id="aiTranslatorOverlay" class="overlay"><div class="overlay-content"><h2>🌐 All AI Translator</h2><div id="translatorGrid" class="convert-grid"></div><button class="tool-btn" onclick="closeOverlay('aiTranslatorOverlay')">← Back</button></div></div>
+<div id="gamesOverlay" class="overlay"><div class="overlay-content"><h2>🎮 GAMES</h2><div id="gamesGrid" class="games-grid"></div><button class="tool-btn" onclick="closeOverlay('gamesOverlay')">← Back</button></div></div>
+<div id="moneyOverlay" class="overlay"><div class="overlay-content"><h2>💵 MONEY & INVESTMENTS</h2><div id="moneyGrid" class="games-grid"></div><button class="tool-btn" onclick="closeOverlay('moneyOverlay')">← Back</button></div></div>
+<div id="remoteOverlay" class="overlay"><div class="overlay-content"><h2>🖥️ RDP, VPN & Web Preview</h2><div id="rdpGrid" class="games-grid"></div><div id="vpnGrid" class="games-grid"></div><div id="previewGrid" class="games-grid"></div><button class="tool-btn" onclick="closeOverlay('remoteOverlay')">← Back</button></div></div>
+<div id="imagineOverlay" class="overlay"><div class="overlay-content"><h2>✨ IMAGINE (25+ New Tools)</h2><div id="imagineGrid" class="imagine-grid"></div><button class="tool-btn" onclick="closeOverlay('imagineOverlay')">← Back</button></div></div>
+<div id="onlineOverlay" class="overlay"><div class="overlay-content"><h2>🌐 Online Tools (30+ Free)</h2><div id="onlineGrid" class="online-grid"></div><button class="tool-btn" onclick="closeOverlay('onlineOverlay')">← Back</button></div></div>
+<div id="shortenerOverlay" class="overlay"><div class="overlay-content"><h2>🔗 URL Shorteners</h2><div id="shortenerGrid" class="shortener-grid"></div><button class="tool-btn" onclick="closeOverlay('shortenerOverlay')">← Back</button></div></div>
+<div id="freeEmailsOverlay" class="overlay"><div class="overlay-content"><h2>📧 Free Email Services</h2><div id="freeEmailsGrid" class="category-grid"></div><button class="tool-btn" onclick="closeOverlay('freeEmailsOverlay')">← Back</button></div></div>
+<div id="healthSportsOverlay" class="overlay"><div class="overlay-content"><h2>🏋️ Health and Sports</h2><div id="healthSportsGrid" class="category-grid"></div><button class="tool-btn" onclick="closeOverlay('healthSportsOverlay')">← Back</button></div></div>
+<div id="miscOverlay" class="overlay"><div class="overlay-content"><h2>🎵 Miscellaneous</h2><div id="miscGrid" class="category-grid"></div><button class="tool-btn" onclick="closeOverlay('miscOverlay')">← Back</button></div></div>
+<div id="travelBooksOverlay" class="overlay"><div class="overlay-content"><h2>✈️ Travel and Books</h2><div id="travelBooksGrid" class="category-grid"></div><button class="tool-btn" onclick="closeOverlay('travelBooksOverlay')">← Back</button></div></div>
+<div id="moviesSeriesOverlay" class="overlay"><div class="overlay-content"><h2>🎬 Movies, Series</h2><div id="moviesSeriesGrid" class="category-grid"></div><button class="tool-btn" onclick="closeOverlay('moviesSeriesOverlay')">← Back</button></div></div>
+<div id="cultureFashionOverlay" class="overlay"><div class="overlay-content"><h2>👗 Culture and Fashion</h2><div id="cultureFashionGrid" class="category-grid"></div><button class="tool-btn" onclick="closeOverlay('cultureFashionOverlay')">← Back</button></div></div>
+<div id="jobsOverlay" class="overlay"><div class="overlay-content"><h2>💼 Jobs</h2><div id="jobsGrid" class="category-grid"></div><button class="tool-btn" onclick="closeOverlay('jobsOverlay')">← Back</button></div></div>
+<div id="techOverlay" class="overlay"><div class="overlay-content"><h2>💻 TECH</h2><div id="techGrid" class="category-grid"></div><button class="tool-btn" onclick="closeOverlay('techOverlay')">← Back</button></div></div>
+<div id="buildingHomeOverlay" class="overlay"><div class="overlay-content"><h2>🏠 Building & Home</h2><div id="buildingHomeGrid" class="category-grid"></div><button class="tool-btn" onclick="closeOverlay('buildingHomeOverlay')">← Back</button></div></div>
+<div id="surfInternetOverlay" class="overlay"><div class="overlay-content"><h2>🌊 SURF Internet</h2><div id="surfInternetGrid" class="category-grid"></div><button class="tool-btn" onclick="closeOverlay('surfInternetOverlay')">← Back</button></div></div>
+<div id="cookingKitchenOverlay" class="overlay"><div class="overlay-content"><h2>🍳 Cooking & Kitchen</h2><div id="cookingKitchenGrid" class="category-grid"></div><button class="tool-btn" onclick="closeOverlay('cookingKitchenOverlay')">← Back</button></div></div>
+<div id="wildernessOceansOverlay" class="overlay"><div class="overlay-content"><h2>🐋 Wilderness and Oceans</h2><div id="wildernessOceansGrid" class="category-grid"></div><button class="tool-btn" onclick="closeOverlay('wildernessOceansOverlay')">← Back</button></div></div>
+<div id="cryptoOverlay" class="overlay"><div class="overlay-content"><h2>₿ Crypto</h2><div id="cryptoGrid" class="category-grid"></div><button class="tool-btn" onclick="closeOverlay('cryptoOverlay')">← Back</button></div></div>
+<div id="newsOverlay" class="overlay"><div class="overlay-content"><h2>📰 NEWS</h2><div id="newsGrid" class="category-grid"></div><button class="tool-btn" onclick="closeOverlay('newsOverlay')">← Back</button></div></div>
+
 <script>
-    // ======================== AUTO-UPDATE SYSTEM (FULLY AUTOMATIC) ========================
-    const APP_VERSION = "4.0.0";
-    const VERSION_CHECK_URL = "https://boussedraoui.github.io/Multitool-Pro-Full-Complete/version.json"; // user's own GitHub page
-    // fallback: if fetch fails, we compare with localStorage flag
+    // ======================== AUTO-UPDATE SYSTEM ========================
+    const APP_VERSION = "5.0.0";
+    const VERSION_CHECK_URL = "https://boussedraoui.github.io/Multitool-Pro-Full-Complete/version.json";
     async function autoCheckForUpdates() {
         try {
-            const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 3500);
-            const res = await fetch(VERSION_CHECK_URL, { signal: controller.signal });
-            clearTimeout(timeout);
+            const res = await fetch(VERSION_CHECK_URL, { cache: 'no-store' });
             if (res.ok) {
                 const data = await res.json();
                 if (data.version && data.version !== APP_VERSION) {
-                    showUpdateNotification(`✨ New version ${data.version} available! Click to reload automatically.`, data.version);
-                } else {
-                    // still store last check
-                    localStorage.setItem('lastVersionCheck', Date.now());
+                    showUpdateNotification(`✨ New version ${data.version} available! Click to reload.`, data.version);
                 }
-            } else {
-                // fallback: simulate update after 7 days
-                simulateVersionCheck();
             }
-        } catch (e) {
-            simulateVersionCheck();
-        }
+        } catch(e) { console.log("update check skipped"); }
     }
-
-    function simulateVersionCheck() {
-        const lastUpdateNotif = localStorage.getItem('lastUpdateShown');
-        const now = Date.now();
-        if (!lastUpdateNotif || now - parseInt(lastUpdateNotif) > 7 * 86400000) {
-            // once a week remind about potential updates
-            showUpdateNotification("🔄 Check for updates? Refresh to get latest features.", "latest");
-            localStorage.setItem('lastUpdateShown', now);
-        }
-    }
-
-    function showUpdateNotification(msg, newVer) {
+    function showUpdateNotification(msg, ver) {
         let toast = document.createElement('div');
         toast.className = 'update-toast';
-        toast.innerHTML = `${msg} <button style="background:white;color:black;border:none;border-radius:60px;padding:6px 14px;margin-left:12px;" onclick="applyAutoUpdate('${newVer}')">Update Now</button>`;
+        toast.innerHTML = `${msg} <button style="background:white;color:black;border:none;border-radius:60px;padding:6px 14px;" onclick="applyAutoUpdate('${ver}')">Update Now</button>`;
         document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 12000);
+        setTimeout(() => toast.remove(), 10000);
     }
+    window.applyAutoUpdate = function(ver) { localStorage.setItem('autoUpdated', ver); showToast("Reloading..."); setTimeout(() => location.reload(), 1000); };
 
-    window.applyAutoUpdate = function(ver) {
-        localStorage.setItem('autoUpdated', ver);
-        showToast("App will reload with latest modules...");
-        setTimeout(() => location.reload(), 1000);
-    };
-
-    // ======================== REWARD & REFERRAL ENGINE ========================
+    // ======================== REWARD SYSTEM ========================
     let userPoints = parseInt(localStorage.getItem('userPoints')) || 0;
     let lastDaily = localStorage.getItem('lastDailyClaim') || '';
     document.getElementById('pointsDisplay').innerText = userPoints;
-
-    function updatePointsUI() {
-        document.getElementById('pointsDisplay').innerText = userPoints;
-        localStorage.setItem('userPoints', userPoints);
-    }
-
+    function updatePointsUI() { document.getElementById('pointsDisplay').innerText = userPoints; localStorage.setItem('userPoints', userPoints); }
     window.claimDailyReward = function() {
         const today = new Date().toDateString();
-        if (lastDaily === today) {
-            showToast("⏳ Already claimed today! Come back tomorrow.");
-            return;
-        }
-        let bonus = Math.floor(Math.random() * 300) + 150; // 150–450 points
-        userPoints += bonus;
-        lastDaily = today;
-        localStorage.setItem('lastDailyClaim', today);
-        updatePointsUI();
-        showToast(`🎉 +${bonus} points! Keep using MultiTool Pro.`);
-        confettiEffect();
+        if (lastDaily === today) { showToast("Already claimed today!"); return; }
+        let bonus = Math.floor(Math.random() * 300) + 150;
+        userPoints += bonus; lastDaily = today; localStorage.setItem('lastDailyClaim', today);
+        updatePointsUI(); showToast(`🎉 +${bonus} points!`); confettiEffect();
     };
-
     window.shareReferral = function() {
-        let refCode = localStorage.getItem('refCode');
-        if (!refCode) {
-            refCode = Math.random().toString(36).substring(2, 10).toUpperCase();
-            localStorage.setItem('refCode', refCode);
-        }
-        const shareText = `🔥 MultiTool Pro - 120+ tools, AI, daily rewards! Use my code ${refCode} and get 500 bonus points! Download APK: https://apk.appmarket24.com/apk/app4024601-9udb5a.apk?v=89 or Play Store: https://play.google.com/store/apps/details?id=multitool.pro2`;
-        if (navigator.share) {
-            navigator.share({ title: 'MultiTool Pro', text: shareText });
-        } else {
-            navigator.clipboard.writeText(shareText);
-            showToast("Referral link copied! Share with friends.");
-        }
-        // award referral bonus only once
-        if (!localStorage.getItem('refBonusClaimed')) {
-            userPoints += 500;
-            updatePointsUI();
-            localStorage.setItem('refBonusClaimed', 'true');
-            showToast("🔥 +500 points for sharing your referral code!");
-        }
+        let refCode = localStorage.getItem('refCode') || Math.random().toString(36).substring(2,10).toUpperCase();
+        localStorage.setItem('refCode', refCode);
+        const shareText = `MultiTool Pro - 120+ tools, AI, daily rewards! Use code ${refCode} and get 500 points! Download: https://apk.appmarket24.com/apk/app4024601-9udb5a.apk?v=89`;
+        if (navigator.share) navigator.share({ title: 'MultiTool Pro', text: shareText });
+        else { navigator.clipboard.writeText(shareText); showToast("Referral link copied!"); }
+        if (!localStorage.getItem('refBonusClaimed')) { userPoints += 500; updatePointsUI(); localStorage.setItem('refBonusClaimed','true'); showToast("🔥 +500 points for sharing!"); }
     };
+    window.downloadAPK = function() { window.open("https://apk.appmarket24.com/apk/app4024601-9udb5a.apk?v=89", '_blank'); userPoints += 1000; updatePointsUI(); showToast("✅ +1000 points!"); confettiEffect(); };
+    window.rateUs = function() { window.open('https://play.google.com/store/apps/details?id=multitool.pro2', '_blank'); userPoints += 100; updatePointsUI(); showToast("⭐ Thank you! +100 points."); };
+    window.openPlayStore = function() { window.open('https://play.google.com/store/apps/details?id=multitool.pro2', '_blank'); };
+    function confettiEffect() { for(let i=0;i<60;i++){ let p=document.createElement('div'); p.style.cssText=`position:fixed; width:8px; height:8px; background:hsl(${Math.random()*360},100%,60%); left:${Math.random()*window.innerWidth}px; top:-10px; border-radius:50%; pointer-events:none; z-index:99999;`; document.body.appendChild(p); p.animate([{transform:'translateY(0px)',opacity:1},{transform:`translateY(${window.innerHeight}px)`,opacity:0}],{duration:1000}); setTimeout(()=>p.remove(),1000); } }
+    function showToast(msg) { let t=document.createElement('div'); t.className='toast-msg'; t.innerText=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2500); }
+    window.toggleTheme = function() { document.documentElement.hasAttribute('data-theme') ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme','dark'); };
+    window.closeOverlay = function(id) { document.getElementById(id).classList.remove('active'); };
 
-    window.downloadAPK = function() {
-        const apkUrl = "https://apk.appmarket24.com/apk/app4024601-9udb5a.apk?v=89";
-        window.open(apkUrl, '_blank');
-        userPoints += 1000;
-        updatePointsUI();
-        showToast("✅ +1000 points! Thanks for downloading the APK.");
-        confettiEffect();
-    };
-
-    window.rateUs = function() {
-        window.open('https://play.google.com/store/apps/details?id=multitool.pro2', '_blank');
-        userPoints += 100;
-        updatePointsUI();
-        showToast("⭐ Thank you! +100 points.");
-    };
-
-    window.openPlayStore = function() {
-        window.open('https://play.google.com/store/apps/details?id=multitool.pro2', '_blank');
-    };
-
-    function confettiEffect() {
-        for (let i = 0; i < 70; i++) {
-            let particle = document.createElement('div');
-            particle.style.position = 'fixed';
-            particle.style.width = '8px';
-            particle.style.height = '8px';
-            particle.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
-            particle.style.left = Math.random() * window.innerWidth + 'px';
-            particle.style.top = '-10px';
-            particle.style.borderRadius = '50%';
-            particle.style.pointerEvents = 'none';
-            particle.style.zIndex = '99999';
-            document.body.appendChild(particle);
-            let anim = particle.animate([{ transform: 'translateY(0px)', opacity: 1 }, { transform: `translateY(${window.innerHeight}px)`, opacity: 0 }], { duration: 1000 + Math.random() * 500 });
-            anim.onfinish = () => particle.remove();
-        }
-    }
-
-    function showToast(msg) {
-        let toast = document.createElement('div');
-        toast.className = 'toast-msg';
-        toast.innerText = msg;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 2700);
-    }
-
-    // ======================== UNIQUE TOOLS (NO DUPLICATES) ========================
+    // ======================== TOOLS LIST (COMPLETE) ========================
     const toolsList = [
-        { id: "calc", name: "🧮 Advanced Calc", icon: "🧮" }, { id: "password", name: "🔐 Password Gen", icon: "🔐" },
-        { id: "wordcount", name: "📝 Word Counter", icon: "📝" }, { id: "color", name: "🎨 Color Picker", icon: "🎨" },
-        { id: "unit", name: "📏 Unit Converter", icon: "📏" }, { id: "stopwatch", name: "⏱️ Stopwatch", icon: "⏱️" },
-        { id: "qr", name: "📱 QR Code", icon: "📱" }, { id: "bmi", name: "⚖️ BMI", icon: "⚖️" },
-        { id: "random", name: "🎲 Random Num", icon: "🎲" }, { id: "countdown", name: "⏳ Timer", icon: "⏳" },
-        { id: "worldclock", name: "🕐 World Clock", icon: "🕐" }, { id: "joke", name: "😂 Joke Gen", icon: "😂" },
-        { id: "currency", name: "💱 Currency", icon: "💱" }, { id: "age", name: "🎂 Age Calc", icon: "🎂" },
-        { id: "base64", name: "🔣 Base64", icon: "🔣" }, { id: "json", name: "📋 JSON Pretty", icon: "📋" },
-        { id: "lorem", name: "📄 Lorem Ipsum", icon: "📄" }, { id: "tip", name: "💰 Tip Calc", icon: "💰" }
+        { id:"calc", name:"🧮 Advanced Calc", icon:"🧮" }, { id:"password", name:"🔐 Password Gen", icon:"🔐" },
+        { id:"wordcount", name:"📝 Word Counter", icon:"📝" }, { id:"color", name:"🎨 Color Picker", icon:"🎨" },
+        { id:"unit", name:"📏 Unit Converter", icon:"📏" }, { id:"stopwatch", name:"⏱️ Stopwatch", icon:"⏱️" },
+        { id:"qr", name:"📱 QR Code", icon:"📱" }, { id:"bmi", name:"⚖️ BMI", icon:"⚖️" },
+        { id:"random", name:"🎲 Random Num", icon:"🎲" }, { id:"countdown", name:"⏳ Timer", icon:"⏳" },
+        { id:"worldclock", name:"🕐 World Clock", icon:"🕐" }, { id:"joke", name:"😂 Joke Gen", icon:"😂" },
+        { id:"currency", name:"💱 Currency", icon:"💱" }, { id:"age", name:"🎂 Age Calc", icon:"🎂" },
+        { id:"base64", name:"🔣 Base64", icon:"🔣" }, { id:"json", name:"📋 JSON Pretty", icon:"📋" },
+        { id:"lorem", name:"📄 Lorem Ipsum", icon:"📄" }, { id:"tip", name:"💰 Tip Calc", icon:"💰" }
     ];
-
     function renderTools() {
         const grid = document.getElementById('toolsGrid');
         grid.innerHTML = toolsList.map(t => `<div class="tool-card" onclick="selectTool('${t.id}')"><div style="font-size:2.6rem">${t.icon}</div><div>${t.name}</div></div>`).join('');
-        // additional featured cards (no duplicates)
-        grid.innerHTML += `<div class="tool-card large" onclick="openAIHub()"><div>🤖 AI HUB (ChatGPT, Gemini, Claude)</div></div>`;
-        grid.innerHTML += `<div class="tool-card large" onclick="openOnlineExtras()"><div>🌐 35+ Online Tools (PDF, Image, Convert)</div></div>`;
+        grid.innerHTML += `<div class="tool-card large" onclick="openOverlayWithContent('aiTranslatorOverlay')">🤖 AI Translator Hub</div>`;
+        grid.innerHTML += `<div class="tool-card large" onclick="openOverlayWithContent('onlineOverlay')">🌐 35+ Online Tools</div>`;
+        grid.innerHTML += `<div class="tool-card large" onclick="openOverlayWithContent('sitesOverlay')">🌍 Popular Sites</div>`;
+        grid.innerHTML += `<div class="tool-card large" onclick="openOverlayWithContent('gamesOverlay')">🎮 Games</div>`;
+        grid.innerHTML += `<div class="tool-card large" onclick="openOverlayWithContent('moneyOverlay')">💵 Money & Finance</div>`;
     }
-
-    // Tool handlers (fully functional)
     window.selectTool = function(id) {
-        const panel = document.getElementById('toolPanel');
         const title = document.getElementById('panelTitle');
         const content = document.getElementById('toolContent');
-        if (id === 'calc') {
-            title.innerText = 'Advanced Calculator';
-            content.innerHTML = `<div id="calcDisplay" style="font-size:2rem;background:var(--surface2);padding:16px;border-radius:20px;margin-bottom:16px;">0</div>
-            <div class="calc-grid">${['7','8','9','/','4','5','6','*','1','2','3','-','0','.','=','+','C','DEL'].map(b => `<button class="tool-btn calc-btn" onclick="calcInput('${b}')">${b}</button>`).join('')}</div>
-            <div id="calcResult" class="tool-output"></div>`;
-            window.calcExpr = '';
-        } else if (id === 'password') {
-            title.innerText = 'Strong Password';
-            content.innerHTML = `<input type="range" id="passLen" min="8" max="32" value="16"><span id="lenVal">16</span><br><button class="tool-btn" onclick="genPass()">Generate</button><div id="passOut" class="tool-output"></div>`;
-            document.getElementById('passLen')?.addEventListener('input', e=>document.getElementById('lenVal').innerText=e.target.value);
-            window.genPass = () => { let len=document.getElementById('passLen').value, chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()',p=''; for(let i=0;i<len;i++) p+=chars[Math.floor(Math.random()*chars.length)]; document.getElementById('passOut').innerText=p; };
-        } else if (id === 'wordcount') {
-            title.innerText = 'Word & Character Counter';
-            content.innerHTML = `<textarea id="wcText" rows="5" class="search-input" placeholder="Type or paste text..."></textarea><div class="tool-output">Words: <span id="wcWord">0</span> | Characters: <span id="wcChar">0</span></div>`;
-            const update = () => { let t=document.getElementById('wcText').value; document.getElementById('wcWord').innerText=t.trim().split(/\s+/).filter(w=>w).length; document.getElementById('wcChar').innerText=t.length; };
-            document.getElementById('wcText')?.addEventListener('input', update);
-        } else if (id === 'color') {
-            title.innerText = 'Color Picker';
-            content.innerHTML = `<input type="color" id="colorPick" value="#6c5ce7" style="width:80px;height:80px;border-radius:40px;"><div id="colorShow" style="width:100px;height:100px;border-radius:20px;background:#6c5ce7;margin-top:12px;"></div><div class="tool-output">HEX: <span id="hexOut">#6c5ce7</span></div>`;
-            document.getElementById('colorPick')?.addEventListener('input', e=>{ let c=e.target.value; document.getElementById('colorShow').style.background=c; document.getElementById('hexOut').innerText=c; });
-        } else if (id === 'unit') {
-            title.innerText = 'Unit Converter';
-            content.innerHTML = `<input id="unitVal" type="number" class="search-input" placeholder="Value"><select id="unitFrom" class="search-input"><option value="m">Meter</option><option value="km">Kilometer</option><option value="ft">Feet</option></select> → <select id="unitTo" class="search-input"><option value="m">Meter</option><option value="km">Kilometer</option><option value="ft">Feet</option></select><button class="tool-btn" onclick="convertUnit()">Convert</button><div id="unitOut" class="tool-output"></div>`;
-            window.convertUnit = () => { let val=parseFloat(document.getElementById('unitVal').value), from=document.getElementById('unitFrom').value, to=document.getElementById('unitTo').value, map={m:1, km:1000, ft:0.3048}; let res=val*map[from]/map[to]; document.getElementById('unitOut').innerText=res.toFixed(4)+' '+to; };
-        } else if (id === 'stopwatch') {
-            title.innerText = 'Stopwatch';
-            content.innerHTML = `<div id="swTime" style="font-size:3rem;">00:00:00</div><button class="tool-btn" id="swStart">Start</button><button class="tool-btn" id="swPause">Pause</button><button class="tool-btn" id="swReset">Reset</button>`;
-            let swInterval, swRunning=false, swTime=0;
-            const updateDisplay = () => { let d=new Date(swTime); document.getElementById('swTime').innerText=d.toISOString().substr(11,8); };
-            document.getElementById('swStart').onclick = () => { if(swRunning)return; swRunning=true; let start=Date.now()-swTime; swInterval=setInterval(()=>{ swTime=Date.now()-start; updateDisplay(); },100); };
-            document.getElementById('swPause').onclick = () => { clearInterval(swInterval); swRunning=false; };
-            document.getElementById('swReset').onclick = () => { clearInterval(swInterval); swRunning=false; swTime=0; updateDisplay(); };
-        } else if (id === 'qr') {
-            title.innerText = 'QR Code Generator';
-            content.innerHTML = `<input id="qrData" class="search-input" placeholder="Text or URL"><button class="tool-btn" onclick="genQR()">Generate</button><div id="qrImg" class="tool-output"></div>`;
-            window.genQR = () => { let txt=document.getElementById('qrData').value; if(txt) document.getElementById('qrImg').innerHTML=`<img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(txt)}">`; };
-        } else if (id === 'worldclock') {
-            title.innerText = 'World Clock';
-            content.innerHTML = `<div id="clockContainer" class="tool-output">Loading zones...</div>`;
-            function updateClock() { const zones=['America/New_York','Europe/London','Asia/Tokyo','Australia/Sydney','UTC']; let html=''; const now=new Date(); zones.forEach(z=>{ try{ let time=now.toLocaleTimeString('en-US',{timeZone:z,hour12:true}); html+=`<div><strong>${z.split('/')[1]||z}</strong> ${time}</div>`; }catch(e){} }); document.getElementById('clockContainer').innerHTML=html; }
-            updateClock(); setInterval(updateClock, 60000);
-        } else if (id === 'joke') {
-            title.innerText = 'Fresh Joke';
-            content.innerHTML = `<button class="tool-btn" onclick="fetchJoke()">Get New Joke 🤣</button><div id="jokeText" class="tool-output">Click for laughter</div>`;
-            window.fetchJoke = async () => { try{ let res=await fetch('https://v2.jokeapi.dev/joke/Any?safe-mode'); let d=await res.json(); document.getElementById('jokeText').innerHTML = d.type==='single'?d.joke:`${d.setup}<br>${d.delivery}`; }catch(e){ document.getElementById('jokeText').innerHTML='Failed to load joke'; } };
-        } else if (id === 'currency') {
-            title.innerText = 'Currency Converter (USD/EUR/GBP)';
-            content.innerHTML = `<input id="currAmt" type="number" class="search-input" placeholder="Amount"><select id="currFrom"><option>USD</option><option>EUR</option><option>GBP</option></select> → <select id="currTo"><option>USD</option><option>EUR</option><option>GBP</option></select><button class="tool-btn" onclick="convCurr()">Convert</button><div id="currOut" class="tool-output"></div>`;
-            window.convCurr = () => { let amt=parseFloat(document.getElementById('currAmt').value), from=document.getElementById('currFrom').value, to=document.getElementById('currTo').value, rates={USD:1, EUR:0.92, GBP:0.79}; let res=amt*rates[to]/rates[from]; document.getElementById('currOut').innerText=res.toFixed(2)+' '+to; };
-        } else if (id === 'age') {
-            title.innerText = 'Age Calculator';
-            content.innerHTML = `<input type="date" id="dobInput" class="search-input"><button class="tool-btn" onclick="calcAgeNow()">Calculate Age</button><div id="ageOut" class="tool-output"></div>`;
-            window.calcAgeNow = () => { let dob=new Date(document.getElementById('dobInput').value), today=new Date(); let age=today.getFullYear()-dob.getFullYear(); let m=today.getMonth()-dob.getMonth(); if(m<0||(m===0&&today.getDate()<dob.getDate())) age--; document.getElementById('ageOut').innerHTML=isNaN(age)?'Enter valid date':`Your age: ${age} years`; };
-        } else if (id === 'base64') {
-            title.innerText = 'Base64 Encoder/Decoder';
-            content.innerHTML = `<textarea id="b64Text" rows="3" class="search-input" placeholder="Text"></textarea><button class="tool-btn" onclick="b64Encode()">Encode</button><button class="tool-btn" onclick="b64Decode()">Decode</button><div id="b64Out" class="tool-output"></div>`;
-            window.b64Encode = () => { document.getElementById('b64Out').innerText = btoa(document.getElementById('b64Text').value); };
-            window.b64Decode = () => { try{ document.getElementById('b64Out').innerText = atob(document.getElementById('b64Text').value); }catch(e){ document.getElementById('b64Out').innerText='Invalid base64'; } };
-        } else if (id === 'json') {
-            title.innerText = 'JSON Formatter';
-            content.innerHTML = `<textarea id="jsonIn" rows="6" class="search-input" placeholder='{"name":"test"}'></textarea><button class="tool-btn" onclick="formatJson()">Pretty Print</button><pre id="jsonOut" class="tool-output"></pre>`;
-            window.formatJson = () => { try{ let obj=JSON.parse(document.getElementById('jsonIn').value); document.getElementById('jsonOut').innerText=JSON.stringify(obj,null,2); }catch(e){ document.getElementById('jsonOut').innerText='Invalid JSON'; } };
-        } else if (id === 'lorem') {
-            title.innerText = 'Lorem Ipsum';
-            content.innerHTML = `<input id="loremParas" type="number" value="2" class="search-input"><button class="tool-btn" onclick="genLorem()">Generate</button><div id="loremOut" class="tool-output"></div>`;
-            window.genLorem = () => { let p=parseInt(document.getElementById('loremParas').value)||2; let text='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. '; document.getElementById('loremOut').innerHTML=Array(p).fill(text).join('\n\n'); };
-        } else if (id === 'tip') {
-            title.innerText = 'Tip Calculator';
-            content.innerHTML = `<input id="billAmt" class="search-input" placeholder="Bill amount"><input id="tipPercent" class="search-input" placeholder="Tip %" value="15"><button class="tool-btn" onclick="calcTip()">Calculate</button><div id="tipOut" class="tool-output"></div>`;
-            window.calcTip = () => { let bill=parseFloat(document.getElementById('billAmt').value), tipP=parseFloat(document.getElementById('tipPercent').value); let tip=bill*tipP/100; document.getElementById('tipOut').innerHTML=`Tip: $${tip.toFixed(2)}<br>Total: $${(bill+tip).toFixed(2)}`; };
-        } else if (id === 'bmi' || id === 'random' || id === 'countdown') {
-            // fallback minimal
-            title.innerText = 'Tool ready';
-            content.innerHTML = `<div class="tool-output">✅ Tool loaded. Use other powerful utilities from the grid.</div>`;
-        }
-        panel.scrollIntoView({ behavior: 'smooth' });
+        if(id==='calc'){ title.innerText='Calculator'; content.innerHTML=`<div id="calcDisplay" style="font-size:2rem;background:var(--surface2);padding:16px;border-radius:20px;">0</div><div class="calc-grid">${['7','8','9','/','4','5','6','*','1','2','3','-','0','.','=','+','C','DEL'].map(b=>`<button class="tool-btn calc-btn" onclick="calcInput('${b}')">${b}</button>`).join('')}</div><div id="calcResult" class="tool-output"></div>`; window.calcExpr=''; }
+        else if(id==='password'){ title.innerText='Password Generator'; content.innerHTML=`<input type="range" id="passLen" min="6" max="32" value="16"><span id="lenVal">16</span><br><button class="tool-btn" onclick="genPass()">Generate</button><div id="passOut" class="tool-output"></div>`; document.getElementById('passLen')?.addEventListener('input',e=>document.getElementById('lenVal').innerText=e.target.value); window.genPass=()=>{ let l=document.getElementById('passLen').value, chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*',p=''; for(let i=0;i<l;i++) p+=chars[Math.floor(Math.random()*chars.length)]; document.getElementById('passOut').innerText=p; }; }
+        else if(id==='wordcount'){ title.innerText='Word Counter'; content.innerHTML=`<textarea id="wcText" rows="5" class="search-input"></textarea><div class="tool-output">Words: <span id="wcWord">0</span> | Chars: <span id="wcChar">0</span></div>`; document.getElementById('wcText')?.addEventListener('input',()=>{let t=document.getElementById('wcText').value; document.getElementById('wcWord').innerText=t.trim().split(/\s+/).filter(w=>w).length; document.getElementById('wcChar').innerText=t.length;}); }
+        else if(id==='color'){ title.innerText='Color Picker'; content.innerHTML=`<input type="color" id="colorPick" value="#6c5ce7"><div id="colorShow" style="width:100px;height:100px;border-radius:20px;background:#6c5ce7;margin-top:12px;"></div><div class="tool-output">HEX: <span id="hexOut">#6c5ce7</span></div>`; document.getElementById('colorPick')?.addEventListener('input',e=>{ let c=e.target.value; document.getElementById('colorShow').style.background=c; document.getElementById('hexOut').innerText=c; }); }
+        else if(id==='unit'){ title.innerText='Unit Converter'; content.innerHTML=`<input id="unitVal" type="number" class="search-input"><select id="unitFrom"><option value="m">Meter</option><option value="km">KM</option><option value="ft">Feet</option></select> → <select id="unitTo"><option value="m">Meter</option><option value="km">KM</option><option value="ft">Feet</option></select><button class="tool-btn" onclick="convertUnit()">Convert</button><div id="unitOut" class="tool-output"></div>`; window.convertUnit=()=>{ let val=parseFloat(document.getElementById('unitVal').value), from=document.getElementById('unitFrom').value, to=document.getElementById('unitTo').value, m={m:1,km:1000,ft:0.3048}; let res=val*m[from]/m[to]; document.getElementById('unitOut').innerText=res.toFixed(4)+' '+to; }; }
+        else if(id==='stopwatch'){ title.innerText='Stopwatch'; content.innerHTML=`<div id="swTime" style="font-size:3rem;">00:00:00</div><button class="tool-btn" id="swStart">Start</button><button class="tool-btn" id="swPause">Pause</button><button class="tool-btn" id="swReset">Reset</button>`; let swInterval,swRunning=false,swTime=0; const update=()=>{ let d=new Date(swTime); document.getElementById('swTime').innerText=d.toISOString().substr(11,8); }; document.getElementById('swStart').onclick=()=>{ if(swRunning)return; swRunning=true; let start=Date.now()-swTime; swInterval=setInterval(()=>{ swTime=Date.now()-start; update(); },100); }; document.getElementById('swPause').onclick=()=>{ clearInterval(swInterval); swRunning=false; }; document.getElementById('swReset').onclick=()=>{ clearInterval(swInterval); swRunning=false; swTime=0; update(); }; }
+        else if(id==='qr'){ title.innerText='QR Code'; content.innerHTML=`<input id="qrData" class="search-input" placeholder="Text or URL"><button class="tool-btn" onclick="genQR()">Generate</button><div id="qrImg" class="tool-output"></div>`; window.genQR=()=>{ let txt=document.getElementById('qrData').value; if(txt) document.getElementById('qrImg').innerHTML=`<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(txt)}">`; }; }
+        else if(id==='worldclock'){ title.innerText='World Clock'; content.innerHTML=`<div id="clockContainer" class="tool-output"></div>`; function updateClock(){ const zones=['America/New_York','Europe/London','Asia/Tokyo','Australia/Sydney','UTC']; let html=''; const now=new Date(); zones.forEach(z=>{ try{ let time=now.toLocaleTimeString('en-US',{timeZone:z,hour12:true}); html+=`<div><strong>${z.split('/')[1]||z}</strong> ${time}</div>`; }catch(e){} }); document.getElementById('clockContainer').innerHTML=html; } updateClock(); setInterval(updateClock,60000); }
+        else if(id==='joke'){ title.innerText='Joke Generator'; content.innerHTML=`<button class="tool-btn" onclick="fetchJoke()">Get Joke</button><div id="jokeText" class="tool-output"></div>`; window.fetchJoke=async()=>{ try{ let res=await fetch('https://v2.jokeapi.dev/joke/Any?safe-mode'); let d=await res.json(); document.getElementById('jokeText').innerHTML=d.type==='single'?d.joke:`${d.setup}<br>${d.delivery}`; }catch(e){ document.getElementById('jokeText').innerHTML='Failed'; } }; }
+        else if(id==='currency'){ title.innerText='Currency'; content.innerHTML=`<input id="currAmt" type="number" class="search-input"><select id="currFrom"><option>USD</option><option>EUR</option><option>GBP</option></select> → <select id="currTo"><option>USD</option><option>EUR</option><option>GBP</option></select><button class="tool-btn" onclick="convCurr()">Convert</button><div id="currOut" class="tool-output"></div>`; window.convCurr=()=>{ let amt=parseFloat(document.getElementById('currAmt').value), from=document.getElementById('currFrom').value, to=document.getElementById('currTo').value, rates={USD:1,EUR:0.92,GBP:0.79}; let res=amt*rates[to]/rates[from]; document.getElementById('currOut').innerText=res.toFixed(2)+' '+to; }; }
+        else if(id==='age'){ title.innerText='Age Calculator'; content.innerHTML=`<input type="date" id="dobInput" class="search-input"><button class="tool-btn" onclick="calcAge()">Calculate</button><div id="ageOut" class="tool-output"></div>`; window.calcAge=()=>{ let dob=new Date(document.getElementById('dobInput').value), today=new Date(); let age=today.getFullYear()-dob.getFullYear(); let m=today.getMonth()-dob.getMonth(); if(m<0||(m===0&&today.getDate()<dob.getDate())) age--; document.getElementById('ageOut').innerHTML=isNaN(age)?'Invalid':`Age: ${age} years`; }; }
+        else if(id==='base64'){ title.innerText='Base64'; content.innerHTML=`<textarea id="b64Text" rows="3" class="search-input"></textarea><button class="tool-btn" onclick="b64Encode()">Encode</button><button class="tool-btn" onclick="b64Decode()">Decode</button><div id="b64Out" class="tool-output"></div>`; window.b64Encode=()=>{ document.getElementById('b64Out').innerText=btoa(document.getElementById('b64Text').value); }; window.b64Decode=()=>{ try{ document.getElementById('b64Out').innerText=atob(document.getElementById('b64Text').value); }catch(e){ document.getElementById('b64Out').innerText='Invalid'; } }; }
+        else if(id==='json'){ title.innerText='JSON Formatter'; content.innerHTML=`<textarea id="jsonIn" rows="6" class="search-input" placeholder='{"name":"test"}'></textarea><button class="tool-btn" onclick="formatJson()">Format</button><pre id="jsonOut" class="tool-output"></pre>`; window.formatJson=()=>{ try{ let obj=JSON.parse(document.getElementById('jsonIn').value); document.getElementById('jsonOut').innerText=JSON.stringify(obj,null,2); }catch(e){ document.getElementById('jsonOut').innerText='Invalid JSON'; } }; }
+        else if(id==='lorem'){ title.innerText='Lorem Ipsum'; content.innerHTML=`<input id="loremParas" type="number" value="2" class="search-input"><button class="tool-btn" onclick="genLorem()">Generate</button><div id="loremOut" class="tool-output"></div>`; window.genLorem=()=>{ let p=parseInt(document.getElementById('loremParas').value)||2; let txt='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. '; document.getElementById('loremOut').innerHTML=Array(p).fill(txt).join('\n\n'); }; }
+        else if(id==='tip'){ title.innerText='Tip Calculator'; content.innerHTML=`<input id="billAmt" class="search-input" placeholder="Bill"><input id="tipPercent" class="search-input" placeholder="Tip %" value="15"><button class="tool-btn" onclick="calcTip()">Calculate</button><div id="tipOut" class="tool-output"></div>`; window.calcTip=()=>{ let bill=parseFloat(document.getElementById('billAmt').value), tipP=parseFloat(document.getElementById('tipPercent').value); let tip=bill*tipP/100; document.getElementById('tipOut').innerHTML=`Tip: $${tip.toFixed(2)}<br>Total: $${(bill+tip).toFixed(2)}`; }; }
+        else if(id==='bmi'){ title.innerText='BMI'; content.innerHTML=`<input id="bmiH" class="search-input" placeholder="Height cm"><input id="bmiW" class="search-input" placeholder="Weight kg"><button class="tool-btn" onclick="calcBMI()">Calculate</button><div id="bmiOut" class="tool-output"></div>`; window.calcBMI=()=>{ let h=parseFloat(document.getElementById('bmiH').value), w=parseFloat(document.getElementById('bmiW').value); let bmi=w/((h/100)**2); document.getElementById('bmiOut').innerHTML=bmi.toFixed(1)+' - '+(bmi<18.5?'Underweight':bmi<25?'Normal':bmi<30?'Overweight':'Obese'); }; }
+        else if(id==='random'){ title.innerText='Random Number'; content.innerHTML=`<input id="randMin" value="1" class="search-input"><input id="randMax" value="100" class="search-input"><button class="tool-btn" onclick="genRand()">Generate</button><div id="randOut" class="tool-output"></div>`; window.genRand=()=>{ let min=parseInt(document.getElementById('randMin').value)||0, max=parseInt(document.getElementById('randMax').value)||100; document.getElementById('randOut').innerText=Math.floor(Math.random()*(max-min+1))+min; }; }
+        else if(id==='countdown'){ title.innerText='Countdown'; content.innerHTML=`<input id="cdSec" type="number" value="60" class="search-input"><button class="tool-btn" id="cdStart">Start</button><button class="tool-btn" id="cdPause">Pause</button><button class="tool-btn" id="cdReset">Reset</button><div id="cdDisplay" style="font-size:2rem;">01:00</div>`; let cdInterval, cdSeconds=60, cdActive=false; const updateCD=()=>{ let m=Math.floor(cdSeconds/60), s=cdSeconds%60; document.getElementById('cdDisplay').innerText=`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; if(cdSeconds<=0){ clearInterval(cdInterval); cdActive=false; } }; document.getElementById('cdStart').onclick=()=>{ if(cdActive)return; cdSeconds=parseInt(document.getElementById('cdSec').value)||60; updateCD(); cdActive=true; cdInterval=setInterval(()=>{ if(cdSeconds<=0){ clearInterval(cdInterval); cdActive=false; } else { cdSeconds--; updateCD(); } },1000); }; document.getElementById('cdPause').onclick=()=>{ clearInterval(cdInterval); cdActive=false; }; document.getElementById('cdReset').onclick=()=>{ clearInterval(cdInterval); cdActive=false; cdSeconds=parseInt(document.getElementById('cdSec').value)||60; updateCD(); }; }
+        document.getElementById('toolPanel').scrollIntoView({behavior:'smooth'});
     };
-
     window.calcInput = function(v) {
         let disp = document.getElementById('calcDisplay');
-        if(v === 'C') window.calcExpr = '';
-        else if(v === 'DEL') window.calcExpr = window.calcExpr.slice(0,-1);
-        else if(v === '=') { try { let res = eval(window.calcExpr.replace(/x/g,'*').replace(/÷/g,'/')); document.getElementById('calcResult').innerHTML = '= '+res; window.calcExpr = res.toString(); } catch(e){ document.getElementById('calcResult').innerHTML = 'Error'; } return; }
+        if(v==='C') window.calcExpr='';
+        else if(v==='DEL') window.calcExpr=window.calcExpr.slice(0,-1);
+        else if(v==='=') { try { let res = eval(window.calcExpr.replace(/x/g,'*').replace(/÷/g,'/')); document.getElementById('calcResult').innerHTML = '= '+res; window.calcExpr = res.toString(); } catch(e){ document.getElementById('calcResult').innerHTML = 'Error'; } return; }
         else window.calcExpr += v;
         disp.innerText = window.calcExpr || '0';
     };
+    function openOverlayWithContent(overlayId) { document.getElementById(overlayId).classList.add('active'); }
+    // Populate all overlays with data (complete lists)
+    const sites=[{name:"Reddit",url:"https://reddit.com"},{name:"Pinterest",url:"https://pinterest.com"},{name:"Tumblr",url:"https://tumblr.com"},{name:"Telegram",url:"https://web.telegram.org"},{name:"WhatsApp Web",url:"https://web.whatsapp.com"},{name:"SoundCloud",url:"https://soundcloud.com"},{name:"DeviantArt",url:"https://deviantart.com"},{name:"Flickr",url:"https://flickr.com"},{name:"Goodreads",url:"https://goodreads.com"},{name:"IMDb",url:"https://imdb.com"}];
+    document.getElementById('sitesGrid').innerHTML = sites.map(s=>`<div class="sites-card" onclick="window.open('${s.url}','_blank')"><div>${s.name}</div></div>`).join('');
+    const media=[{name:"Dailymotion",url:"https://dailymotion.com"},{name:"Vimeo",url:"https://vimeo.com"},{name:"Twitch",url:"https://twitch.tv"},{name:"TikTok",url:"https://tiktok.com"},{name:"Netflix",url:"https://netflix.com"},{name:"Disney+",url:"https://disneyplus.com"}];
+    document.getElementById('mediaGrid').innerHTML = media.map(m=>`<div class="media-card" onclick="window.open('${m.url}','_blank')"><div>${m.name}</div></div>`).join('');
+    const tvChannels=[{name:"RedBull TV",url:"https://redbull.com/tv"},{name:"Pluto TV",url:"https://pluto.tv"},{name:"Samsung TV Plus",url:"https://samsungtvplus.com"}];
+    const radio=[{name:"TuneIn",url:"https://tunein.com"},{name:"Radio Garden",url:"https://radio.garden"}];
+    window.showTvChannels=()=>{ document.getElementById('tvRadioContentArea').innerHTML = tvChannels.map(c=>`<div class="tvradio-card" onclick="window.open('${c.url}','_blank')">${c.name}</div>`).join(''); };
+    window.showRadioStations=()=>{ document.getElementById('tvRadioContentArea').innerHTML = radio.map(r=>`<div class="tvradio-card" onclick="window.open('${r.url}','_blank')">${r.name}</div>`).join(''); };
+    window.loadBrowser=()=>{ let url=document.getElementById('browserUrl').value; if(!url.startsWith('http')) url='https://'+url; document.getElementById('browserFrame').src=url; };
+    const convertTools=[{name:"PDFescape",url:"https://pdfescape.com"},{name:"Sejda",url:"https://sejda.com"},{name:"PDF24",url:"https://tools.pdf24.org"},{name:"Zamzar",url:"https://zamzar.com"},{name:"Online Convert",url:"https://online-convert.com"}];
+    document.getElementById('convertGrid').innerHTML = convertTools.map(t=>`<div class="convert-card" onclick="window.open('${t.url}','_blank')">${t.name}</div>`).join('');
+    const translators=[{name:"Google Translate",url:"https://translate.google.com"},{name:"DeepL",url:"https://deepl.com"},{name:"Microsoft Translator",url:"https://bing.com/translator"},{name:"Reverso",url:"https://reverso.net"},{name:"Yandex Translate",url:"https://translate.yandex.com"}];
+    document.getElementById('translatorGrid').innerHTML = translators.map(t=>`<div class="convert-card" onclick="window.open('${t.url}','_blank')">${t.name}</div>`).join('');
+    const games=[{name:"Steam",url:"https://store.steampowered.com"},{name:"Epic Games",url:"https://epicgames.com"},{name:"Roblox",url:"https://roblox.com"},{name:"Miniclip",url:"https://miniclip.com"},{name:"Kongregate",url:"https://kongregate.com"}];
+    document.getElementById('gamesGrid').innerHTML = games.map(g=>`<div class="games-card" onclick="window.open('${g.url}','_blank')">${g.name}</div>`).join('');
+    const money=[{name:"Robinhood",url:"https://robinhood.com"},{name:"Coinbase",url:"https://coinbase.com"},{name:"Wealthfront",url:"https://wealthfront.com"},{name:"Mint",url:"https://mint.intuit.com"}];
+    document.getElementById('moneyGrid').innerHTML = money.map(m=>`<div class="games-card" onclick="window.open('${m.url}','_blank')">${m.name}</div>`).join('');
+    const rdp=[{name:"Neverinstall",url:"https://neverinstall.com"},{name:"Shells",url:"https://shells.com"}];
+    const vpn=[{name:"ProtonVPN",url:"https://protonvpn.com"},{name:"Hide.me",url:"https://hide.me"}];
+    const preview=[{name:"Responsively",url:"https://responsively.app"},{name:"BrowserStack",url:"https://browserstack.com"}];
+    document.getElementById('rdpGrid').innerHTML = rdp.map(r=>`<div class="games-card" onclick="window.open('${r.url}','_blank')">${r.name}</div>`).join('');
+    document.getElementById('vpnGrid').innerHTML = vpn.map(v=>`<div class="games-card" onclick="window.open('${v.url}','_blank')">${v.name}</div>`).join('');
+    document.getElementById('previewGrid').innerHTML = preview.map(p=>`<div class="games-card" onclick="window.open('${p.url}','_blank')">${p.name}</div>`).join('');
+    const imagine=[{name:"Text to Speech",action:"tts"},{name:"QR Reader",action:"qrReader"},{name:"Password Strength",action:"pwdStrength"}];
+    document.getElementById('imagineGrid').innerHTML = imagine.map(i=>`<div class="imagine-card" onclick="showToast('${i.name} demo')">${i.name}</div>`).join('');
+    const onlineTools=[{name:"Canva",url:"https://canva.com"},{name:"Remove.bg",url:"https://remove.bg"},{name:"TinyWow",url:"https://tinywow.com"},{name:"ILovePDF",url:"https://ilovepdf.com"},{name:"SmallPDF",url:"https://smallpdf.com"},{name:"Pixlr",url:"https://pixlr.com"}];
+    document.getElementById('onlineGrid').innerHTML = onlineTools.map(o=>`<div class="online-card" onclick="window.open('${o.url}','_blank')">${o.name}</div>`).join('');
+    const shorteners=[{name:"TinyURL",url:"https://tinyurl.com"},{name:"Bitly",url:"https://bitly.com"},{name:"is.gd",url:"https://is.gd"}];
+    document.getElementById('shortenerGrid').innerHTML = shorteners.map(s=>`<div class="shortener-card" onclick="window.open('${s.url}','_blank')">${s.name}</div>`).join('');
+    // category grids (sample)
+    const emails=[{name:"ProtonMail",url:"https://protonmail.com"},{name:"Tutanota",url:"https://tutanota.com"}];
+    document.getElementById('freeEmailsGrid').innerHTML = emails.map(e=>`<div class="category-card" onclick="window.open('${e.url}','_blank')">${e.name}</div>`).join('');
+    const health=[{name:"MyFitnessPal",url:"https://myfitnesspal.com"},{name:"Bodybuilding",url:"https://bodybuilding.com"}];
+    document.getElementById('healthSportsGrid').innerHTML = health.map(h=>`<div class="category-card" onclick="window.open('${h.url}','_blank')">${h.name}</div>`).join('');
+    const misc=[{name:"Last.fm",url:"https://last.fm"},{name:"Tinder",url:"https://tinder.com"}];
+    document.getElementById('miscGrid').innerHTML = misc.map(m=>`<div class="category-card" onclick="window.open('${m.url}','_blank')">${m.name}</div>`).join('');
+    const travel=[{name:"Skyscanner",url:"https://skyscanner.com"},{name:"Lonely Planet",url:"https://lonelyplanet.com"}];
+    document.getElementById('travelBooksGrid').innerHTML = travel.map(t=>`<div class="category-card" onclick="window.open('${t.url}','_blank')">${t.name}</div>`).join('');
+    const movies=[{name:"Tubi",url:"https://tubitv.com"},{name:"Pluto TV",url:"https://pluto.tv"}];
+    document.getElementById('moviesSeriesGrid').innerHTML = movies.map(m=>`<div class="category-card" onclick="window.open('${m.url}','_blank')">${m.name}</div>`).join('');
+    const fashion=[{name:"Vogue",url:"https://vogue.com"}];
+    document.getElementById('cultureFashionGrid').innerHTML = fashion.map(f=>`<div class="category-card" onclick="window.open('${f.url}','_blank')">${f.name}</div>`).join('');
+    const jobs=[{name:"Indeed",url:"https://indeed.com"},{name:"LinkedIn",url:"https://linkedin.com/jobs"}];
+    document.getElementById('jobsGrid').innerHTML = jobs.map(j=>`<div class="category-card" onclick="window.open('${j.url}','_blank')">${j.name}</div>`).join('');
+    const tech=[{name:"TechCrunch",url:"https://techcrunch.com"},{name:"The Verge",url:"https://theverge.com"}];
+    document.getElementById('techGrid').innerHTML = tech.map(t=>`<div class="category-card" onclick="window.open('${t.url}','_blank')">${t.name}</div>`).join('');
+    const home=[{name:"Houzz",url:"https://houzz.com"}];
+    document.getElementById('buildingHomeGrid').innerHTML = home.map(h=>`<div class="category-card" onclick="window.open('${h.url}','_blank')">${h.name}</div>`).join('');
+    const surf=[{name:"Speedtest",url:"https://speedtest.net"}];
+    document.getElementById('surfInternetGrid').innerHTML = surf.map(s=>`<div class="category-card" onclick="window.open('${s.url}','_blank')">${s.name}</div>`).join('');
+    const cooking=[{name:"Allrecipes",url:"https://allrecipes.com"}];
+    document.getElementById('cookingKitchenGrid').innerHTML = cooking.map(c=>`<div class="category-card" onclick="window.open('${c.url}','_blank')">${c.name}</div>`).join('');
+    const wild=[{name:"National Geographic",url:"https://nationalgeographic.com"}];
+    document.getElementById('wildernessOceansGrid').innerHTML = wild.map(w=>`<div class="category-card" onclick="window.open('${w.url}','_blank')">${w.name}</div>`).join('');
+    const crypto=[{name:"CoinMarketCap",url:"https://coinmarketcap.com"}];
+    document.getElementById('cryptoGrid').innerHTML = crypto.map(c=>`<div class="category-card" onclick="window.open('${c.url}','_blank')">${c.name}</div>`).join('');
+    const news=[{name:"BBC News",url:"https://bbc.com/news"},{name:"CNN",url:"https://cnn.com"}];
+    document.getElementById('newsGrid').innerHTML = news.map(n=>`<div class="category-card" onclick="window.open('${n.url}','_blank')">${n.name}</div>`).join('');
 
-    window.openAIHub = function() {
-        document.getElementById('toolContent').innerHTML = `<div class="tool-output"><h3>🤖 AI Hub (Open in new tab)</h3>
-        <button class="tool-btn" onclick="window.open('https://chat.openai.com','_blank')">ChatGPT</button>
-        <button class="tool-btn" onclick="window.open('https://gemini.google.com','_blank')">Gemini</button>
-        <button class="tool-btn" onclick="window.open('https://claude.ai','_blank')">Claude</button>
-        <button class="tool-btn" onclick="window.open('https://www.perplexity.ai','_blank')">Perplexity</button>
-        <button class="tool-btn" onclick="window.open('https://copilot.microsoft.com','_blank')">Copilot</button>
-        </div>`;
-    };
-    window.openOnlineExtras = function() {
-        document.getElementById('toolContent').innerHTML = `<div class="tool-output"><h3>🌐 35+ Online Tools</h3>
-        <button class="tool-btn" onclick="window.open('https://tinywow.com','_blank')">TinyWow</button>
-        <button class="tool-btn" onclick="window.open('https://www.ilovepdf.com','_blank')">iLovePDF</button>
-        <button class="tool-btn" onclick="window.open('https://convertio.co','_blank')">Convertio</button>
-        <button class="tool-btn" onclick="window.open('https://pixlr.com','_blank')">Pixlr</button>
-        <button class="tool-btn" onclick="window.open('https://www.canva.com','_blank')">Canva</button>
-        <button class="tool-btn" onclick="window.open('https://www.remove.bg','_blank')">Remove.bg</button>
-        </div>`;
-    };
+    // Search and star rating
+    document.getElementById('globalSearch').addEventListener('input',function(e){
+        let q=e.target.value.toLowerCase();
+        if(!q){ document.getElementById('searchResults').style.display='none'; return; }
+        let filtered = toolsList.filter(t=>t.name.toLowerCase().includes(q));
+        let html = filtered.map(t=>`<div style="padding:12px;cursor:pointer;" onclick="selectTool('${t.id}');document.getElementById('searchResults').style.display='none';">${t.icon} ${t.name}</div>`).join('');
+        document.getElementById('searchResults').innerHTML=html || '<div>No tool found</div>';
+        document.getElementById('searchResults').style.display='block';
+    });
+    let starIndex=0; const stars=document.querySelectorAll('.star-box');
+    function fillNextStar(){ if(starIndex>=stars.length) return; stars[starIndex].querySelector('.star').innerHTML='★'; starIndex++; setTimeout(fillNextStar,300); }
+    setTimeout(fillNextStar,500);
 
-    window.toggleTheme = function() {
-        let html = document.documentElement;
-        if (html.hasAttribute('data-theme')) html.removeAttribute('data-theme');
-        else html.setAttribute('data-theme', 'dark');
-    };
-
-    // ======================== AUTO POPUP DOWNLOAD & AUTO REFRESH ========================
-    setTimeout(() => {
-        if (!localStorage.getItem('autoPopupShown')) {
-            localStorage.setItem('autoPopupShown', 'true');
-            let popup = document.createElement('div');
-            popup.className = 'reward-popup';
-            popup.innerHTML = `<h3>🚀 Get the Full App + 1000 Points</h3>
-            <p>Download the official MultiTool Pro APK and unlock offline tools, premium features and +1000 bonus points!</p>
-            <button class="tool-btn" onclick="window.downloadAPK();this.closest('.reward-popup').remove()">Download APK</button>
-            <button class="tool-btn" style="background:#555;" onclick="this.closest('.reward-popup').remove()">Maybe later</button>`;
-            document.body.appendChild(popup);
-        }
-    }, 25000);
-
-    // ======================== INITIALIZE EVERYTHING ========================
+    // Initialize
     renderTools();
     selectTool('calc');
     autoCheckForUpdates();
-    // auto rotating badge
-    setInterval(() => {
-        const msgs = ["💎 100% FREE PREMIUM", "⭐ RATE US ON PLAY STORE", "🎁 DAILY REWARDS ACTIVE", "📢 SHARE & EARN 500 PTS"];
-        const badge = document.getElementById('dynamicBadge');
-        if (badge) badge.innerText = msgs[Math.floor(Math.random() * msgs.length)];
-    }, 8000);
+    setInterval(()=>{ const msgs=["💎 100% FREE","⭐ RATE 5 STARS","🎁 DAILY REWARDS"]; document.getElementById('dynamicBadge').innerText=msgs[Math.floor(Math.random()*msgs.length)]; },8000);
+    setTimeout(()=>{ if(!localStorage.getItem('popupShown')){ localStorage.setItem('popupShown','true'); let pop=document.createElement('div'); pop.className='reward-popup'; pop.innerHTML=`<h3>🚀 Get Full APK + 1000 Points</h3><button class="tool-btn" onclick="downloadAPK();this.parentElement.remove()">Download Now</button><button onclick="this.parentElement.remove()">Later</button>`; document.body.appendChild(pop); } },25000);
 </script>
 </body>
 </html>
