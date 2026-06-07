@@ -568,12 +568,92 @@
         if (toolId === 'shortener_overlay') { openShortenerOverlay(); return; }
         if (toolId === 'other_tools_overlay') { openOtherTools(); return; }
         if (toolId === 'ai_hub_overlay') { openAiTools(); return; }
-        if(toolId === 'premium_ai'){ document.getElementById('premiumOverlay').classList.add('active'); document.getElementById('premiumContent').innerHTML = `<h2 style="font-size:1.8rem;">🔮 AI Text Enhancer</h2><p style="font-size:1rem;">AI-powered text enhancement (demo). Enter text and get an enhanced version.</p><textarea id="aiDemoText" rows="4" class="search-input" placeholder="Type your text..." style="font-size:1rem;"></textarea><button class="tool-btn" onclick="demoAIEnhance()">✨ Enhance</button><div id="aiDemoResult" class="tool-output"></div><button class="tool-btn" onclick="closePremium()">← Back to tools</button>`; return; }
+        if(toolId === 'premium_ai'){ document.getElementById('premiumOverlay').classList.add('active'); 
+            document.getElementById('premiumContent').innerHTML = `<h2 style="font-size:1.8rem;">🔮 AI Text Enhancer & Advanced AI Tools</h2>
+            <textarea id="aiDemoText" rows="4" class="search-input" placeholder="Type or paste your text here..." style="font-size:1rem;"></textarea>
+            <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:20px 0;">
+                <button class="tool-btn" onclick="runAIParaphraser()" style="background:#9b59b6;">🔄 Paraphraser</button>
+                <button class="tool-btn" onclick="runAIGrammarCheck()" style="background:#3498db;">✅ Grammar & Spell Check</button>
+                <button class="tool-btn" onclick="runAISummarizer()" style="background:#e67e22;">📄 Summarizer</button>
+                <button class="tool-btn" onclick="runAISentiment()" style="background:#1abc9c;">😊 Sentiment Analysis</button>
+                <button class="tool-btn" onclick="runAIKeywords()" style="background:#f39c12;">🔑 Keyword Extractor</button>
+                <button class="tool-btn" onclick="runAIReadability()" style="background:#95a5a6;">📖 Readability Checker</button>
+            </div>
+            <div id="aiDemoResult" class="tool-output"></div>
+            <button class="tool-btn" onclick="closePremium()">← Back to tools</button>`;
+            return; }
         closePremium();
         document.getElementById('mainPage').style.display = 'block';
         renderToolPanel(toolId);
         document.getElementById('toolPanel').scrollIntoView({behavior:'smooth'});
     };
+    // ************** NEW ADVANCED AI TOOLS FUNCTIONS **************
+    window.runAIParaphraser = function() {
+        let txt = document.getElementById('aiDemoText').value;
+        if(!txt) { document.getElementById('aiDemoResult').innerHTML = 'Please enter some text first.'; return; }
+        let words = txt.split(' ');
+        let synonyms = { "good": "excellent", "bad": "poor", "big": "large", "small": "tiny", "fast": "quick", "slow": "sluggish", "happy": "joyful", "sad": "melancholy", "start": "begin", "end": "finish" };
+        let paraphrased = words.map(w => {
+            let lower = w.toLowerCase();
+            if(synonyms[lower]) return synonyms[lower];
+            if(synonyms[lower.replace(/[^a-z]/g,'')]) return synonyms[lower.replace(/[^a-z]/g,'')];
+            return w;
+        }).join(' ');
+        document.getElementById('aiDemoResult').innerHTML = `<strong>🔄 Paraphrased (AI level 1):</strong><br>${paraphrased}<br><br><em>Tip: For better results, use longer texts.</em>`;
+    };
+    window.runAIGrammarCheck = function() {
+        let txt = document.getElementById('aiDemoText').value;
+        if(!txt) { document.getElementById('aiDemoResult').innerHTML = 'Please enter some text first.'; return; }
+        let corrected = txt.replace(/(i) /gi,'I ').replace(/(wanna)/gi,'want to').replace(/(gonna)/gi,'going to').replace(/(\w+)ing /gi, '$1ing ').replace(/\s+/g,' ').trim();
+        if(corrected === txt) corrected += " (No obvious grammar errors found)";
+        document.getElementById('aiDemoResult').innerHTML = `<strong>✅ Grammar & Spell Check:</strong><br>${corrected}<br><br><em>Note: Basic corrections only. For full accuracy, use a dedicated tool.</em>`;
+    };
+    window.runAISummarizer = function() {
+        let txt = document.getElementById('aiDemoText').value;
+        if(!txt) { document.getElementById('aiDemoResult').innerHTML = 'Please enter some text first.'; return; }
+        let sentences = txt.match(/[^\.!\?]+[\.!\?]+/g);
+        if(!sentences || sentences.length <= 2) {
+            document.getElementById('aiDemoResult').innerHTML = `<strong>📄 Summarizer:</strong><br>${txt}<br><br><em>Text too short to summarize.</em>`;
+            return;
+        }
+        let summary = sentences.slice(0, Math.max(2, Math.floor(sentences.length/3))).join(' ');
+        document.getElementById('aiDemoResult').innerHTML = `<strong>📄 AI Summarizer:</strong><br>${summary}<br><br><em>Extracted key sentences.</em>`;
+    };
+    window.runAISentiment = function() {
+        let txt = document.getElementById('aiDemoText').value;
+        if(!txt) { document.getElementById('aiDemoResult').innerHTML = 'Please enter some text first.'; return; }
+        let lower = txt.toLowerCase();
+        let positive = ['good','great','awesome','excellent','love','happy','wonderful','amazing','fantastic','best'];
+        let negative = ['bad','terrible','awful','hate','sad','worst','horrible','disappointing','poor','ugly'];
+        let posCount = positive.filter(w => lower.includes(w)).length;
+        let negCount = negative.filter(w => lower.includes(w)).length;
+        let sentiment = (posCount > negCount) ? 'Positive 😊' : (negCount > posCount) ? 'Negative 😞' : 'Neutral 😐';
+        let confidence = Math.min(100, Math.round(((posCount+negCount)/Math.max(1, lower.split(' ').length))*100));
+        document.getElementById('aiDemoResult').innerHTML = `<strong>😊 Sentiment Analysis:</strong><br>Sentiment: ${sentiment}<br>Confidence: ${confidence}%<br>Positive indicators: ${posCount}, Negative: ${negCount}`;
+    };
+    window.runAIKeywords = function() {
+        let txt = document.getElementById('aiDemoText').value;
+        if(!txt) { document.getElementById('aiDemoResult').innerHTML = 'Please enter some text first.'; return; }
+        let words = txt.toLowerCase().split(/\W+/);
+        let stopwords = ['the','and','of','to','a','in','is','it','for','on','with','as','by','at','an','be','this','that','are','was','were','have','has','had','but','not','or','so'];
+        let freq = {};
+        words.forEach(w => { if(w.length>2 && !stopwords.includes(w)) freq[w] = (freq[w]||0)+1; });
+        let sorted = Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,5);
+        let keywords = sorted.map(([k,v])=>`${k} (${v})`).join(', ');
+        document.getElementById('aiDemoResult').innerHTML = `<strong>🔑 Top Keywords:</strong><br>${keywords || 'No significant keywords found.'}<br><br><em>Based on frequency.</em>`;
+    };
+    window.runAIReadability = function() {
+        let txt = document.getElementById('aiDemoText').value;
+        if(!txt) { document.getElementById('aiDemoResult').innerHTML = 'Please enter some text first.'; return; }
+        let sentences = txt.match(/[^\.!\?]+[\.!\?]+/g);
+        let sentenceCount = sentences ? sentences.length : 1;
+        let words = txt.split(/\s+/).length;
+        let syllables = txt.toLowerCase().replace(/[^a-z]/g,'').match(/[aeiouy]{1,2}/g)?.length || words;
+        let score = 206.835 - 1.015*(words/sentenceCount) - 84.6*(syllables/words);
+        let level = (score >= 90) ? 'Very Easy (5th grade)' : (score >= 80) ? 'Easy (6th grade)' : (score >= 70) ? 'Fairly Easy (7th grade)' : (score >= 60) ? 'Standard (8th-9th grade)' : (score >= 50) ? 'Fairly Difficult (10th-12th grade)' : (score >= 30) ? 'Difficult (College)' : 'Very Difficult (College Graduate)';
+        document.getElementById('aiDemoResult').innerHTML = `<strong>📖 Readability (Flesch Reading Ease):</strong><br>Score: ${Math.round(score)}<br>Level: ${level}<br>Words: ${words}, Sentences: ${sentenceCount}, Syllables: ${syllables}`;
+    };
+    // ************** END OF NEW ADVANCED AI TOOLS **************
     window.demoAIEnhance = function(){ let txt = document.getElementById('aiDemoText')?.value; if(txt) document.getElementById('aiDemoResult').innerHTML = `✨ Enhanced: ${txt} (powered by MultiTool AI) ✨`; else document.getElementById('aiDemoResult').innerHTML = 'Please enter some text.'; };
     function renderShortenerGrid(){ const container = document.getElementById('shortenerGrid'); const shorteners = [ { name: 'TinyURL', icon: '🔗', url: 'https://tinyurl.com/app' }, { name: 'Bitly', icon: '📎', url: 'https://bitly.com' }, { name: 'is.gd', icon: '⚡', url: 'https://is.gd' }, { name: 'Rebrandly', icon: '🔄', url: 'https://rebrandly.com' }, { name: 'Short.io', icon: '✂️', url: 'https://short.io' }, { name: 'Cutt.ly', icon: '✂️', url: 'https://cutt.ly' }, { name: 'T2M', icon: '🔗', url: 'https://t2m.io' }, { name: 'Shorte.st', icon: '📏', url: 'https://shorte.st' }, { name: '1Link', icon: '🔗', url: 'https://1link.io' }, { name: 'Linkly', icon: '🔗', url: 'https://linklyhq.com' } ]; let html = ''; shorteners.forEach(s => { html += `<div class="shortener-card" onclick="window.open('${s.url}', '_blank'); closeShortenerOverlay();"><div style="font-size:2.8rem;">${s.icon}</div><div style="font-weight:700; font-size:1.2rem;">${s.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`; }); container.innerHTML = html; }
     function renderOnlineGrid(){ const container = document.getElementById('onlineGrid'); const onlineToolsList = [ { name: 'Canva', icon: '🎨', url: 'https://www.canva.com' }, { name: 'Remove.bg', icon: '🖼️', url: 'https://www.remove.bg' }, { name: 'TinyWow', icon: '✨', url: 'https://tinywow.com' }, { name: 'ILovePDF', icon: '📄', url: 'https://www.ilovepdf.com' }, { name: 'SmallPDF', icon: '📑', url: 'https://smallpdf.com' }, { name: 'OnlineOCR', icon: '🔍', url: 'https://www.onlineocr.net' }, { name: 'Convertio', icon: '🔄', url: 'https://convertio.co' }, { name: 'CloudConvert', icon: '☁️', url: 'https://cloudconvert.com' }, { name: 'EZGIF', icon: '🎞️', url: 'https://ezgif.com' }, { name: 'Kapwing', icon: '✂️', url: 'https://www.kapwing.com' }, { name: 'Pixlr', icon: '🎨', url: 'https://pixlr.com' }, { name: 'Photopea', icon: '🖌️', url: 'https://www.photopea.com' }, { name: 'Cleanup.pictures', icon: '🧹', url: 'https://cleanup.pictures' }, { name: 'Watermark Remover', icon: '💧', url: 'https://www.watermarkremover.io' }, { name: 'QR Code Monkey', icon: '📱', url: 'https://www.qrcode-monkey.com' }, { name: 'Grammarly', icon: '✍️', url: 'https://www.grammarly.com' }, { name: 'QuillBot', icon: '📝', url: 'https://quillbot.com' }, { name: 'Hemingway Editor', icon: '📖', url: 'https://hemingwayapp.com' }, { name: 'DeepL Translator', icon: '🌐', url: 'https://www.deepl.com' }, { name: 'Google Translate', icon: '🔤', url: 'https://translate.google.com' }, { name: 'MyMemory', icon: '🧠', url: 'https://mymemory.translated.net' }, { name: 'Color Hunt', icon: '🎨', url: 'https://colorhunt.co' }, { name: 'Coolors', icon: '🌈', url: 'https://coolors.co' }, { name: 'UI Gradients', icon: '📊', url: 'https://uigradients.com' }, { name: 'CSS Gradient', icon: '🎨', url: 'https://cssgradient.io' }, { name: 'JsonFormatter', icon: '📋', url: 'https://jsonformatter.org' }, { name: 'CodePen', icon: '💻', url: 'https://codepen.io' }, { name: 'JSFiddle', icon: '🔧', url: 'https://jsfiddle.net' }, { name: 'Replit', icon: '🔄', url: 'https://replit.com' } ]; let html = ''; onlineToolsList.forEach(tool => { html += `<div class="online-card" onclick="window.open('${tool.url}', '_blank'); closeOnlineOverlay();"><div style="font-size:2.8rem;">${tool.icon}</div><div style="font-weight:700; font-size:1.2rem;">${tool.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`; }); container.innerHTML = html; }
@@ -677,8 +757,8 @@
             case 'wordcount':
                 title = '📝 Word & Character Counter';
                 content = `<textarea id="wcText" rows="6" class="search-input" placeholder="Type or paste your text here..."></textarea>
-                <div class="tool-output"><strong>Words:</strong> <span id="wcWord">0</span>  | <strong>Characters (with spaces):</strong> <span id="wcChar">0</span>  | <strong>Chars (no spaces):</strong> <span id="wcCharNoSpace">0</span><br>
-                <strong>Reading time:</strong> <span id="readTime">0</span> min  | <strong>Speaking time:</strong> <span id="speakTime">0</span> min<br>
+                <div class="tool-output"><strong>Words:</strong> <span id="wcWord">0</span> &nbsp;| <strong>Characters (with spaces):</strong> <span id="wcChar">0</span> &nbsp;| <strong>Chars (no spaces):</strong> <span id="wcCharNoSpace">0</span><br>
+                <strong>Reading time:</strong> <span id="readTime">0</span> min &nbsp;| <strong>Speaking time:</strong> <span id="speakTime">0</span> min<br>
                 <strong>Keyword density (top 3):</strong> <span id="keywordDensity">—</span></div>`;
                 break;
             case 'caseconverter':
