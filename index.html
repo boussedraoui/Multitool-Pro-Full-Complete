@@ -546,7 +546,15 @@
     window.openMoneyOverlay = function(){ document.getElementById('moneyOverlay').classList.add('active'); renderMoneyGrid(); };
     window.closeMoneyOverlay = function(){ document.getElementById('moneyOverlay').classList.remove('active'); };
     function renderMoneyGrid() { const container = document.getElementById('moneyGrid'); const sites = [ { name: 'Geico', icon: '🦎', url: 'https://www.geico.com' }, { name: 'Progressive', icon: '🅿️', url: 'https://www.progressive.com' }, { name: 'State Farm', icon: '🏠', url: 'https://www.statefarm.com' }, { name: 'Allstate', icon: '🤲', url: 'https://www.allstate.com' }, { name: 'USAA', icon: '🦅', url: 'https://www.usaa.com' }, { name: 'Liberty Mutual', icon: '🗽', url: 'https://www.libertymutual.com' }, { name: 'Nationwide', icon: '🌐', url: 'https://www.nationwide.com' }, { name: 'Farmers', icon: '🌾', url: 'https://www.farmers.com' }, { name: 'Travelers', icon: '✈️', url: 'https://www.travelers.com' }, { name: 'Aflac', icon: '🦆', url: 'https://www.aflac.com' }, { name: 'LendingTree', icon: '🌳', url: 'https://www.lendingtree.com' }, { name: 'SoFi', icon: '🏦', url: 'https://www.sofi.com' }, { name: 'Marcus', icon: '💰', url: 'https://www.marcus.com' }, { name: 'Rocket Mortgage', icon: '🚀', url: 'https://www.rocketmortgage.com' }, { name: 'Upstart', icon: '📈', url: 'https://www.upstart.com' }, { name: 'Best Egg', icon: '🥚', url: 'https://www.bestegg.com' }, { name: 'Robinhood', icon: '🏹', url: 'https://robinhood.com' }, { name: 'E*TRADE', icon: '📊', url: 'https://us.etrade.com' }, { name: 'Fidelity', icon: '🏆', url: 'https://www.fidelity.com' }, { name: 'Charles Schwab', icon: '🐂', url: 'https://www.schwab.com' }, { name: 'Vanguard', icon: '🚢', url: 'https://investor.vanguard.com' }, { name: 'Acorns', icon: '🌰', url: 'https://www.acorns.com' }, { name: 'Coinbase', icon: '🪙', url: 'https://www.coinbase.com' }, { name: 'Gemini', icon: '♊', url: 'https://www.gemini.com' }, { name: 'Webull', icon: '🐃', url: 'https://www.webull.com' }, { name: 'Betterment', icon: '🌱', url: 'https://www.betterment.com' }, { name: 'Mint', icon: '🍃', url: 'https://mint.intuit.com' }, { name: 'YNAB', icon: '📝', url: 'https://www.youneedabudget.com' }, { name: 'Credit Karma', icon: '🛡️', url: 'https://www.creditkarma.com' }, { name: 'NerdWallet', icon: '🤓', url: 'https://www.nerdwallet.com' } ]; let html = ''; sites.forEach(site => { html += `<div class="games-card" onclick="window.open('${site.url}', '_blank');"><div style="font-size:2.8rem;">${site.icon}</div><div style="font-weight:700; font-size:1.2rem;">${site.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`; }); container.innerHTML = html; }
-    const originalTools = [ {id:'calculator', icon:'🧮', name:'Advanced Calculator'}, {id:'password', icon:'🔐', name:'Password Generator'}, {id:'wordcount', icon:'📝', name:'Word Counter'}, {id:'caseconverter', icon:'🔤', name:'Case Converter'}, {id:'colorpicker', icon:'🎨', name:'Color Picker'}, {id:'unitconverter', icon:'📏', name:'Unit Converter'}, {id:'stopwatch', icon:'⏱️', name:'Stopwatch'}, {id:'qrcode', icon:'📱', name:'QR Code'}, {id:'bmi', icon:'⚖️', name:'BMI Calculator'}, {id:'random', icon:'🎲', name:'Random Number'}, {id:'countdown', icon:'⏳', name:'Countdown Timer'}, {id:'datediff', icon:'📅', name:'Date Difference'}, {id:'base64', icon:'🔣', name:'Base64'}, {id:'urlencode', icon:'🔗', name:'URL Encode'}, {id:'jsonformat', icon:'📋', name:'JSON Formatter'}, {id:'lorem', icon:'📄', name:'Lorem Ipsum'}, {id:'currency', icon:'💱', name:'Currency Converter'}, {id:'percentcalc', icon:'📊', name:'Percentage Calc'}, {id:'agecalc', icon:'🎂', name:'Age Calculator'}, {id:'binhex', icon:'💻', name:'Binary/Hex'}, {id:'roman', icon:'🏛️', name:'Roman Numeral'}, {id:'tipcalc', icon:'💰', name:'Tip Calculator'}, {id:'worldclock', icon:'🕐', name:'World Clock (All Zones)'}, {id:'dice', icon:'🎲', name:'Dice Roller'}, {id:'coin', icon:'🪙', name:'Coin Flip'}, {id:'joke', icon:'😂', name:'Joke Generator (Fresh)'}, {id:'ip', icon:'🌍', name:'IP Lookup'}, {id:'premium_ai', icon:'🔮', name:'✨ AI Text Enhancer'} ];
+    const originalTools = [ {id:'calculator', icon:'🧮', name:'Advanced Calculator'}, {id:'password', icon:'🔐', name:'Password Generator'}, {id:'wordcount', icon:'📝', name:'Word Counter'}, {id:'caseconverter', icon:'🔤', name:'Case Converter'}, {id:'colorpicker', icon:'🎨', name:'Color Picker'}, {id:'unitconverter', icon:'📏', name:'Unit Converter'}, {id:'stopwatch', icon:'⏱️', name:'Stopwatch'}, {id:'qrcode', icon:'📱', name:'QR Code'}, {id:'bmi', icon:'⚖️', name:'BMI Calculator'}, {id:'random', icon:'🎲', name:'Random Number'}, {id:'countdown', icon:'⏳', name:'Countdown Timer'}, {id:'datediff', icon:'📅', name:'Date Difference'}, {id:'base64', icon:'🔣', name:'Base64'}, {id:'urlencode', icon:'🔗', name:'URL Encode'}, {id:'jsonformat', icon:'📋', name:'JSON Formatter'}, {id:'lorem', icon:'📄', name:'Lorem Ipsum'}, {id:'currency', icon:'💱', name:'Currency Converter'}, {id:'percentcalc', icon:'📊', name:'Percentage Calc'}, {id:'agecalc', icon:'🎂', name:'Age Calculator'}, {id:'binhex', icon:'💻', name:'Binary/Hex'}, {id:'roman', icon:'🏛️', name:'Roman Numeral'}, {id:'tipcalc', icon:'💰', name:'Tip Calculator'}, {id:'worldclock', icon:'🕐', name:'World Clock (All Zones)'}, {id:'dice', icon:'🎲', name:'Dice Roller'}, {id:'coin', icon:'🪙', name:'Coin Flip'}, {id:'joke', icon:'😂', name:'Joke Generator (Fresh)'}, {id:'ip', icon:'🌍', name:'IP Lookup'},
+        // NEW ADVANCED AI TOOLS inserted before premium_ai
+        {id:'ai_paraphraser', icon:'🔄', name:'AI Paraphraser'},
+        {id:'ai_grammar', icon:'✅', name:'Grammar & Spell Check'},
+        {id:'ai_summarizer', icon:'📄', name:'AI Summarizer'},
+        {id:'ai_sentiment', icon:'😊', name:'Sentiment Analysis'},
+        {id:'ai_keywords', icon:'🔑', name:'Keyword Extractor'},
+        {id:'ai_readability', icon:'📖', name:'Readability Checker'},
+        {id:'premium_ai', icon:'🔮', name:'✨ AI Text Enhancer'} ];
     const metaSearchTools = [ {id:'media_overlay', icon:'📺', name:'📺 Media & Video Platforms'}, {id:'sites_overlay', icon:'🌐', name:'🌐 Popular Sites'}, {id:'tvradio_overlay', icon:'📺📻', name:'📺📻 TV / RADIO'}, {id:'browsers_overlay', icon:'🌐🧭', name:'🌐 Browsers (In‑App)'}, {id:'convert_overlay', icon:'🔄📄', name:'🔄 CONVERT (Word, Image, PDF)'}, {id:'aitranslator_overlay', icon:'🌐🔤', name:'🌐 All AI Translator'}, {id:'games_overlay', icon:'🎮', name:'🎮 GAMES'}, {id:'money_overlay', icon:'💵', name:'💵 MONEY & INVESTMENTS'}, {id:'remote_overlay', icon:'🖥️🔒', name:'🖥️ RDP, VPN & Web Preview'}, {id:'imagine_overlay', icon:'✨🧠', name:'✨ IMAGINE (25+ New Tools)'}, {id:'online_overlay', icon:'🌐', name:'🌐 Online Tools (30+ Free)'}, {id:'shortener_overlay', icon:'🔗', name:'🔗 URL Shorteners'}, {id:'other_tools_overlay', icon:'🧰', name:'🧰 All other tools (Notes, Weather, Todo)'}, {id:'ai_hub_overlay', icon:'🤖', name:'🤖 AI Hub (ChatGPT, Gemini, etc.)'} ];
     const allTools = [...originalTools, ...metaSearchTools];
     const fullToolsList = allTools;
@@ -569,16 +577,10 @@
         if (toolId === 'other_tools_overlay') { openOtherTools(); return; }
         if (toolId === 'ai_hub_overlay') { openAiTools(); return; }
         if(toolId === 'premium_ai'){ document.getElementById('premiumOverlay').classList.add('active'); 
-            document.getElementById('premiumContent').innerHTML = `<h2 style="font-size:1.8rem;">🔮 AI Text Enhancer & Advanced AI Tools</h2>
-            <textarea id="aiDemoText" rows="4" class="search-input" placeholder="Type or paste your text here..." style="font-size:1rem;"></textarea>
-            <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:20px 0;">
-                <button class="tool-btn" onclick="runAIParaphraser()" style="background:#9b59b6;">🔄 Paraphraser</button>
-                <button class="tool-btn" onclick="runAIGrammarCheck()" style="background:#3498db;">✅ Grammar & Spell Check</button>
-                <button class="tool-btn" onclick="runAISummarizer()" style="background:#e67e22;">📄 Summarizer</button>
-                <button class="tool-btn" onclick="runAISentiment()" style="background:#1abc9c;">😊 Sentiment Analysis</button>
-                <button class="tool-btn" onclick="runAIKeywords()" style="background:#f39c12;">🔑 Keyword Extractor</button>
-                <button class="tool-btn" onclick="runAIReadability()" style="background:#95a5a6;">📖 Readability Checker</button>
-            </div>
+            document.getElementById('premiumContent').innerHTML = `<h2 style="font-size:1.8rem;">🔮 AI Text Enhancer (Multiple modes)</h2>
+            <textarea id="aiDemoText" rows="4" class="search-input" placeholder="Type your text..."></textarea>
+            <div><select id="aiMode"><option value="grammar">Grammar Fix</option><option value="professional">Professional</option><option value="friendly">Friendly</option><option value="shorten">Shorten</option><option value="expand">Expand</option><option value="simplify">Simplify</option></select></div>
+            <button class="tool-btn" onclick="demoAIEnhanceAdvanced()">Enhance</button>
             <div id="aiDemoResult" class="tool-output"></div>
             <button class="tool-btn" onclick="closePremium()">← Back to tools</button>`;
             return; }
@@ -587,10 +589,24 @@
         renderToolPanel(toolId);
         document.getElementById('toolPanel').scrollIntoView({behavior:'smooth'});
     };
-    // ************** NEW ADVANCED AI TOOLS FUNCTIONS **************
-    window.runAIParaphraser = function() {
+    // ************** ORIGINAL ADVANCED AI TEXT ENHANCER **************
+    window.demoAIEnhanceAdvanced = function() {
         let txt = document.getElementById('aiDemoText').value;
-        if(!txt) { document.getElementById('aiDemoResult').innerHTML = 'Please enter some text first.'; return; }
+        let mode = document.getElementById('aiMode').value;
+        if(!txt) { document.getElementById('aiDemoResult').innerHTML = 'Enter some text first.'; return; }
+        let result = txt;
+        if(mode==='grammar') result = txt.replace(/(i) /gi,'I ').replace(/(\w+?) (is|are|am) /gi,'$1 $2 ').replace(/ +/g,' ');
+        else if(mode==='professional') result = '✨ Enhanced: ' + txt + ' (professional tone)';
+        else if(mode==='friendly') result = '🙂 ' + txt + ' (friendly)';
+        else if(mode==='shorten') result = txt.split(' ').slice(0,15).join(' ') + (txt.split(' ').length>15?'...':'');
+        else if(mode==='expand') result = txt + ' In addition, this tool helps you achieve more.';
+        else if(mode==='simplify') result = txt.replace(/[^a-zA-Z0-9 ]/g,'').toLowerCase();
+        document.getElementById('aiDemoResult').innerHTML = result;
+    };
+    // ************** NEW ADVANCED AI TOOLS FUNCTIONS (each with its own textarea) **************
+    window.runParaphraserTool = function() {
+        let txt = document.getElementById('paraphraserText').value;
+        if(!txt) { document.getElementById('paraphraserOut').innerHTML = 'Please enter some text first.'; return; }
         let words = txt.split(' ');
         let synonyms = { "good": "excellent", "bad": "poor", "big": "large", "small": "tiny", "fast": "quick", "slow": "sluggish", "happy": "joyful", "sad": "melancholy", "start": "begin", "end": "finish" };
         let paraphrased = words.map(w => {
@@ -599,29 +615,29 @@
             if(synonyms[lower.replace(/[^a-z]/g,'')]) return synonyms[lower.replace(/[^a-z]/g,'')];
             return w;
         }).join(' ');
-        document.getElementById('aiDemoResult').innerHTML = `<strong>🔄 Paraphrased (AI level 1):</strong><br>${paraphrased}<br><br><em>Tip: For better results, use longer texts.</em>`;
+        document.getElementById('paraphraserOut').innerHTML = `<strong>🔄 Paraphrased (AI level 1):</strong><br>${paraphrased}<br><br><em>Tip: For better results, use longer texts.</em>`;
     };
-    window.runAIGrammarCheck = function() {
-        let txt = document.getElementById('aiDemoText').value;
-        if(!txt) { document.getElementById('aiDemoResult').innerHTML = 'Please enter some text first.'; return; }
+    window.runGrammarTool = function() {
+        let txt = document.getElementById('grammarText').value;
+        if(!txt) { document.getElementById('grammarOut').innerHTML = 'Please enter some text first.'; return; }
         let corrected = txt.replace(/(i) /gi,'I ').replace(/(wanna)/gi,'want to').replace(/(gonna)/gi,'going to').replace(/(\w+)ing /gi, '$1ing ').replace(/\s+/g,' ').trim();
         if(corrected === txt) corrected += " (No obvious grammar errors found)";
-        document.getElementById('aiDemoResult').innerHTML = `<strong>✅ Grammar & Spell Check:</strong><br>${corrected}<br><br><em>Note: Basic corrections only. For full accuracy, use a dedicated tool.</em>`;
+        document.getElementById('grammarOut').innerHTML = `<strong>✅ Grammar & Spell Check:</strong><br>${corrected}<br><br><em>Note: Basic corrections only. For full accuracy, use a dedicated tool.</em>`;
     };
-    window.runAISummarizer = function() {
-        let txt = document.getElementById('aiDemoText').value;
-        if(!txt) { document.getElementById('aiDemoResult').innerHTML = 'Please enter some text first.'; return; }
+    window.runSummarizerTool = function() {
+        let txt = document.getElementById('summarizerText').value;
+        if(!txt) { document.getElementById('summarizerOut').innerHTML = 'Please enter some text first.'; return; }
         let sentences = txt.match(/[^\.!\?]+[\.!\?]+/g);
         if(!sentences || sentences.length <= 2) {
-            document.getElementById('aiDemoResult').innerHTML = `<strong>📄 Summarizer:</strong><br>${txt}<br><br><em>Text too short to summarize.</em>`;
+            document.getElementById('summarizerOut').innerHTML = `<strong>📄 AI Summarizer:</strong><br>${txt}<br><br><em>Text too short to summarize.</em>`;
             return;
         }
         let summary = sentences.slice(0, Math.max(2, Math.floor(sentences.length/3))).join(' ');
-        document.getElementById('aiDemoResult').innerHTML = `<strong>📄 AI Summarizer:</strong><br>${summary}<br><br><em>Extracted key sentences.</em>`;
+        document.getElementById('summarizerOut').innerHTML = `<strong>📄 AI Summarizer:</strong><br>${summary}<br><br><em>Extracted key sentences.</em>`;
     };
-    window.runAISentiment = function() {
-        let txt = document.getElementById('aiDemoText').value;
-        if(!txt) { document.getElementById('aiDemoResult').innerHTML = 'Please enter some text first.'; return; }
+    window.runSentimentTool = function() {
+        let txt = document.getElementById('sentimentText').value;
+        if(!txt) { document.getElementById('sentimentOut').innerHTML = 'Please enter some text first.'; return; }
         let lower = txt.toLowerCase();
         let positive = ['good','great','awesome','excellent','love','happy','wonderful','amazing','fantastic','best'];
         let negative = ['bad','terrible','awful','hate','sad','worst','horrible','disappointing','poor','ugly'];
@@ -629,34 +645,34 @@
         let negCount = negative.filter(w => lower.includes(w)).length;
         let sentiment = (posCount > negCount) ? 'Positive 😊' : (negCount > posCount) ? 'Negative 😞' : 'Neutral 😐';
         let confidence = Math.min(100, Math.round(((posCount+negCount)/Math.max(1, lower.split(' ').length))*100));
-        document.getElementById('aiDemoResult').innerHTML = `<strong>😊 Sentiment Analysis:</strong><br>Sentiment: ${sentiment}<br>Confidence: ${confidence}%<br>Positive indicators: ${posCount}, Negative: ${negCount}`;
+        document.getElementById('sentimentOut').innerHTML = `<strong>😊 Sentiment Analysis:</strong><br>Sentiment: ${sentiment}<br>Confidence: ${confidence}%<br>Positive indicators: ${posCount}, Negative: ${negCount}`;
     };
-    window.runAIKeywords = function() {
-        let txt = document.getElementById('aiDemoText').value;
-        if(!txt) { document.getElementById('aiDemoResult').innerHTML = 'Please enter some text first.'; return; }
+    window.runKeywordsTool = function() {
+        let txt = document.getElementById('keywordsText').value;
+        if(!txt) { document.getElementById('keywordsOut').innerHTML = 'Please enter some text first.'; return; }
         let words = txt.toLowerCase().split(/\W+/);
         let stopwords = ['the','and','of','to','a','in','is','it','for','on','with','as','by','at','an','be','this','that','are','was','were','have','has','had','but','not','or','so'];
         let freq = {};
         words.forEach(w => { if(w.length>2 && !stopwords.includes(w)) freq[w] = (freq[w]||0)+1; });
         let sorted = Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,5);
         let keywords = sorted.map(([k,v])=>`${k} (${v})`).join(', ');
-        document.getElementById('aiDemoResult').innerHTML = `<strong>🔑 Top Keywords:</strong><br>${keywords || 'No significant keywords found.'}<br><br><em>Based on frequency.</em>`;
+        document.getElementById('keywordsOut').innerHTML = `<strong>🔑 Top Keywords:</strong><br>${keywords || 'No significant keywords found.'}<br><br><em>Based on frequency.</em>`;
     };
-    window.runAIReadability = function() {
-        let txt = document.getElementById('aiDemoText').value;
-        if(!txt) { document.getElementById('aiDemoResult').innerHTML = 'Please enter some text first.'; return; }
+    window.runReadabilityTool = function() {
+        let txt = document.getElementById('readabilityText').value;
+        if(!txt) { document.getElementById('readabilityOut').innerHTML = 'Please enter some text first.'; return; }
         let sentences = txt.match(/[^\.!\?]+[\.!\?]+/g);
         let sentenceCount = sentences ? sentences.length : 1;
         let words = txt.split(/\s+/).length;
         let syllables = txt.toLowerCase().replace(/[^a-z]/g,'').match(/[aeiouy]{1,2}/g)?.length || words;
         let score = 206.835 - 1.015*(words/sentenceCount) - 84.6*(syllables/words);
         let level = (score >= 90) ? 'Very Easy (5th grade)' : (score >= 80) ? 'Easy (6th grade)' : (score >= 70) ? 'Fairly Easy (7th grade)' : (score >= 60) ? 'Standard (8th-9th grade)' : (score >= 50) ? 'Fairly Difficult (10th-12th grade)' : (score >= 30) ? 'Difficult (College)' : 'Very Difficult (College Graduate)';
-        document.getElementById('aiDemoResult').innerHTML = `<strong>📖 Readability (Flesch Reading Ease):</strong><br>Score: ${Math.round(score)}<br>Level: ${level}<br>Words: ${words}, Sentences: ${sentenceCount}, Syllables: ${syllables}`;
+        document.getElementById('readabilityOut').innerHTML = `<strong>📖 Readability (Flesch Reading Ease):</strong><br>Score: ${Math.round(score)}<br>Level: ${level}<br>Words: ${words}, Sentences: ${sentenceCount}, Syllables: ${syllables}`;
     };
     // ************** END OF NEW ADVANCED AI TOOLS **************
-    window.demoAIEnhance = function(){ let txt = document.getElementById('aiDemoText')?.value; if(txt) document.getElementById('aiDemoResult').innerHTML = `✨ Enhanced: ${txt} (powered by MultiTool AI) ✨`; else document.getElementById('aiDemoResult').innerHTML = 'Please enter some text.'; };
     function renderShortenerGrid(){ const container = document.getElementById('shortenerGrid'); const shorteners = [ { name: 'TinyURL', icon: '🔗', url: 'https://tinyurl.com/app' }, { name: 'Bitly', icon: '📎', url: 'https://bitly.com' }, { name: 'is.gd', icon: '⚡', url: 'https://is.gd' }, { name: 'Rebrandly', icon: '🔄', url: 'https://rebrandly.com' }, { name: 'Short.io', icon: '✂️', url: 'https://short.io' }, { name: 'Cutt.ly', icon: '✂️', url: 'https://cutt.ly' }, { name: 'T2M', icon: '🔗', url: 'https://t2m.io' }, { name: 'Shorte.st', icon: '📏', url: 'https://shorte.st' }, { name: '1Link', icon: '🔗', url: 'https://1link.io' }, { name: 'Linkly', icon: '🔗', url: 'https://linklyhq.com' } ]; let html = ''; shorteners.forEach(s => { html += `<div class="shortener-card" onclick="window.open('${s.url}', '_blank'); closeShortenerOverlay();"><div style="font-size:2.8rem;">${s.icon}</div><div style="font-weight:700; font-size:1.2rem;">${s.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`; }); container.innerHTML = html; }
-    function renderOnlineGrid(){ const container = document.getElementById('onlineGrid'); const onlineToolsList = [ { name: 'Canva', icon: '🎨', url: 'https://www.canva.com' }, { name: 'Remove.bg', icon: '🖼️', url: 'https://www.remove.bg' }, { name: 'TinyWow', icon: '✨', url: 'https://tinywow.com' }, { name: 'ILovePDF', icon: '📄', url: 'https://www.ilovepdf.com' }, { name: 'SmallPDF', icon: '📑', url: 'https://smallpdf.com' }, { name: 'OnlineOCR', icon: '🔍', url: 'https://www.onlineocr.net' }, { name: 'Convertio', icon: '🔄', url: 'https://convertio.co' }, { name: 'CloudConvert', icon: '☁️', url: 'https://cloudconvert.com' }, { name: 'EZGIF', icon: '🎞️', url: 'https://ezgif.com' }, { name: 'Kapwing', icon: '✂️', url: 'https://www.kapwing.com' }, { name: 'Pixlr', icon: '🎨', url: 'https://pixlr.com' }, { name: 'Photopea', icon: '🖌️', url: 'https://www.photopea.com' }, { name: 'Cleanup.pictures', icon: '🧹', url: 'https://cleanup.pictures' }, { name: 'Watermark Remover', icon: '💧', url: 'https://www.watermarkremover.io' }, { name: 'QR Code Monkey', icon: '📱', url: 'https://www.qrcode-monkey.com' }, { name: 'Grammarly', icon: '✍️', url: 'https://www.grammarly.com' }, { name: 'QuillBot', icon: '📝', url: 'https://quillbot.com' }, { name: 'Hemingway Editor', icon: '📖', url: 'https://hemingwayapp.com' }, { name: 'DeepL Translator', icon: '🌐', url: 'https://www.deepl.com' }, { name: 'Google Translate', icon: '🔤', url: 'https://translate.google.com' }, { name: 'MyMemory', icon: '🧠', url: 'https://mymemory.translated.net' }, { name: 'Color Hunt', icon: '🎨', url: 'https://colorhunt.co' }, { name: 'Coolors', icon: '🌈', url: 'https://coolors.co' }, { name: 'UI Gradients', icon: '📊', url: 'https://uigradients.com' }, { name: 'CSS Gradient', icon: '🎨', url: 'https://cssgradient.io' }, { name: 'JsonFormatter', icon: '📋', url: 'https://jsonformatter.org' }, { name: 'CodePen', icon: '💻', url: 'https://codepen.io' }, { name: 'JSFiddle', icon: '🔧', url: 'https://jsfiddle.net' }, { name: 'Replit', icon: '🔄', url: 'https://replit.com' } ]; let html = ''; onlineToolsList.forEach(tool => { html += `<div class="online-card" onclick="window.open('${tool.url}', '_blank'); closeOnlineOverlay();"><div style="font-size:2.8rem;">${tool.icon}</div><div style="font-weight:700; font-size:1.2rem;">${tool.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`; }); container.innerHTML = html; }
+    function renderOnlineGrid(){ const container = document.getElementById('onlineGrid'); const onlineToolsList = [ { name: 'Canva', icon: '🎨', url: 'https://www.canva.com' }, { name: 'Remove.bg', icon: '🖼️', url: 'https://www.remove.bg' }, { name: 'TinyWow', icon: '✨', url: 'https://tinywow.com' }, { name: 'ILovePDF', icon: '📄', url: 'https://www.ilovepdf.com' }, { name: 'SmallPDF', icon: '📑', url: 'https://smallpdf.com' }, { name: 'OnlineOCR', icon: '🔍', url: 'https://www.onlineocr.net' }, { name: 'Convertio', icon: '🔄', url: 'https://convertio.co' }, { name: 'CloudConvert', icon: '☁️', url: 'https://cloudconvert.com' }, { name: 'EZGIF', icon: '🎞️', url: 'https://ezgif.com' }, { name: 'Kapwing', icon: '✂️', url: 'https://www.kapwing.com' }, { name: 'Pixlr', icon: '🎨', url: 'https://pixlr.com' }, { name: 'Photopea', icon: '🖌️', url: 'https://www.photopea.com' }, { name: 'Cleanup.pictures', icon: '🧹', url: 'https://cleanup.pictures' }, { name: 'Watermark Remover', icon: '💧', url: 'https://www.watermarkremover.io' }, { name: 'QR Code Monkey', icon: '📱', url: 'https://www.qrcode-monkey.com' }, { name: 'Grammarly', icon: '✍️', url: 'https://www.grammarly.com' }, { name: 'QuillBot', icon: '📝', url: 'https://quillbot.com' }, { name: 'Hemingway Editor', icon: '📖', url: 'https://hemingwayapp.com' }, { name: 'DeepL Translator', icon: '🌐', url: 'https://www.deepl.com' }, // Google Translate removed
+        { name: 'MyMemory', icon: '🧠', url: 'https://mymemory.translated.net' }, { name: 'Color Hunt', icon: '🎨', url: 'https://colorhunt.co' }, { name: 'Coolors', icon: '🌈', url: 'https://coolors.co' }, { name: 'UI Gradients', icon: '📊', url: 'https://uigradients.com' }, { name: 'CSS Gradient', icon: '🎨', url: 'https://cssgradient.io' }, { name: 'JsonFormatter', icon: '📋', url: 'https://jsonformatter.org' }, { name: 'CodePen', icon: '💻', url: 'https://codepen.io' }, { name: 'JSFiddle', icon: '🔧', url: 'https://jsfiddle.net' }, { name: 'Replit', icon: '🔄', url: 'https://replit.com' } ]; let html = ''; onlineToolsList.forEach(tool => { html += `<div class="online-card" onclick="window.open('${tool.url}', '_blank'); closeOnlineOverlay();"><div style="font-size:2.8rem;">${tool.icon}</div><div style="font-weight:700; font-size:1.2rem;">${tool.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`; }); container.innerHTML = html; }
     function renderAiToolsFull(){ const container = document.getElementById('aiToolsContainer'); const aiSites = [ { name: 'ChatGPT', icon: '🤖', url: 'https://chat.openai.com', category: 'chat' }, { name: 'Google Gemini', icon: '🧠', url: 'https://gemini.google.com', category: 'chat' }, { name: 'Claude', icon: '🧬', url: 'https://claude.ai', category: 'chat' }, { name: 'DeepSeek', icon: '🐋', url: 'https://chat.deepseek.com', category: 'chat' }, { name: 'Microsoft Copilot', icon: '💻', url: 'https://copilot.microsoft.com', category: 'chat' }, { name: 'Poe', icon: '💡', url: 'https://poe.com', category: 'chat' }, { name: 'Pi AI', icon: '😊', url: 'https://pi.ai/talk', category: 'chat' }, { name: 'Character.AI', icon: '🎭', url: 'https://character.ai', category: 'chat' }, { name: 'Perplexity', icon: '🔎', url: 'https://www.perplexity.ai', category: 'search' }, { name: 'You.com', icon: '🔍', url: 'https://you.com', category: 'search' }, { name: 'DALL·E 3', icon: '🖼️', url: 'https://openai.com/dall-e-3', category: 'image' }, { name: 'Midjourney', icon: '🌸', url: 'https://www.midjourney.com', category: 'image' }, { name: 'Stable Diffusion', icon: '🌀', url: 'https://stability.ai', category: 'image' }, { name: 'Leonardo AI', icon: '🦁', url: 'https://leonardo.ai', category: 'image' }, { name: 'DreamStudio', icon: '🌟', url: 'https://beta.dreamstudio.ai', category: 'image' }, { name: 'Bing Image Creator', icon: '🌄', url: 'https://www.bing.com/images/create', category: 'image' }, { name: 'Craiyon', icon: '🎠', url: 'https://www.craiyon.com', category: 'image' }, { name: 'NightCafe', icon: '🌌', url: 'https://creator.nightcafe.studio', category: 'image' }, { name: 'Artbreeder', icon: '🧬', url: 'https://www.artbreeder.com', category: 'image' }, { name: 'Playground AI', icon: '🎮', url: 'https://playgroundai.com', category: 'image' }, { name: 'Runway ML', icon: '🎥', url: 'https://runwayml.com', category: 'video' }, { name: 'Pika', icon: '🎞️', url: 'https://pika.art', category: 'video' }, { name: 'Synthesia', icon: '🎙️', url: 'https://www.synthesia.io', category: 'video' }, { name: 'HeyGen', icon: '👤', url: 'https://www.heygen.com', category: 'video' }, { name: 'Invideo', icon: '📹', url: 'https://invideo.io', category: 'video' }, { name: 'Kapwing', icon: '🎬', url: 'https://www.kapwing.com', category: 'video' }, { name: 'Lumen5', icon: '📽️', url: 'https://www.lumen5.com', category: 'video' }, { name: 'Suno AI', icon: '🎤', url: 'https://suno.ai', category: 'music' }, { name: 'Udio', icon: '🎧', url: 'https://www.udio.com', category: 'music' }, { name: 'AIVA', icon: '🎼', url: 'https://www.aiva.ai', category: 'music' }, { name: 'Boomy', icon: '🎹', url: 'https://boomy.com', category: 'music' }, { name: 'Soundraw', icon: '🎛️', url: 'https://soundraw.io', category: 'music' }, { name: 'Mubert', icon: '🎚️', url: 'https://mubert.com', category: 'music' }, { name: 'GitHub Copilot', icon: '🐙', url: 'https://github.com/features/copilot', category: 'code' }, { name: 'Codeium', icon: '⚡', url: 'https://codeium.com', category: 'code' }, { name: 'Tabnine', icon: '🦊', url: 'https://www.tabnine.com', category: 'code' }, { name: 'Replit Ghostwriter', icon: '👻', url: 'https://replit.com/ghostwriter', category: 'code' }, { name: 'Cody', icon: '🤖', url: 'https://sourcegraph.com/cody', category: 'code' }, { name: 'Jasper', icon: '✍️', url: 'https://www.jasper.ai', category: 'writing' }, { name: 'Writesonic', icon: '📝', url: 'https://writesonic.com', category: 'writing' }, { name: 'Notion AI', icon: '📓', url: 'https://www.notion.so/product/ai', category: 'writing' } ]; const categoryNames = { chat: 'AI Chat & Assistants', search: 'AI Search & Research', image: 'AI Image Generation', video: 'AI Video & Animation', music: 'AI Music & Audio', code: 'AI Code & Development', writing: 'AI Writing & Content' }; const grouped = {}; aiSites.forEach(tool => { if (!grouped[tool.category]) grouped[tool.category] = []; grouped[tool.category].push(tool); }); let html = '<h2 style="font-size:2rem;text-align:center;">🤖 AI Hub · 40+ AI Tools</h2>'; for (const [catKey, catLabel] of Object.entries(categoryNames)) { if (grouped[catKey] && grouped[catKey].length > 0) { html += `<h3 style="margin-top:36px;text-align:center;border-bottom:2px solid var(--border);padding-bottom:12px;font-size:1.6rem;">${catLabel}</h3><div class="ai-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:24px;margin-top:24px;">`; grouped[catKey].forEach(ai => { html += `<div class="ai-card" onclick="window.open('${ai.url}', '_blank'); closeAiOverlay();"><div style="font-size:2.8rem;">${ai.icon}</div><div style="font-weight:700; font-size:1.2rem;">${ai.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`; }); html += '</div>'; } } html += '<div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeAiOverlay()">← Back to main tools</button></div>'; container.innerHTML = html; }
     function renderImagineTools(){ const container = document.getElementById('imagineToolsGrid'); const imagineTools = [ { name: '🖼️ Image to Text (OCR)', icon: '📸', action: 'ocr' }, { name: '🎨 Random Color Palette', icon: '🌈', action: 'randomColor' }, { name: '📻 Morse Code Converter', icon: '📡', action: 'morse' }, { name: '📝 Text Summarizer', icon: '📄', action: 'summarize' }, { name: '🔢 Number Base Converter', icon: '🔢', action: 'baseAny' }, { name: '🧬 UUID Generator', icon: '🆔', action: 'uuid' }, { name: '🔐 Hash Generator', icon: '🔑', action: 'hashGen' }, { name: '📅 Unix Timestamp', icon: '⏲️', action: 'unixTime' }, { name: '🌍 IP Geolocation', icon: '🗺️', action: 'ipGeo' }, { name: '📧 Email Validator', icon: '📨', action: 'emailValidate' }, { name: '📊 CSV to JSON', icon: '📑', action: 'csvToJson' }, { name: '🧮 Quadratic Solver', icon: '📐', action: 'quadratic' }, { name: '⚖️ Weight Converter', icon: '⚖️', action: 'weightConv' }, { name: '🌡️ Temperature Converter', icon: '🌡️', action: 'tempConv' }, { name: '📏 Area Converter', icon: '📐', action: 'areaConv' }, { name: '💾 Data Size Converter', icon: '💾', action: 'dataConv' }, { name: '⏱️ Epoch Time Now', icon: '⏰', action: 'epochNow' }, { name: '🔍 Reverse Text', icon: '🔄', action: 'reverseText' }, { name: '✏️ Leet Speak', icon: '👾', action: 'leetSpeak' }, { name: '🎯 Palindrome Checker', icon: '🔄', action: 'palindrome' }, { name: '🔠 Strong Password', icon: '🔐', action: 'strongPwd' }, { name: '📇 QR Reader (camera)', icon: '📷', action: 'qrReader' }, { name: '🎲 Custom Dice Roll', icon: '🎲', action: 'customDice' }, { name: '💬 Random Advice', icon: '💡', action: 'advice' }, { name: '🔗 URL Shortener', icon: '🔗', action: 'shortener' } ]; let html = ''; imagineTools.forEach(tool => { html += `<div class="imagine-tool-card" onclick="executeImagineTool('${tool.action}')"><div style="font-size:2.8rem;">${tool.icon}</div><div style="font-weight:700; font-size:1.2rem;">${tool.name}</div></div>`; }); container.innerHTML = html; }
     window.executeImagineTool = function(action){ if(action === 'shortener') { openShortenerOverlay(); return; } let output = ''; switch(action){ case 'ocr': output = '📸 OCR Demo: Upload image<br><input type="file" id="ocrFile" accept="image/*"><button class="tool-btn" onclick="simulateOCR()">Extract Text</button><div id="ocrResult"></div>'; break;
@@ -917,6 +933,43 @@
                 title = '🌍 IP Lookup (Geolocation)';
                 content = `<button class="tool-btn" onclick="getIPAdvanced()">Get My IP Info</button>
                 <div id="ipOut" class="tool-output"></div>`;
+                break;
+            // NEW ADVANCED AI TOOLS CASES
+            case 'ai_paraphraser':
+                title = '🔄 AI Paraphraser';
+                content = `<textarea id="paraphraserText" rows="4" class="search-input" placeholder="Enter text to paraphrase..."></textarea>
+                <button class="tool-btn" onclick="runParaphraserTool()">Paraphrase</button>
+                <div id="paraphraserOut" class="tool-output"></div>`;
+                break;
+            case 'ai_grammar':
+                title = '✅ Grammar & Spell Check';
+                content = `<textarea id="grammarText" rows="4" class="search-input" placeholder="Enter text to check..."></textarea>
+                <button class="tool-btn" onclick="runGrammarTool()">Check Grammar</button>
+                <div id="grammarOut" class="tool-output"></div>`;
+                break;
+            case 'ai_summarizer':
+                title = '📄 AI Summarizer';
+                content = `<textarea id="summarizerText" rows="5" class="search-input" placeholder="Paste long text to summarize..."></textarea>
+                <button class="tool-btn" onclick="runSummarizerTool()">Summarize</button>
+                <div id="summarizerOut" class="tool-output"></div>`;
+                break;
+            case 'ai_sentiment':
+                title = '😊 Sentiment Analysis';
+                content = `<textarea id="sentimentText" rows="4" class="search-input" placeholder="Enter text to analyze sentiment..."></textarea>
+                <button class="tool-btn" onclick="runSentimentTool()">Analyze Sentiment</button>
+                <div id="sentimentOut" class="tool-output"></div>`;
+                break;
+            case 'ai_keywords':
+                title = '🔑 Keyword Extractor';
+                content = `<textarea id="keywordsText" rows="4" class="search-input" placeholder="Enter text to extract keywords..."></textarea>
+                <button class="tool-btn" onclick="runKeywordsTool()">Extract Keywords</button>
+                <div id="keywordsOut" class="tool-output"></div>`;
+                break;
+            case 'ai_readability':
+                title = '📖 Readability Checker';
+                content = `<textarea id="readabilityText" rows="4" class="search-input" placeholder="Enter text to check readability..."></textarea>
+                <button class="tool-btn" onclick="runReadabilityTool()">Check Readability</button>
+                <div id="readabilityOut" class="tool-output"></div>`;
                 break;
             case 'premium_ai':
                 title = '🔮 AI Text Enhancer (Multiple modes)';
@@ -1442,20 +1495,6 @@
             out.innerHTML = '❌ Failed to fetch IP info. Check your internet connection.';
             console.error(err);
         }
-    };
-    // AI Text Enhancer advanced
-    window.demoAIEnhanceAdvanced = function() {
-        let txt = document.getElementById('aiDemoText').value;
-        let mode = document.getElementById('aiMode').value;
-        if(!txt) { document.getElementById('aiDemoResult').innerHTML = 'Enter some text first.'; return; }
-        let result = txt;
-        if(mode==='grammar') result = txt.replace(/(i) /gi,'I ').replace(/(\w+?) (is|are|am) /gi,'$1 $2 ').replace(/ +/g,' ');
-        else if(mode==='professional') result = '✨ Enhanced: ' + txt + ' (professional tone)';
-        else if(mode==='friendly') result = '🙂 ' + txt + ' (friendly)';
-        else if(mode==='shorten') result = txt.split(' ').slice(0,15).join(' ') + (txt.split(' ').length>15?'...':'');
-        else if(mode==='expand') result = txt + ' In addition, this tool helps you achieve more.';
-        else if(mode==='simplify') result = txt.replace(/[^a-zA-Z0-9 ]/g,'').toLowerCase();
-        document.getElementById('aiDemoResult').innerHTML = result;
     };
     // ==================== End of enhanced functions ====================
     document.getElementById('globalSearch').addEventListener('input',function(e){ let q=e.target.value.trim().toLowerCase(); if(q===''){ document.getElementById('searchResults').style.display='none'; return; } let filtered = fullToolsList.filter(t=>t.name.toLowerCase().includes(q)); let html = filtered.map(t=>`<div style="padding:16px;border-bottom:1px solid var(--border);cursor:pointer;font-size:1rem;" onclick="selectTool('${t.id}');document.getElementById('globalSearch').value='';document.getElementById('searchResults').style.display='none';">${t.icon} ${t.name}</div>`).join(''); if(!html){ html = `<div style="padding:20px;text-align:center;"><div>No tools found for "<strong>${q}</strong>"</div><button class="tool-btn" style="margin-top:16px;" onclick="searchGoogle('${q}')">🔍 Search Google for "${q} free online"</button></div>`; } document.getElementById('searchResults').innerHTML=html; document.getElementById('searchResults').style.display='block'; });
