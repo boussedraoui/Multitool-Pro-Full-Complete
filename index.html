@@ -405,7 +405,6 @@
             <span class="ticker-text">⚡ NO MORE DOWNLOADS – WE HAVE IT ALL, RIGHT HERE ⚡</span>
             <span class="ticker-icon">🌍</span>
             <span class="ticker-text">💪 STAY AHEAD WITH OUR EVER‑GROWING TOOLKIT 💪</span>
-            <!-- duplicate for seamless loop -->
             <span class="ticker-icon">🚀</span>
             <span class="ticker-text">✨ MULTITOOL PRO IS ALWAYS UPDATING ✨</span>
             <span class="ticker-icon">⭐</span>
@@ -422,7 +421,7 @@
     </div>
 </div>
 
-<!-- ========== SMART CHATBOT (COMPLETELY ENHANCED – KNOWS EVERYTHING) ========== -->
+<!-- ========== SMART CHATBOT (FIXED: WORKING BUTTONS, CLOSES CHAT, NO NUMBERS) ========== -->
 <div id="smartChatWidget" class="chat-widget">
     <div class="chat-button" id="chatButton">
         💬 <span class="chat-badge">AI</span>
@@ -436,7 +435,7 @@
             </div>
         </div>
         <div class="chat-messages" id="chatMessages">
-            <div class="chat-message bot">👋 Welcome to MultiTool Pro! I know every single tool, category, and site inside this app. Just type what you need – I'll give you clickable buttons to open it immediately. Try "pdf", "games", "weather", "password", or even a single letter like "c".</div>
+            <div class="chat-message bot">👋 Welcome to MultiTool Pro! I know **every single tool** inside this app. Type what you need – I'll give you working buttons. Try: `pdf`, `games`, `calculator`, `weather`, or even a single letter like `p`.</div>
         </div>
         <div class="chat-input-area">
             <button class="chat-voice-btn" id="chatVoiceBtn" title="Voice input">🎤</button>
@@ -448,7 +447,7 @@
 </div>
 
 <style>
-/* ===== CHAT WIDGET (left side) ===== */
+/* Chat widget styles – ensures footer is not hidden */
 .chat-widget {
     position: fixed;
     bottom: 30px;
@@ -492,7 +491,7 @@
     bottom: 85px;
     left: 0;
     right: auto;
-    width: 420px;
+    width: 450px;
     max-width: 85vw;
     background: rgba(20, 20, 40, 0.96);
     backdrop-filter: blur(20px);
@@ -545,7 +544,7 @@
     text-shadow: 0 0 4px gold;
 }
 .chat-messages {
-    height: 420px;
+    height: 450px;
     overflow-y: auto;
     padding: 16px;
     display: flex;
@@ -574,7 +573,7 @@
     border-bottom-left-radius: 4px;
     border-left: 3px solid #ffaa44;
 }
-.chat-message.bot .tool-btn {
+.chat-message.bot .chat-btn {
     display: inline-block;
     background: #ffaa44;
     color: #1e1e2a;
@@ -587,7 +586,7 @@
     font-weight: bold;
     transition: 0.1s;
 }
-.chat-message.bot .tool-btn:hover {
+.chat-message.bot .chat-btn:hover {
     transform: scale(0.98);
     background: #ffcc66;
 }
@@ -639,7 +638,7 @@
 </style>
 
 <script>
-// ==================== FULLY INTELLIGENT CHATBOT WITH COMPREHENSIVE KNOWLEDGE ====================
+// ==================== FIXED CHATBOT: GLOBAL COMMAND DISPATCHER (BUTTONS WORK) ====================
 (function() {
     let isChatOpen = false;
     let isFullscreen = false;
@@ -654,103 +653,92 @@
     const voiceBtn = document.getElementById('chatVoiceBtn');
     const voiceStatus = document.getElementById('voiceStatus');
     
-    // -------------------- BUILD COMPLETE FEATURE DATABASE --------------------
-    // All individual tools (the ones inside the main grid + AI tools)
+    // All individual tools (exactly as in your app)
     const allIndividualTools = [
-        { id: 'calculator', name: 'Advanced Calculator', keywords: ['calculator', 'calc', 'math', 'sin', 'cos', 'tan', 'log', 'sqrt', 'scientific'] },
-        { id: 'password', name: 'Password Generator', keywords: ['password', 'generate password', 'secure password', 'random password'] },
-        { id: 'wordcount', name: 'Word Counter', keywords: ['word count', 'character count', 'reading time', 'speaking time'] },
-        { id: 'caseconverter', name: 'Case Converter', keywords: ['case converter', 'uppercase', 'lowercase', 'title case'] },
-        { id: 'colorpicker', name: 'Color Picker', keywords: ['color picker', 'pick color', 'hex', 'rgb', 'hsl'] },
-        { id: 'unitconverter', name: 'Unit Converter', keywords: ['unit converter', 'convert length', 'mass', 'volume', 'temperature', 'speed'] },
-        { id: 'stopwatch', name: 'Stopwatch', keywords: ['stopwatch', 'lap timer', 'time elapsed'] },
-        { id: 'qrcode', name: 'QR Code Generator', keywords: ['qr code', 'generate qr', 'qr generator'] },
-        { id: 'bmi', name: 'BMI Calculator', keywords: ['bmi', 'body mass index', 'weight', 'height'] },
-        { id: 'random', name: 'Random Number Generator', keywords: ['random number', 'random generator', 'pick random'] },
-        { id: 'countdown', name: 'Countdown Timer', keywords: ['countdown', 'timer', 'set timer'] },
-        { id: 'datediff', name: 'Date Difference', keywords: ['date difference', 'days between dates', 'weekdays'] },
-        { id: 'base64', name: 'Base64 Encoder/Decoder', keywords: ['base64', 'encode base64', 'decode base64'] },
-        { id: 'urlencode', name: 'URL Encode/Decode', keywords: ['url encode', 'url decode', 'encode uri'] },
-        { id: 'jsonformat', name: 'JSON Formatter', keywords: ['json', 'json formatter', 'pretty print'] },
-        { id: 'lorem', name: 'Lorem Ipsum Generator', keywords: ['lorem ipsum', 'placeholder text', 'dummy text'] },
-        { id: 'currency', name: 'Currency Converter', keywords: ['currency converter', 'exchange rate', 'convert money'] },
-        { id: 'percentcalc', name: 'Percentage Calculator', keywords: ['percentage', 'percent', 'percentage change'] },
-        { id: 'agecalc', name: 'Age Calculator', keywords: ['age calculator', 'calculate age', 'birthday'] },
-        { id: 'binhex', name: 'Binary/Hex/Decimal/Octal Converter', keywords: ['binary', 'hex', 'octal', 'decimal', 'base conversion'] },
-        { id: 'roman', name: 'Roman Numeral Converter', keywords: ['roman numeral', 'convert roman', 'roman to number'] },
-        { id: 'tipcalc', name: 'Tip Calculator', keywords: ['tip calculator', 'split bill', 'tip'] },
-        { id: 'worldclock', name: 'World Clock', keywords: ['world clock', 'time zone', 'current time'] },
-        { id: 'dice', name: 'Dice Roller', keywords: ['dice', 'roll dice', 'd6', 'd20'] },
-        { id: 'coin', name: 'Coin Flip', keywords: ['coin flip', 'flip coin', 'heads tails'] },
-        { id: 'joke', name: 'Joke Generator', keywords: ['joke', 'funny', 'laugh', 'humor'] },
-        { id: 'ip', name: 'IP Lookup', keywords: ['ip address', 'ip lookup', 'geolocation', 'my ip'] },
-        { id: 'ai_paraphraser', name: 'AI Paraphraser', keywords: ['paraphrase', 'rewrite', 'rephrase'] },
-        { id: 'ai_grammar', name: 'Grammar & Spell Check', keywords: ['grammar check', 'spell check', 'fix grammar'] },
-        { id: 'ai_summarizer', name: 'AI Summarizer', keywords: ['summarize', 'text summary', 'summarizer'] },
-        { id: 'ai_sentiment', name: 'Sentiment Analysis', keywords: ['sentiment', 'emotion', 'positive negative neutral'] },
-        { id: 'ai_keywords', name: 'Keyword Extractor', keywords: ['keywords', 'extract keywords', 'important words'] },
-        { id: 'ai_readability', name: 'Readability Checker', keywords: ['readability', 'flesch', 'reading ease'] },
-        { id: 'premium_ai', name: 'AI Text Enhancer', keywords: ['enhance text', 'improve writing', 'polish', 'rewrite professional'] }
+        { id: 'calculator', name: 'Advanced Calculator', keywords: ['calculator','calc','math','sin','cos','tan','log','sqrt'] },
+        { id: 'password', name: 'Password Generator', keywords: ['password','generate password','secure password'] },
+        { id: 'wordcount', name: 'Word Counter', keywords: ['word count','character count','reading time'] },
+        { id: 'caseconverter', name: 'Case Converter', keywords: ['case converter','uppercase','lowercase','title case'] },
+        { id: 'colorpicker', name: 'Color Picker', keywords: ['color picker','pick color','hex','rgb'] },
+        { id: 'unitconverter', name: 'Unit Converter', keywords: ['unit converter','convert length','mass','volume','temperature'] },
+        { id: 'stopwatch', name: 'Stopwatch', keywords: ['stopwatch','lap timer','time elapsed'] },
+        { id: 'qrcode', name: 'QR Code Generator', keywords: ['qr code','generate qr','qr generator'] },
+        { id: 'bmi', name: 'BMI Calculator', keywords: ['bmi','body mass index','weight','height'] },
+        { id: 'random', name: 'Random Number Generator', keywords: ['random number','random generator','pick random'] },
+        { id: 'countdown', name: 'Countdown Timer', keywords: ['countdown','timer','set timer'] },
+        { id: 'datediff', name: 'Date Difference', keywords: ['date difference','days between dates','weekdays'] },
+        { id: 'base64', name: 'Base64 Encoder/Decoder', keywords: ['base64','encode base64','decode base64'] },
+        { id: 'urlencode', name: 'URL Encode/Decode', keywords: ['url encode','url decode','encode uri'] },
+        { id: 'jsonformat', name: 'JSON Formatter', keywords: ['json','json formatter','pretty print'] },
+        { id: 'lorem', name: 'Lorem Ipsum Generator', keywords: ['lorem ipsum','placeholder text','dummy text'] },
+        { id: 'currency', name: 'Currency Converter', keywords: ['currency converter','exchange rate','convert money'] },
+        { id: 'percentcalc', name: 'Percentage Calculator', keywords: ['percentage','percent','percentage change'] },
+        { id: 'agecalc', name: 'Age Calculator', keywords: ['age calculator','calculate age','birthday'] },
+        { id: 'binhex', name: 'Binary/Hex/Decimal/Octal Converter', keywords: ['binary','hex','octal','decimal'] },
+        { id: 'roman', name: 'Roman Numeral Converter', keywords: ['roman numeral','convert roman'] },
+        { id: 'tipcalc', name: 'Tip Calculator', keywords: ['tip calculator','split bill','tip'] },
+        { id: 'worldclock', name: 'World Clock', keywords: ['world clock','time zone','current time'] },
+        { id: 'dice', name: 'Dice Roller', keywords: ['dice','roll dice','d6','d20'] },
+        { id: 'coin', name: 'Coin Flip', keywords: ['coin flip','flip coin','heads tails'] },
+        { id: 'joke', name: 'Joke Generator', keywords: ['joke','funny','laugh','humor'] },
+        { id: 'ip', name: 'IP Lookup', keywords: ['ip address','ip lookup','geolocation','my ip'] },
+        { id: 'ai_paraphraser', name: 'AI Paraphraser', keywords: ['paraphrase','rewrite','rephrase'] },
+        { id: 'ai_grammar', name: 'Grammar & Spell Check', keywords: ['grammar check','spell check','fix grammar'] },
+        { id: 'ai_summarizer', name: 'AI Summarizer', keywords: ['summarize','text summary','summarizer'] },
+        { id: 'ai_sentiment', name: 'Sentiment Analysis', keywords: ['sentiment','emotion'] },
+        { id: 'ai_keywords', name: 'Keyword Extractor', keywords: ['keywords','extract keywords'] },
+        { id: 'ai_readability', name: 'Readability Checker', keywords: ['readability','flesch'] },
+        { id: 'premium_ai', name: 'AI Text Enhancer', keywords: ['enhance text','improve writing','polish'] }
     ];
     
-    // All major category overlays (the big buttons)
+    // All category overlays (the big buttons)
     const categoryOverlays = [
-        { id: 'convert_overlay', name: 'CONVERT Tools (PDF, Word, Image, Video)', keywords: ['convert', 'pdf', 'word', 'image', 'video', 'audio', 'editor', 'converter', 'pdf tools', 'edit pdf', 'word editor', 'image editor', 'file converter', 'audio converter', 'video converter'], action: 'openConvertOverlay' },
-        { id: 'browsers_overlay', name: 'Browsers (In‑App Web Browser)', keywords: ['browser', 'web browser', 'surf web', 'open website', 'browse', 'internet', 'surf internet', 'internal tab'], action: 'openBrowsersOverlay' },
-        { id: 'aitranslator_overlay', name: 'All AI Translator (Google Translate, Lernix, Reverso, etc.)', keywords: ['translate', 'translation', 'google translate', 'language translator', 'translator', 'lernix', 'reverso', 'microsoft translator'], action: 'openAllAiTranslatorOverlay' },
-        { id: 'games_overlay', name: 'GAMES (Steam, Roblox, Poki, etc.)', keywords: ['games', 'gaming', 'play games', 'steam', 'roblox', 'minecraft', 'fortnite', 'poki', 'crazygames'], action: 'openGamesOverlay' },
-        { id: 'money_overlay', name: 'MONEY & INVESTMENTS (Insurance, Loans, Crypto)', keywords: ['money', 'investments', 'insurance', 'loan', 'finance', 'crypto', 'trading', 'stocks'], action: 'openMoneyOverlay' },
-        { id: 'remote_overlay', name: 'RDP, VPN & Web Preview Tools', keywords: ['rdp', 'vpn', 'remote desktop', 'proxy', 'website preview', 'responsive preview'], action: 'openRemoteToolsOverlay' },
-        { id: 'online_overlay', name: 'Online Tools (Canva, Remove.bg, SmallPDF, etc.)', keywords: ['online tools', 'canva', 'remove bg', 'smallpdf', 'ilovepdf', 'grammarly', 'quillbot', 'deepl', 'codepen'], action: 'openOnlineOverlay' },
-        { id: 'imagine_overlay', name: 'IMAGINE (25 Unique Tools)', keywords: ['imagine', 'ocr', 'morse', 'uuid', 'hash', 'unix timestamp', 'csv to json', 'quadratic', 'palindrome'], action: 'openImagineOverlay' },
-        { id: 'shortener_overlay', name: 'URL Shorteners', keywords: ['url shortener', 'tinyurl', 'bitly', 'short link', 'shorten url'], action: 'openShortenerOverlay' },
-        { id: 'other_tools_overlay', name: 'All Other Tools (Notes, Weather, Todo, Translator, Wikipedia)', keywords: ['notes', 'weather', 'todo', 'random fact', 'password strength', 'wikipedia', 'other tools', 'translate text', 'quick notes'], action: 'openOtherTools' },
-        { id: 'ai_hub_overlay', name: 'AI Hub (ChatGPT, Gemini, Claude, etc.)', keywords: ['ai', 'chatgpt', 'gemini', 'claude', 'copilot', 'midjourney', 'dall e', 'artificial intelligence', 'ai tools'], action: 'openAiTools' },
-        { id: 'media_overlay', name: 'MEDIA & Video Platforms (Netflix, YouTube, Twitch)', keywords: ['media', 'video', 'netflix', 'youtube', 'twitch', 'prime video', 'disney+', 'vimeo', 'dailymotion'], action: 'openMediaOverlay' },
-        { id: 'sites_overlay', name: 'Popular Websites (Reddit, Pinterest, WhatsApp Web)', keywords: ['popular sites', 'reddit', 'pinterest', 'whatsapp web', 'telegram', 'signal', 'soundcloud', 'deviantart'], action: 'openSitesOverlay' },
-        { id: 'tvradio_overlay', name: 'TV / RADIO (Free TV channels & Radio stations)', keywords: ['tv', 'radio', 'live tv', 'radio stations', 'tunein', 'iheartradio', 'pluto tv', 'samsung tv', 'free tv'], action: 'openTvRadioOverlay' },
-        { id: 'free_emails_overlay', name: 'Free Email Services (ProtonMail, Tutanota, etc.)', keywords: ['free email', 'protonmail', 'tutanota', 'mail.com', 'gmx', 'yandex mail', 'aol mail'], action: 'openFreeEmailsOverlay' },
-        { id: 'health_sports_overlay', name: 'Health and Sports (MyFitnessPal, Bodybuilding, Swimming)', keywords: ['health', 'sports', 'fitness', 'myfitnesspal', 'bodybuilding', 'swimming', 'yoga', 'weightlifting', 'running'], action: 'openHealthSportsOverlay' },
-        { id: 'misc_overlay', name: 'Miscellaneous (Music, Dating, Art)', keywords: ['music', 'dating', 'art', 'last.fm', 'tinder', 'bumble', 'deviantart', 'mixcloud'], action: 'openMiscOverlay' },
-        { id: 'travel_books_overlay', name: 'Travel and Books (Project Gutenberg, Skyscanner)', keywords: ['travel', 'books', 'flights', 'gutenberg', 'open library', 'skyscanner', 'rome2rio', 'lonely planet'], action: 'openTravelBooksOverlay' },
-        { id: 'movies_series_overlay', name: 'Movies, Series and Shows (Free streaming)', keywords: ['movies', 'series', 'shows', 'popcornflix', 'tubi', 'pluto tv', 'crackle', 'free movies'], action: 'openMoviesSeriesOverlay' },
-        { id: 'culture_fashion_overlay', name: 'Culture and Fashion (Vogue, ArtStation)', keywords: ['fashion', 'culture', 'vogue', 'artstation', 'harper\'s bazaar', 'polygon'], action: 'openCultureFashionOverlay' },
-        { id: 'jobs_overlay', name: 'Jobs (Indeed, LinkedIn, Upwork)', keywords: ['jobs', 'career', 'indeed', 'linkedin', 'upwork', 'fiverr', 'remote jobs'], action: 'openJobsOverlay' },
-        { id: 'tech_overlay', name: 'TECH (TechCrunch, The Verge, GSMArena)', keywords: ['tech', 'technology', 'techcrunch', 'the verge', 'cnet', 'android', 'gsmarena'], action: 'openTechOverlay' },
-        { id: 'building_home_overlay', name: 'Building & Home Life (DIY, Houzz)', keywords: ['home', 'diy', 'houzz', 'family handyman', 'gardening', 'renovation'], action: 'openBuildingHomeOverlay' },
-        { id: 'surf_internet_overlay', name: 'SURF Internet (Speedtest, IP tools, DNS)', keywords: ['surf internet', 'speed test', 'whatismyip', 'dns checker', 'ping', 'network tools'], action: 'openSurfInternetOverlay' },
-        { id: 'cooking_kitchen_overlay', name: 'Cooking & Kitchen (Recipes, Allrecipes)', keywords: ['cooking', 'kitchen', 'recipes', 'allrecipes', 'yummly', 'food network', 'tasty'], action: 'openCookingKitchenOverlay' },
-        { id: 'wilderness_oceans_overlay', name: 'Wilderness and Oceans (National Geographic, WWF)', keywords: ['wildlife', 'oceans', 'nature', 'national geographic', 'wwf', 'inaturalist'], action: 'openWildernessOceansOverlay' },
-        { id: 'crypto_overlay', name: 'Crypto (CoinMarketCap, Binance, Coinbase)', keywords: ['crypto', 'bitcoin', 'ethereum', 'coinmarketcap', 'binance', 'coinbase', 'cryptocurrency'], action: 'openCryptoOverlay' },
-        { id: 'news_overlay', name: 'NEWS (BBC, CNN, Reuters)', keywords: ['news', 'bbc', 'cnn', 'reuters', 'al jazeera', 'guardian', 'world news'], action: 'openNewsOverlay' }
+        { action: 'openConvertOverlay', name: 'CONVERT Tools (PDF, Word, Image, Video)', keywords: ['convert','pdf','word','image','video','audio','editor','converter','pdf tools','edit pdf'] },
+        { action: 'openBrowsersOverlay', name: 'Browsers (In‑App Web Browser)', keywords: ['browser','web browser','surf web','open website'] },
+        { action: 'openAllAiTranslatorOverlay', name: 'All AI Translator (Google Translate, Lernix, Reverso)', keywords: ['translate','translation','google translate','language translator'] },
+        { action: 'openGamesOverlay', name: 'GAMES (Steam, Roblox, Poki, etc.)', keywords: ['games','gaming','play games','steam','roblox'] },
+        { action: 'openMoneyOverlay', name: 'MONEY & INVESTMENTS (Insurance, Loans, Crypto)', keywords: ['money','investments','insurance','loan','finance','crypto'] },
+        { action: 'openRemoteToolsOverlay', name: 'RDP, VPN & Web Preview Tools', keywords: ['rdp','vpn','remote desktop','proxy','website preview'] },
+        { action: 'openOnlineOverlay', name: 'Online Tools (Canva, Remove.bg, SmallPDF, etc.)', keywords: ['online tools','canva','remove bg','smallpdf','ilovepdf','grammarly','quillbot'] },
+        { action: 'openImagineOverlay', name: 'IMAGINE (25 Unique Tools)', keywords: ['imagine','ocr','morse','uuid','hash','unix timestamp'] },
+        { action: 'openShortenerOverlay', name: 'URL Shorteners', keywords: ['url shortener','tinyurl','bitly','short link'] },
+        { action: 'openOtherTools', name: 'All Other Tools (Notes, Weather, Todo, Translator, Wikipedia)', keywords: ['notes','weather','todo','random fact','password strength','wikipedia'] },
+        { action: 'openAiTools', name: 'AI Hub (ChatGPT, Gemini, Claude, etc.)', keywords: ['ai','chatgpt','gemini','claude','copilot','midjourney','dall e'] },
+        { action: 'openMediaOverlay', name: 'MEDIA & Video Platforms (Netflix, YouTube, Twitch)', keywords: ['media','video','netflix','youtube','twitch'] },
+        { action: 'openSitesOverlay', name: 'Popular Websites (Reddit, Pinterest, WhatsApp Web)', keywords: ['popular sites','reddit','pinterest','whatsapp web'] },
+        { action: 'openTvRadioOverlay', name: 'TV / RADIO (Free TV channels & Radio stations)', keywords: ['tv','radio','live tv','radio stations','tunein'] },
+        { action: 'openFreeEmailsOverlay', name: 'Free Email Services', keywords: ['free email','protonmail','tutanota'] },
+        { action: 'openHealthSportsOverlay', name: 'Health and Sports', keywords: ['health','sports','fitness','myfitnesspal'] },
+        { action: 'openMiscOverlay', name: 'Miscellaneous (Music, Dating, Art)', keywords: ['music','dating','art'] },
+        { action: 'openTravelBooksOverlay', name: 'Travel and Books', keywords: ['travel','books','flights'] },
+        { action: 'openMoviesSeriesOverlay', name: 'Movies, Series and Shows', keywords: ['movies','series','shows'] },
+        { action: 'openCultureFashionOverlay', name: 'Culture and Fashion', keywords: ['fashion','culture','vogue'] },
+        { action: 'openJobsOverlay', name: 'Jobs', keywords: ['jobs','career','indeed'] },
+        { action: 'openTechOverlay', name: 'TECH', keywords: ['tech','technology','techcrunch'] },
+        { action: 'openBuildingHomeOverlay', name: 'Building & Home Life', keywords: ['home','diy','houzz'] },
+        { action: 'openSurfInternetOverlay', name: 'SURF Internet (Speedtest, IP tools)', keywords: ['surf internet','speed test','whatismyip'] },
+        { action: 'openCookingKitchenOverlay', name: 'Cooking & Kitchen', keywords: ['cooking','kitchen','recipes'] },
+        { action: 'openWildernessOceansOverlay', name: 'Wilderness and Oceans', keywords: ['wildlife','oceans','nature'] },
+        { action: 'openCryptoOverlay', name: 'Crypto', keywords: ['crypto','bitcoin','ethereum'] },
+        { action: 'openNewsOverlay', name: 'NEWS', keywords: ['news','bbc','cnn'] }
     ];
     
-    // Combine everything into a single searchable array
     const allFeatures = [...allIndividualTools, ...categoryOverlays];
     
-    // Helper: get all tool names for listing
-    function getAllFeatureNames() {
-        return allFeatures.map(f => f.name).join(', ');
-    }
-    
-    // Intelligent search: returns matches with scores
     function searchFeatures(query) {
         const q = query.toLowerCase().trim();
         if (!q) return [];
         const results = [];
         for (const feat of allFeatures) {
             let score = 0;
-            // name match (exact or partial)
             if (feat.name.toLowerCase().includes(q)) score += 15;
             if (q.includes(feat.name.toLowerCase())) score += 10;
-            // keyword matches
             if (feat.keywords) {
                 for (const kw of feat.keywords) {
                     if (q.includes(kw.toLowerCase())) score += 5;
                     if (kw.toLowerCase().includes(q)) score += 3;
                 }
             }
-            // special: single letter – show all matches that start with that letter or contain
             if (q.length === 1) {
                 if (feat.name.toLowerCase().startsWith(q)) score += 2;
                 if (feat.name.toLowerCase().includes(q)) score += 1;
@@ -758,148 +746,109 @@
             if (score > 0) results.push({ ...feat, score });
         }
         results.sort((a,b) => b.score - a.score);
-        return results.slice(0, 12); // limit to 12
+        return results.slice(0, 12);
     }
     
-    // Generate HTML buttons for a feature
+    // Generate button with a data-command attribute (no inline onclick)
     function featureToButton(feat) {
-        if (feat.id) {
-            // individual tool
-            return `<button class="tool-btn" onclick="selectTool('${feat.id}'); closeChatPanel();" style="margin:4px 6px 4px 0;">🔧 ${feat.name}</button>`;
-        } else if (feat.action && window[feat.action]) {
-            // category overlay
-            return `<button class="tool-btn" onclick="${feat.action}(); closeChatPanel();" style="margin:4px 6px 4px 0;">📂 ${feat.name}</button>`;
-        }
-        return '';
+        let command = '';
+        if (feat.id) command = `tool:${feat.id}`;
+        else if (feat.action) command = `action:${feat.action}`;
+        return `<button class="chat-btn" data-command="${command}">🔧 ${feat.name}</button>`;
     }
     
-    function closeChatPanel() {
+    // Global click handler for chat buttons (works for dynamically added buttons)
+    function handleChatButtonClick(e) {
+        const btn = e.target.closest('.chat-btn');
+        if (!btn) return;
+        const cmd = btn.getAttribute('data-command');
+        if (!cmd) return;
+        // Close chat panel first
         const panel = document.getElementById('chatPanel');
-        if (panel) panel.classList.remove('active');
+        if (panel && panel.classList.contains('active')) panel.classList.remove('active');
+        // Execute command
+        if (cmd.startsWith('tool:')) {
+            const toolId = cmd.substring(5);
+            if (typeof window.selectTool === 'function') window.selectTool(toolId);
+        } else if (cmd.startsWith('action:')) {
+            const actionName = cmd.substring(7);
+            if (typeof window[actionName] === 'function') window[actionName]();
+        }
+        // Scroll to tool panel for better UX
+        const toolPanel = document.getElementById('toolPanel');
+        if (toolPanel) toolPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+    document.addEventListener('click', handleChatButtonClick);
     
-    // Main AI response generator
     function generateResponse(userMsg) {
         const q = userMsg.toLowerCase().trim();
-        
-        // Greeting
-        if (q.match(/^(hi|hello|hey|greetings|sup|good morning|good afternoon|good evening)$/i)) {
-            const greetings = [
-                "👋 Hello! I know **everything** inside MultiTool Pro. Just tell me what you need – a tool, a category, a site... I'll give you clickable buttons to open it instantly!",
-                "Hey there! I'm your assistant that knows all 100+ tools, converters, games, AI hubs, and categories. Try typing 'pdf', 'games', 'weather', or even a single letter like 'p'.",
-                "Greetings! MultiTool Pro has **all tools** you'll ever need. Ask me about anything – from 'calculator' to 'movie streaming' to 'url shortener'."
-            ];
-            return greetings[Math.floor(Math.random() * greetings.length)];
+        if (q.match(/^(hi|hello|hey|greetings|good morning|good afternoon|good evening)$/i)) {
+            return "👋 Hello! I know **every single tool** in MultiTool Pro. Just tell me what you need – a tool, a category, a site... I'll give you working buttons. Try `pdf`, `games`, `weather`, or even a letter like `p`.";
         }
-        
-        // If user just typed a single letter or very short query, return all matches
         if (q.length <= 2) {
             const matches = searchFeatures(q);
-            if (matches.length === 0) {
-                return `🔍 I didn't find any tool matching "${q}". Try a longer word like "pdf", "game", "convert", or browse the main page.`;
-            }
-            let response = `✨ **${matches.length} result(s) for "${q}":**\n\n`;
-            for (let m of matches) {
-                response += featureToButton(m);
-            }
-            response += `\n\n💡 You can also click the big category buttons on the main page.`;
+            if (matches.length === 0) return `🔍 No results for "${q}". Try a longer word like "pdf" or "calculator".`;
+            let response = `✨ **Found ${matches.length} result(s) for "${q}":**\n\n`;
+            for (let m of matches) response += featureToButton(m);
+            response += `\n\n💡 You can also use the main search bar or big category buttons.`;
             return response;
         }
-        
-        // Search for matches
         const matches = searchFeatures(q);
         if (matches.length > 0) {
             let response = `🔍 **Found ${matches.length} match(es) for "${userMsg}":**\n\n`;
-            for (let m of matches) {
-                response += featureToButton(m);
-            }
-            // Add a helpful note
-            if (matches.length === 1 && matches[0].name.toLowerCase().includes('convert')) {
-                response += `\n\n📄 The CONVERT section includes PDF tools, Word editors, image editors, video/audio converters, and much more.`;
-            }
-            if (q.includes('pdf')) {
-                response += `\n\n📄 **PDF tools** are inside the **CONVERT** overlay – click the button above.`;
-            }
-            if (q.includes('weather') || q.includes('temperature')) {
-                response += `\n\n🌤️ **Weather** tool is inside "All other tools" (the 🧰 button on main page).`;
-            }
+            for (let m of matches) response += featureToButton(m);
+            if (q.includes('pdf')) response += `\n\n📄 **PDF tools** are inside the **CONVERT** overlay – click the button above.`;
+            if (q.includes('weather')) response += `\n\n🌤️ **Weather** tool is inside "All other tools" (the 🧰 button on main page).`;
             return response;
         }
-        
-        // No matches – suggest popular categories
-        return `🤔 I couldn't find a direct match for "${userMsg}". But MultiTool Pro has **hundreds of tools and sites**!\n\nTry these popular categories:\n` +
-               `<button class="tool-btn" onclick="openConvertOverlay(); closeChatPanel();">🔄 CONVERT Tools (PDF, Word, Image)</button>\n` +
-               `<button class="tool-btn" onclick="openGamesOverlay(); closeChatPanel();">🎮 GAMES</button>\n` +
-               `<button class="tool-btn" onclick="openOnlineOverlay(); closeChatPanel();">🌐 Online Tools</button>\n` +
-               `<button class="tool-btn" onclick="openAiTools(); closeChatPanel();">🤖 AI Hub</button>\n` +
-               `<button class="tool-btn" onclick="openBrowsersOverlay(); closeChatPanel();">🌐 Browsers</button>\n` +
-               `\nOr just ask me for "calculator", "qr code", "world clock", "translate", "news", "tv", etc.`;
+        return `🤔 I couldn't find a direct match for "${userMsg}". But MultiTool Pro has **ALL tools imaginable**! Try these:\n\n` +
+               `<button class="chat-btn" data-command="action:openConvertOverlay">🔄 CONVERT Tools (PDF, Word, Image)</button>\n` +
+               `<button class="chat-btn" data-command="action:openGamesOverlay">🎮 GAMES</button>\n` +
+               `<button class="chat-btn" data-command="action:openOnlineOverlay">🌐 Online Tools</button>\n` +
+               `<button class="chat-btn" data-command="action:openAiTools">🤖 AI Hub</button>\n` +
+               `<button class="chat-btn" data-command="action:openBrowsersOverlay">🌐 Browsers</button>\n` +
+               `\nOr just ask for "calculator", "qr code", "world clock", "translate", "news", "tv", etc.`;
     }
     
-    // ========== Chat UI logic ==========
-    function openChat() {
-        chatPanel.classList.add('active');
-        chatPanel.style.display = 'flex';
-        isChatOpen = true;
-    }
-    function closeChat() {
-        chatPanel.classList.remove('active');
-        chatPanel.style.display = 'none';
-        isChatOpen = false;
-        if (isFullscreen) toggleFullscreenMode();
-    }
-    chatButton.addEventListener('click', () => {
-        if (chatPanel.classList.contains('active')) closeChat();
-        else openChat();
-    });
+    // Chat UI logic
+    function openChat() { chatPanel.classList.add('active'); chatPanel.style.display = 'flex'; isChatOpen = true; }
+    function closeChat() { chatPanel.classList.remove('active'); chatPanel.style.display = 'none'; isChatOpen = false; if (isFullscreen) toggleFullscreenMode(); }
+    chatButton.addEventListener('click', () => { if (chatPanel.classList.contains('active')) closeChat(); else openChat(); });
     chatCloseBtn.addEventListener('click', closeChat);
     chatFullscreenBtn.addEventListener('click', toggleFullscreenMode);
     function toggleFullscreenMode() {
         isFullscreen = !isFullscreen;
-        if (isFullscreen) {
-            chatPanel.classList.add('fullscreen');
-            chatFullscreenBtn.textContent = '🗖';
-        } else {
-            chatPanel.classList.remove('fullscreen');
-            chatFullscreenBtn.textContent = '⛶';
-        }
+        if (isFullscreen) { chatPanel.classList.add('fullscreen'); chatFullscreenBtn.textContent = '🗖'; }
+        else { chatPanel.classList.remove('fullscreen'); chatFullscreenBtn.textContent = '⛶'; }
     }
-    
     function addMessage(text, isUser) {
         const div = document.createElement('div');
         div.className = `chat-message ${isUser ? 'user' : 'bot'}`;
-        if (!isUser) {
-            // allow HTML buttons
-            div.innerHTML = text;
-        } else {
-            div.textContent = text;
-        }
+        if (!isUser) div.innerHTML = text;
+        else div.textContent = text;
         chatMessages.appendChild(div);
         chatMessages.scrollTop = chatMessages.scrollHeight;
         return div;
     }
-    
-    async function getAIResponseWithDelay(userMessage) {
+    async function getAIResponseWithDelay(msg) {
         await new Promise(r => setTimeout(r, 600 + Math.random() * 800));
-        return generateResponse(userMessage);
+        return generateResponse(msg);
     }
-    
     async function sendUserMessage() {
-        let message = chatInput.value.trim();
-        if (!message) return;
-        addMessage(message, true);
+        let msg = chatInput.value.trim();
+        if (!msg) return;
+        addMessage(msg, true);
         chatInput.value = '';
         const thinkingDiv = addMessage('🤔 Thinking...', false);
         try {
-            const aiReply = await getAIResponseWithDelay(message);
+            const reply = await getAIResponseWithDelay(msg);
             thinkingDiv.remove();
-            addMessage(aiReply, false);
+            addMessage(reply, false);
         } catch (err) {
             thinkingDiv.remove();
-            addMessage("⚠️ Sorry, I encountered an error. Please try again.", false);
+            addMessage("⚠️ Sorry, an error occurred. Please try again.", false);
         }
     }
-    
     chatSendBtn.addEventListener('click', sendUserMessage);
     chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendUserMessage(); });
     
@@ -910,14 +859,8 @@
         recognition.continuous = false;
         recognition.interimResults = false;
         recognition.lang = 'en-US';
-        recognition.onstart = () => {
-            voiceStatus.textContent = '🎙️ Listening... speak now';
-            voiceBtn.style.background = '#ff5555';
-        };
-        recognition.onend = () => {
-            voiceStatus.textContent = '';
-            voiceBtn.style.background = '#4c9aff';
-        };
+        recognition.onstart = () => { voiceStatus.textContent = '🎙️ Listening...'; voiceBtn.style.background = '#ff5555'; };
+        recognition.onend = () => { voiceStatus.textContent = ''; voiceBtn.style.background = '#4c9aff'; };
         recognition.onresult = (event) => {
             const transcript = event.results[0][0].transcript;
             chatInput.value = transcript;
@@ -925,17 +868,10 @@
             setTimeout(() => { if(voiceStatus) voiceStatus.textContent = ''; }, 2000);
             sendUserMessage();
         };
-        recognition.onerror = (e) => {
-            voiceStatus.textContent = '❌ Voice error: ' + e.error;
-            voiceBtn.style.background = '#4c9aff';
-            setTimeout(() => { if(voiceStatus) voiceStatus.textContent = ''; }, 2000);
-        };
-        voiceBtn.addEventListener('click', () => {
-            if (recognition) recognition.start();
-        });
+        recognition.onerror = (e) => { voiceStatus.textContent = '❌ Voice error'; voiceBtn.style.background = '#4c9aff'; setTimeout(() => { if(voiceStatus) voiceStatus.textContent = ''; }, 2000); };
+        voiceBtn.addEventListener('click', () => { if (recognition) recognition.start(); });
     } else {
         voiceBtn.disabled = true;
-        voiceBtn.title = 'Voice not supported in this browser';
         voiceStatus.textContent = 'No voice support';
     }
 })();
