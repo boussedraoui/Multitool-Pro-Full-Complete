@@ -282,6 +282,61 @@
         .gt-protection-popup .gt-message { font-size: 1rem; line-height: 1.6; margin-bottom: 24px; }
         .gt-btn { padding: 12px 26px; font-size: 1rem; }
         .gt-btn-return-red { width: 26px; height: 26px; background: red !important; padding: 0 !important; margin: 0 !important; font-size: 0 !important; border-radius: 6px; display: inline-block; cursor: pointer; }
+        
+        /* ===== RESTORED BOTTOM SLIDING NEWS TICKER ===== */
+        .ultra-ticker-wrapper {
+            width: 100%;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            border-top: 3px solid #ffd966;
+            border-bottom: 3px solid #ff884d;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 -8px 30px rgba(0,0,0,0.3);
+            margin-top: 0;
+            z-index: 9999;
+        }
+        .ticker-container {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            padding: 14px 0;
+        }
+        .ticker-content {
+            display: inline-block;
+            animation: smoothScroll 60s linear infinite;
+            font-size: 1.3rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .ticker-content span {
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .ticker-icon {
+            font-size: 1.8rem;
+            margin: 0 15px;
+            filter: drop-shadow(0 0 5px gold);
+        }
+        .ticker-text {
+            color: #ffffff !important;
+            background: none !important;
+            -webkit-background-clip: unset !important;
+            background-clip: unset !important;
+            text-shadow: 0 0 8px rgba(0,0,0,0.8), 0 0 4px #ffffff, 0 0 2px #000000;
+            font-weight: 800;
+            margin-right: 40px;
+            white-space: nowrap;
+            font-size: 1.4rem;
+        }
+        @keyframes smoothScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .ticker-content:hover {
+            animation-play-state: paused;
+        }
     </style>
 </head>
 <body>
@@ -389,7 +444,7 @@
 </footer>
 <div id="toast" class="toast"></div>
 
-<!-- ========== NEWS TICKER ========== -->
+<!-- ========== BOTTOM SLIDING NEWS TICKER (RESTORED) ========== -->
 <div class="ultra-ticker-wrapper">
     <div class="ticker-container">
         <div class="ticker-content">
@@ -405,6 +460,7 @@
             <span class="ticker-text">⚡ NO MORE DOWNLOADS – WE HAVE IT ALL, RIGHT HERE ⚡</span>
             <span class="ticker-icon">🌍</span>
             <span class="ticker-text">💪 STAY AHEAD WITH OUR EVER‑GROWING TOOLKIT 💪</span>
+            <!-- duplicate for seamless loop -->
             <span class="ticker-icon">🚀</span>
             <span class="ticker-text">✨ MULTITOOL PRO IS ALWAYS UPDATING ✨</span>
             <span class="ticker-icon">⭐</span>
@@ -421,7 +477,7 @@
     </div>
 </div>
 
-<!-- ========== SMART CHATBOT (FIXED: WORKING BUTTONS, CLOSES CHAT, NO NUMBERS) ========== -->
+<!-- ========== SMART CHATBOT (FIXED: WORKING BUTTONS) ========== -->
 <div id="smartChatWidget" class="chat-widget">
     <div class="chat-button" id="chatButton">
         💬 <span class="chat-badge">AI</span>
@@ -749,7 +805,6 @@
         return results.slice(0, 12);
     }
     
-    // Generate button with a data-command attribute (no inline onclick)
     function featureToButton(feat) {
         let command = '';
         if (feat.id) command = `tool:${feat.id}`;
@@ -757,7 +812,6 @@
         return `<button class="chat-btn" data-command="${command}">🔧 ${feat.name}</button>`;
     }
     
-    // Global click handler for chat buttons (works for dynamically added buttons)
     function handleChatButtonClick(e) {
         const btn = e.target.closest('.chat-btn');
         if (!btn) return;
@@ -877,6 +931,7 @@
 })();
 </script>
 
+<!-- ========== ORIGINAL SCRIPT (all existing functions preserved – only the chatbot replaced) ========== -->
 <script>
 // ==================== ORIGINAL SCRIPT (all existing functions preserved – only the chatbot replaced) ====================
 (function(){
@@ -958,7 +1013,7 @@
     function renderMediaGrid(){ const container = document.getElementById('mediaGrid'); const mediaSites = [ { name: 'Dailymotion', icon: '📹', url: 'https://www.dailymotion.com' }, { name: 'Vimeo', icon: '🎬', url: 'https://vimeo.com' }, { name: 'Twitch', icon: '🎮', url: 'https://www.twitch.tv' }, { name: 'TikTok', icon: '🎵', url: 'https://www.tiktok.com' }, { name: 'Instagram Reels', icon: '📱', url: 'https://www.instagram.com/reels' }, { name: 'Facebook Watch', icon: '📘', url: 'https://www.facebook.com/watch' }, { name: 'Netflix', icon: '📺', url: 'https://www.netflix.com' }, { name: 'Amazon Prime Video', icon: '📦', url: 'https://www.primevideo.com' }, { name: 'Disney+', icon: '✨', url: 'https://www.disneyplus.com' }, { name: 'HBO Max', icon: '🎬', url: 'https://www.max.com' }, { name: 'Hulu', icon: '📺', url: 'https://www.hulu.com' }, { name: 'Paramount+', icon: '⭐', url: 'https://www.paramountplus.com' }, { name: 'Peacock', icon: '🦚', url: 'https://www.peacocktv.com' }, { name: 'Apple TV+', icon: '🍎', url: 'https://tv.apple.com' }, { name: 'Crunchyroll', icon: '🍙', url: 'https://www.crunchyroll.com' }, { name: 'Funimation', icon: '🎞️', url: 'https://www.funimation.com' }, { name: 'Viki', icon: '🌏', url: 'https://www.viki.com' }, { name: 'Tubi', icon: '📺', url: 'https://tubitv.com' }, { name: 'Pluto TV', icon: '🪐', url: 'https://pluto.tv' }, { name: 'Plex', icon: '📡', url: 'https://watch.plex.tv' } ]; let html = ''; mediaSites.forEach(site => { html += `<div class="media-card" onclick="window.open('${site.url}', '_blank');"><div style="font-size:2.8rem;">${site.icon}</div><div style="font-weight:700; font-size:1.2rem;">${site.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`; }); container.innerHTML = html; }
     window.openTvRadioOverlay = function(){ document.getElementById('tvRadioOverlay').classList.add('active'); document.getElementById('tvRadioContentArea').innerHTML = ''; };
     window.closeTvRadioOverlay = function(){ document.getElementById('tvRadioOverlay').classList.remove('active'); };
-    const tvChannels = [ { name: 'RedBull TV', icon: '🐂', url: 'https://www.redbull.com/int-en/tv' }, { name: 'Samsung TV Plus', icon: '📺', url: 'https://www.samsungtvplus.com' }, { name: 'Xumo', icon: '📡', url: 'https://www.xumo.tv' }, { name: 'Plex Live TV', icon: '📼', url: 'https://watch.plex.tv/live-tv' }, { name: 'DistroTV', icon: '📀', url: 'https://www.distro.tv' }, { name: 'Amazon Freevee', icon: '🎬', url: 'https://www.amazon.com/Freevee' }, { name: 'Crackle', icon: '🎞️', url: 'https://www.crackle.com' }, { name: 'Vudu Free', icon: '💿', url: 'https://www.vudu.com/content/movies/featured/free' }, { name: 'The Roku Channel', icon: '📼', url: 'https://therokuchannel.roku.com' }, { name: 'BBC iPlayer', icon: '🇬🇧', url: 'https://www.bbc.co.uk/iplayer' }, { name: 'ITVX', icon: '🎥', url: 'https://www.itv.com' }, { name: 'Channel 4', icon: '4️⃣', url: 'https://www.channel4.com' }, { name: 'SBS On Demand', icon: '🇦🇺', url: 'https://www.sbs.com.au/ondemand/' }, { name: 'ABC iview', icon: '🦘', url: 'https://iview.abc.net.au' }, { name: 'NHK World', icon: '🇯🇵', url: 'https://www3.nhk.or.jp/nhkworld/' }, { name: 'France.tv', icon: '🇫🇷', url: 'https://www.france.tv' }, { name: 'ZDF Mediathek', icon: '🇩🇪', url: 'https://www.zdf.de' }, { name: 'RaiPlay', icon: '🇮🇹', url: 'https://www.raiplay.it' }, { name: 'Haystack News', icon: '📰', url: 'https://www.haystack.tv' }, { name: 'GlobeTV', icon: '🌍', url: 'https://globetv.app/' }, { name: 'FreeInterTV', icon: '📶', url: 'http://www.freeintertv.com/' }, { name: 'TabloTV', icon: '💾', url: 'https://www.tablotv.com/' }, { name: 'JustWatch', icon: '🔍', url: 'https://www.justwatch.com' } ];
+    const tvChannels = [ { name: 'RedBull TV', icon: '🐂', url: 'https://www.redbull.com/int-en/tv' }, { name: 'Samsung TV Plus', icon: '📺', url: 'https://www.samsungtvplus.com' }, { name: 'Xumo', icon: '📡', url: 'https://www.xumo.tv' }, { name: 'Plex Live TV', icon: '📼', url: 'https://watch.plex.tv/live-tv' }, { name: 'DistroTV', icon: '📀', url: 'https://www.distro.tv' }, { name: 'Amazon Freevee', icon: '🎬', url: 'https://www.amazon.com/Freevee' }, { name: 'Crackle', icon: '🎞️', url: 'https://www.crackle.com.in' }, { name: 'Vudu Free', icon: '💿', url: 'https://www.vudu.com/content/movies/featured/free' }, { name: 'The Roku Channel', icon: '📼', url: 'https://therokuchannel.roku.com' }, { name: 'BBC iPlayer', icon: '🇬🇧', url: 'https://www.bbc.co.uk/iplayer' }, { name: 'ITVX', icon: '🎥', url: 'https://www.itv.com' }, { name: 'Channel 4', icon: '4️⃣', url: 'https://www.channel4.com' }, { name: 'SBS On Demand', icon: '🇦🇺', url: 'https://www.sbs.com.au/ondemand/' }, { name: 'ABC iview', icon: '🦘', url: 'https://iview.abc.net.au' }, { name: 'NHK World', icon: '🇯🇵', url: 'https://www3.nhk.or.jp/nhkworld/' }, { name: 'France.tv', icon: '🇫🇷', url: 'https://www.france.tv' }, { name: 'ZDF Mediathek', icon: '🇩🇪', url: 'https://www.zdf.de' }, { name: 'RaiPlay', icon: '🇮🇹', url: 'https://www.raiplay.it' }, { name: 'Haystack News', icon: '📰', url: 'https://www.haystack.tv' }, { name: 'GlobeTV', icon: '🌍', url: 'https://globetv.app/' }, { name: 'FreeInterTV', icon: '📶', url: 'http://www.freeintertv.com/' }, { name: 'TabloTV', icon: '💾', url: 'https://www.tablotv.com/' }, { name: 'JustWatch', icon: '🔍', url: 'https://www.justwatch.com' } ];
     const radioStations = [ { name: 'TuneIn', icon: '📻', url: 'https://tunein.com' }, { name: 'iHeartRadio', icon: '❤️', url: 'https://www.iheart.com' }, { name: 'Radio Garden', icon: '🗺️', url: 'https://radio.garden' }, { name: 'Streema', icon: '🎛️', url: 'https://streema.com' }, { name: 'Radio.net', icon: '🎚️', url: 'https://www.radio.net' }, { name: 'Online Radio Box', icon: '📦', url: 'https://onlineradiobox.com' }, { name: 'AccuRadio', icon: '🎵', url: 'https://www.accuradio.com' }, { name: 'SomaFM', icon: '🎹', url: 'https://somafm.com' }, { name: 'LiveATC', icon: '✈️', url: 'https://www.liveatc.net' }, { name: 'BBC Sounds', icon: '🎧', url: 'https://www.bbc.co.uk/sounds' }, { name: 'NPR', icon: '🎙️', url: 'https://www.npr.org' }, { name: 'Audacy', icon: '🎤', url: 'https://www.audacy.com' }, { name: 'Jango', icon: '🎻', url: 'https://www.jango.com' }, { name: 'Radio Paradise', icon: '🌴', url: 'https://radioparadise.com' }, { name: 'JazzRadio', icon: '🎷', url: 'https://www.jazzradio.com' }, { name: 'DI.FM', icon: '🎼', url: 'https://www.di.fm' }, { name: 'KEXP', icon: '🎸', url: 'https://www.kexp.org' }, { name: 'WNYC', icon: '🔊', url: 'https://www.wnyc.org' }, { name: 'Internet-Radio.com', icon: '🎶', url: 'https://www.internet-radio.com/' }, { name: 'Radiotunes', icon: '🎺', url: 'https://www.radiotunes.com/' } ];
     window.showTvChannels = function(){ const area = document.getElementById('tvRadioContentArea'); let html = '<h3 style="text-align:center;margin-bottom:20px;font-size:1.6rem;">📺 TV Channels</h3>'; tvChannels.forEach(site => { html += `<div class="tvradio-card" onclick="window.open('${site.url}', '_blank');"><div style="font-size:2.8rem;">${site.icon}</div><div style="font-weight:700; font-size:1.2rem;">${site.name}</div><div style="font-size:0.9rem;">Watch now</div></div>`; }); area.innerHTML = html; };
     window.showRadioStations = function(){ const area = document.getElementById('tvRadioContentArea'); let html = '<h3 style="text-align:center;margin-bottom:20px;font-size:1.6rem;">📻 Radio Stations</h3>'; radioStations.forEach(site => { html += `<div class="tvradio-card" onclick="window.open('${site.url}', '_blank');"><div style="font-size:2.8rem;">${site.icon}</div><div style="font-weight:700; font-size:1.2rem;">${site.name}</div><div style="font-size:0.9rem;">Listen now</div></div>`; }); area.innerHTML = html; };
@@ -2096,7 +2151,7 @@ const moviesSeries = [
     { name: 'Kanopy', icon: '🎥', url: 'https://www.kanopy.com', cat: 'Free Movies' },
     { name: 'Tubi', icon: '📺', url: 'https://tubitv.com', cat: 'Free Movies/TV' },
     { name: 'Pluto TV', icon: '🪐', url: 'https://pluto.tv', cat: 'Live TV' },
-    { name: 'Crackle', icon: '💎', url: 'https://www.crackle.com', cat: 'Free Movies' },
+    { name: 'Crackle', icon: '💎', url: 'https://www.crackle.com.in', cat: 'Free Movies' },
     { name: 'Vudu Free', icon: '💿', url: 'https://www.vudu.com/content/movies/featured/free', cat: 'Free Movies' }
 ];
 document.getElementById('moviesSeriesGrid').innerHTML = moviesSeries.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
