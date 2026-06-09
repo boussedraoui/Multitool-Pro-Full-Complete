@@ -422,7 +422,7 @@
     </div>
 </div>
 
-<!-- ========== SMART CHATBOT (LEFT side, FULLY INTELLIGENT, THINKS BEFORE ANSWERING) ========== -->
+<!-- ========== SMART CHATBOT (COMPLETELY ENHANCED – KNOWS EVERYTHING) ========== -->
 <div id="smartChatWidget" class="chat-widget">
     <div class="chat-button" id="chatButton">
         💬 <span class="chat-badge">AI</span>
@@ -436,11 +436,11 @@
             </div>
         </div>
         <div class="chat-messages" id="chatMessages">
-            <div class="chat-message bot">👋 Hello! I'm your enhanced MultiTool Pro assistant. Ask me about any tool, how to use it, or give me a task. I'll never repeat myself and always suggest the best tool from our 50+ utilities!</div>
+            <div class="chat-message bot">👋 Welcome to MultiTool Pro! I know every single tool, category, and site inside this app. Just type what you need – I'll give you clickable buttons to open it immediately. Try "pdf", "games", "weather", "password", or even a single letter like "c".</div>
         </div>
         <div class="chat-input-area">
             <button class="chat-voice-btn" id="chatVoiceBtn" title="Voice input">🎤</button>
-            <input type="text" id="chatInput" placeholder="Ask me anything... e.g., 'Calculator' or 'How to make a QR code?'">
+            <input type="text" id="chatInput" placeholder="Ask me anything... e.g., 'pdf', 'sports', 'translate', 'p'">
             <button class="chat-send-btn" id="chatSendBtn">➤</button>
         </div>
         <div class="chat-voice-status" id="voiceStatus"></div>
@@ -547,7 +547,7 @@
     bottom: 85px;
     left: 0;
     right: auto;
-    width: 380px;
+    width: 420px;
     max-width: 85vw;
     background: rgba(20, 20, 40, 0.96);
     backdrop-filter: blur(20px);
@@ -600,7 +600,7 @@
     text-shadow: 0 0 4px gold;
 }
 .chat-messages {
-    height: 380px;
+    height: 420px;
     overflow-y: auto;
     padding: 16px;
     display: flex;
@@ -628,6 +628,23 @@
     color: #f0f0fa;
     border-bottom-left-radius: 4px;
     border-left: 3px solid #ffaa44;
+}
+.chat-message.bot .tool-btn {
+    display: inline-block;
+    background: #ffaa44;
+    color: #1e1e2a;
+    font-size: 0.8rem;
+    padding: 6px 14px;
+    margin: 4px 6px 4px 0;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.1s;
+}
+.chat-message.bot .tool-btn:hover {
+    transform: scale(0.98);
+    background: #ffcc66;
 }
 .chat-input-area {
     display: flex;
@@ -677,7 +694,7 @@
 </style>
 
 <script>
-// ===== FULLY INTELLIGENT CHATBOT WITH THINKING DELAY =====
+// ==================== FULLY INTELLIGENT CHATBOT WITH COMPREHENSIVE KNOWLEDGE ====================
 (function() {
     let isChatOpen = false;
     let isFullscreen = false;
@@ -691,8 +708,190 @@
     const chatMessages = document.getElementById('chatMessages');
     const voiceBtn = document.getElementById('chatVoiceBtn');
     const voiceStatus = document.getElementById('voiceStatus');
-    let thinkingTimeout = null;
-
+    
+    // -------------------- BUILD COMPLETE FEATURE DATABASE --------------------
+    // All individual tools (the ones inside the main grid + AI tools)
+    const allIndividualTools = [
+        { id: 'calculator', name: 'Advanced Calculator', keywords: ['calculator', 'calc', 'math', 'sin', 'cos', 'tan', 'log', 'sqrt', 'scientific'] },
+        { id: 'password', name: 'Password Generator', keywords: ['password', 'generate password', 'secure password', 'random password'] },
+        { id: 'wordcount', name: 'Word Counter', keywords: ['word count', 'character count', 'reading time', 'speaking time'] },
+        { id: 'caseconverter', name: 'Case Converter', keywords: ['case converter', 'uppercase', 'lowercase', 'title case'] },
+        { id: 'colorpicker', name: 'Color Picker', keywords: ['color picker', 'pick color', 'hex', 'rgb', 'hsl'] },
+        { id: 'unitconverter', name: 'Unit Converter', keywords: ['unit converter', 'convert length', 'mass', 'volume', 'temperature', 'speed'] },
+        { id: 'stopwatch', name: 'Stopwatch', keywords: ['stopwatch', 'lap timer', 'time elapsed'] },
+        { id: 'qrcode', name: 'QR Code Generator', keywords: ['qr code', 'generate qr', 'qr generator'] },
+        { id: 'bmi', name: 'BMI Calculator', keywords: ['bmi', 'body mass index', 'weight', 'height'] },
+        { id: 'random', name: 'Random Number Generator', keywords: ['random number', 'random generator', 'pick random'] },
+        { id: 'countdown', name: 'Countdown Timer', keywords: ['countdown', 'timer', 'set timer'] },
+        { id: 'datediff', name: 'Date Difference', keywords: ['date difference', 'days between dates', 'weekdays'] },
+        { id: 'base64', name: 'Base64 Encoder/Decoder', keywords: ['base64', 'encode base64', 'decode base64'] },
+        { id: 'urlencode', name: 'URL Encode/Decode', keywords: ['url encode', 'url decode', 'encode uri'] },
+        { id: 'jsonformat', name: 'JSON Formatter', keywords: ['json', 'json formatter', 'pretty print'] },
+        { id: 'lorem', name: 'Lorem Ipsum Generator', keywords: ['lorem ipsum', 'placeholder text', 'dummy text'] },
+        { id: 'currency', name: 'Currency Converter', keywords: ['currency converter', 'exchange rate', 'convert money'] },
+        { id: 'percentcalc', name: 'Percentage Calculator', keywords: ['percentage', 'percent', 'percentage change'] },
+        { id: 'agecalc', name: 'Age Calculator', keywords: ['age calculator', 'calculate age', 'birthday'] },
+        { id: 'binhex', name: 'Binary/Hex/Decimal/Octal Converter', keywords: ['binary', 'hex', 'octal', 'decimal', 'base conversion'] },
+        { id: 'roman', name: 'Roman Numeral Converter', keywords: ['roman numeral', 'convert roman', 'roman to number'] },
+        { id: 'tipcalc', name: 'Tip Calculator', keywords: ['tip calculator', 'split bill', 'tip'] },
+        { id: 'worldclock', name: 'World Clock', keywords: ['world clock', 'time zone', 'current time'] },
+        { id: 'dice', name: 'Dice Roller', keywords: ['dice', 'roll dice', 'd6', 'd20'] },
+        { id: 'coin', name: 'Coin Flip', keywords: ['coin flip', 'flip coin', 'heads tails'] },
+        { id: 'joke', name: 'Joke Generator', keywords: ['joke', 'funny', 'laugh', 'humor'] },
+        { id: 'ip', name: 'IP Lookup', keywords: ['ip address', 'ip lookup', 'geolocation', 'my ip'] },
+        { id: 'ai_paraphraser', name: 'AI Paraphraser', keywords: ['paraphrase', 'rewrite', 'rephrase'] },
+        { id: 'ai_grammar', name: 'Grammar & Spell Check', keywords: ['grammar check', 'spell check', 'fix grammar'] },
+        { id: 'ai_summarizer', name: 'AI Summarizer', keywords: ['summarize', 'text summary', 'summarizer'] },
+        { id: 'ai_sentiment', name: 'Sentiment Analysis', keywords: ['sentiment', 'emotion', 'positive negative neutral'] },
+        { id: 'ai_keywords', name: 'Keyword Extractor', keywords: ['keywords', 'extract keywords', 'important words'] },
+        { id: 'ai_readability', name: 'Readability Checker', keywords: ['readability', 'flesch', 'reading ease'] },
+        { id: 'premium_ai', name: 'AI Text Enhancer', keywords: ['enhance text', 'improve writing', 'polish', 'rewrite professional'] }
+    ];
+    
+    // All major category overlays (the big buttons)
+    const categoryOverlays = [
+        { id: 'convert_overlay', name: 'CONVERT Tools (PDF, Word, Image, Video)', keywords: ['convert', 'pdf', 'word', 'image', 'video', 'audio', 'editor', 'converter', 'pdf tools', 'edit pdf', 'word editor', 'image editor', 'file converter', 'audio converter', 'video converter'], action: 'openConvertOverlay' },
+        { id: 'browsers_overlay', name: 'Browsers (In‑App Web Browser)', keywords: ['browser', 'web browser', 'surf web', 'open website', 'browse', 'internet', 'surf internet', 'internal tab'], action: 'openBrowsersOverlay' },
+        { id: 'aitranslator_overlay', name: 'All AI Translator (Google Translate, Lernix, Reverso, etc.)', keywords: ['translate', 'translation', 'google translate', 'language translator', 'translator', 'lernix', 'reverso', 'microsoft translator'], action: 'openAllAiTranslatorOverlay' },
+        { id: 'games_overlay', name: 'GAMES (Steam, Roblox, Poki, etc.)', keywords: ['games', 'gaming', 'play games', 'steam', 'roblox', 'minecraft', 'fortnite', 'poki', 'crazygames'], action: 'openGamesOverlay' },
+        { id: 'money_overlay', name: 'MONEY & INVESTMENTS (Insurance, Loans, Crypto)', keywords: ['money', 'investments', 'insurance', 'loan', 'finance', 'crypto', 'trading', 'stocks'], action: 'openMoneyOverlay' },
+        { id: 'remote_overlay', name: 'RDP, VPN & Web Preview Tools', keywords: ['rdp', 'vpn', 'remote desktop', 'proxy', 'website preview', 'responsive preview'], action: 'openRemoteToolsOverlay' },
+        { id: 'online_overlay', name: 'Online Tools (Canva, Remove.bg, SmallPDF, etc.)', keywords: ['online tools', 'canva', 'remove bg', 'smallpdf', 'ilovepdf', 'grammarly', 'quillbot', 'deepl', 'codepen'], action: 'openOnlineOverlay' },
+        { id: 'imagine_overlay', name: 'IMAGINE (25 Unique Tools)', keywords: ['imagine', 'ocr', 'morse', 'uuid', 'hash', 'unix timestamp', 'csv to json', 'quadratic', 'palindrome'], action: 'openImagineOverlay' },
+        { id: 'shortener_overlay', name: 'URL Shorteners', keywords: ['url shortener', 'tinyurl', 'bitly', 'short link', 'shorten url'], action: 'openShortenerOverlay' },
+        { id: 'other_tools_overlay', name: 'All Other Tools (Notes, Weather, Todo, Translator, Wikipedia)', keywords: ['notes', 'weather', 'todo', 'random fact', 'password strength', 'wikipedia', 'other tools', 'translate text', 'quick notes'], action: 'openOtherTools' },
+        { id: 'ai_hub_overlay', name: 'AI Hub (ChatGPT, Gemini, Claude, etc.)', keywords: ['ai', 'chatgpt', 'gemini', 'claude', 'copilot', 'midjourney', 'dall e', 'artificial intelligence', 'ai tools'], action: 'openAiTools' },
+        { id: 'media_overlay', name: 'MEDIA & Video Platforms (Netflix, YouTube, Twitch)', keywords: ['media', 'video', 'netflix', 'youtube', 'twitch', 'prime video', 'disney+', 'vimeo', 'dailymotion'], action: 'openMediaOverlay' },
+        { id: 'sites_overlay', name: 'Popular Websites (Reddit, Pinterest, WhatsApp Web)', keywords: ['popular sites', 'reddit', 'pinterest', 'whatsapp web', 'telegram', 'signal', 'soundcloud', 'deviantart'], action: 'openSitesOverlay' },
+        { id: 'tvradio_overlay', name: 'TV / RADIO (Free TV channels & Radio stations)', keywords: ['tv', 'radio', 'live tv', 'radio stations', 'tunein', 'iheartradio', 'pluto tv', 'samsung tv', 'free tv'], action: 'openTvRadioOverlay' },
+        { id: 'free_emails_overlay', name: 'Free Email Services (ProtonMail, Tutanota, etc.)', keywords: ['free email', 'protonmail', 'tutanota', 'mail.com', 'gmx', 'yandex mail', 'aol mail'], action: 'openFreeEmailsOverlay' },
+        { id: 'health_sports_overlay', name: 'Health and Sports (MyFitnessPal, Bodybuilding, Swimming)', keywords: ['health', 'sports', 'fitness', 'myfitnesspal', 'bodybuilding', 'swimming', 'yoga', 'weightlifting', 'running'], action: 'openHealthSportsOverlay' },
+        { id: 'misc_overlay', name: 'Miscellaneous (Music, Dating, Art)', keywords: ['music', 'dating', 'art', 'last.fm', 'tinder', 'bumble', 'deviantart', 'mixcloud'], action: 'openMiscOverlay' },
+        { id: 'travel_books_overlay', name: 'Travel and Books (Project Gutenberg, Skyscanner)', keywords: ['travel', 'books', 'flights', 'gutenberg', 'open library', 'skyscanner', 'rome2rio', 'lonely planet'], action: 'openTravelBooksOverlay' },
+        { id: 'movies_series_overlay', name: 'Movies, Series and Shows (Free streaming)', keywords: ['movies', 'series', 'shows', 'popcornflix', 'tubi', 'pluto tv', 'crackle', 'free movies'], action: 'openMoviesSeriesOverlay' },
+        { id: 'culture_fashion_overlay', name: 'Culture and Fashion (Vogue, ArtStation)', keywords: ['fashion', 'culture', 'vogue', 'artstation', 'harper\'s bazaar', 'polygon'], action: 'openCultureFashionOverlay' },
+        { id: 'jobs_overlay', name: 'Jobs (Indeed, LinkedIn, Upwork)', keywords: ['jobs', 'career', 'indeed', 'linkedin', 'upwork', 'fiverr', 'remote jobs'], action: 'openJobsOverlay' },
+        { id: 'tech_overlay', name: 'TECH (TechCrunch, The Verge, GSMArena)', keywords: ['tech', 'technology', 'techcrunch', 'the verge', 'cnet', 'android', 'gsmarena'], action: 'openTechOverlay' },
+        { id: 'building_home_overlay', name: 'Building & Home Life (DIY, Houzz)', keywords: ['home', 'diy', 'houzz', 'family handyman', 'gardening', 'renovation'], action: 'openBuildingHomeOverlay' },
+        { id: 'surf_internet_overlay', name: 'SURF Internet (Speedtest, IP tools, DNS)', keywords: ['surf internet', 'speed test', 'whatismyip', 'dns checker', 'ping', 'network tools'], action: 'openSurfInternetOverlay' },
+        { id: 'cooking_kitchen_overlay', name: 'Cooking & Kitchen (Recipes, Allrecipes)', keywords: ['cooking', 'kitchen', 'recipes', 'allrecipes', 'yummly', 'food network', 'tasty'], action: 'openCookingKitchenOverlay' },
+        { id: 'wilderness_oceans_overlay', name: 'Wilderness and Oceans (National Geographic, WWF)', keywords: ['wildlife', 'oceans', 'nature', 'national geographic', 'wwf', 'inaturalist'], action: 'openWildernessOceansOverlay' },
+        { id: 'crypto_overlay', name: 'Crypto (CoinMarketCap, Binance, Coinbase)', keywords: ['crypto', 'bitcoin', 'ethereum', 'coinmarketcap', 'binance', 'coinbase', 'cryptocurrency'], action: 'openCryptoOverlay' },
+        { id: 'news_overlay', name: 'NEWS (BBC, CNN, Reuters)', keywords: ['news', 'bbc', 'cnn', 'reuters', 'al jazeera', 'guardian', 'world news'], action: 'openNewsOverlay' }
+    ];
+    
+    // Combine everything into a single searchable array
+    const allFeatures = [...allIndividualTools, ...categoryOverlays];
+    
+    // Helper: get all tool names for listing
+    function getAllFeatureNames() {
+        return allFeatures.map(f => f.name).join(', ');
+    }
+    
+    // Intelligent search: returns matches with scores
+    function searchFeatures(query) {
+        const q = query.toLowerCase().trim();
+        if (!q) return [];
+        const results = [];
+        for (const feat of allFeatures) {
+            let score = 0;
+            // name match (exact or partial)
+            if (feat.name.toLowerCase().includes(q)) score += 15;
+            if (q.includes(feat.name.toLowerCase())) score += 10;
+            // keyword matches
+            if (feat.keywords) {
+                for (const kw of feat.keywords) {
+                    if (q.includes(kw.toLowerCase())) score += 5;
+                    if (kw.toLowerCase().includes(q)) score += 3;
+                }
+            }
+            // special: single letter – show all matches that start with that letter or contain
+            if (q.length === 1) {
+                if (feat.name.toLowerCase().startsWith(q)) score += 2;
+                if (feat.name.toLowerCase().includes(q)) score += 1;
+            }
+            if (score > 0) results.push({ ...feat, score });
+        }
+        results.sort((a,b) => b.score - a.score);
+        return results.slice(0, 12); // limit to 12
+    }
+    
+    // Generate HTML buttons for a feature
+    function featureToButton(feat) {
+        if (feat.id) {
+            // individual tool
+            return `<button class="tool-btn" onclick="selectTool('${feat.id}'); closeChatPanel();" style="margin:4px 6px 4px 0;">🔧 ${feat.name}</button>`;
+        } else if (feat.action && window[feat.action]) {
+            // category overlay
+            return `<button class="tool-btn" onclick="${feat.action}(); closeChatPanel();" style="margin:4px 6px 4px 0;">📂 ${feat.name}</button>`;
+        }
+        return '';
+    }
+    
+    function closeChatPanel() {
+        const panel = document.getElementById('chatPanel');
+        if (panel) panel.classList.remove('active');
+    }
+    
+    // Main AI response generator
+    function generateResponse(userMsg) {
+        const q = userMsg.toLowerCase().trim();
+        
+        // Greeting
+        if (q.match(/^(hi|hello|hey|greetings|sup|good morning|good afternoon|good evening)$/i)) {
+            const greetings = [
+                "👋 Hello! I know **everything** inside MultiTool Pro. Just tell me what you need – a tool, a category, a site... I'll give you clickable buttons to open it instantly!",
+                "Hey there! I'm your assistant that knows all 100+ tools, converters, games, AI hubs, and categories. Try typing 'pdf', 'games', 'weather', or even a single letter like 'p'.",
+                "Greetings! MultiTool Pro has **all tools** you'll ever need. Ask me about anything – from 'calculator' to 'movie streaming' to 'url shortener'."
+            ];
+            return greetings[Math.floor(Math.random() * greetings.length)];
+        }
+        
+        // If user just typed a single letter or very short query, return all matches
+        if (q.length <= 2) {
+            const matches = searchFeatures(q);
+            if (matches.length === 0) {
+                return `🔍 I didn't find any tool matching "${q}". Try a longer word like "pdf", "game", "convert", or browse the main page.`;
+            }
+            let response = `✨ **${matches.length} result(s) for "${q}":**\n\n`;
+            for (let m of matches) {
+                response += featureToButton(m);
+            }
+            response += `\n\n💡 You can also click the big category buttons on the main page.`;
+            return response;
+        }
+        
+        // Search for matches
+        const matches = searchFeatures(q);
+        if (matches.length > 0) {
+            let response = `🔍 **Found ${matches.length} match(es) for "${userMsg}":**\n\n`;
+            for (let m of matches) {
+                response += featureToButton(m);
+            }
+            // Add a helpful note
+            if (matches.length === 1 && matches[0].name.toLowerCase().includes('convert')) {
+                response += `\n\n📄 The CONVERT section includes PDF tools, Word editors, image editors, video/audio converters, and much more.`;
+            }
+            if (q.includes('pdf')) {
+                response += `\n\n📄 **PDF tools** are inside the **CONVERT** overlay – click the button above.`;
+            }
+            if (q.includes('weather') || q.includes('temperature')) {
+                response += `\n\n🌤️ **Weather** tool is inside "All other tools" (the 🧰 button on main page).`;
+            }
+            return response;
+        }
+        
+        // No matches – suggest popular categories
+        return `🤔 I couldn't find a direct match for "${userMsg}". But MultiTool Pro has **hundreds of tools and sites**!\n\nTry these popular categories:\n` +
+               `<button class="tool-btn" onclick="openConvertOverlay(); closeChatPanel();">🔄 CONVERT Tools (PDF, Word, Image)</button>\n` +
+               `<button class="tool-btn" onclick="openGamesOverlay(); closeChatPanel();">🎮 GAMES</button>\n` +
+               `<button class="tool-btn" onclick="openOnlineOverlay(); closeChatPanel();">🌐 Online Tools</button>\n` +
+               `<button class="tool-btn" onclick="openAiTools(); closeChatPanel();">🤖 AI Hub</button>\n` +
+               `<button class="tool-btn" onclick="openBrowsersOverlay(); closeChatPanel();">🌐 Browsers</button>\n` +
+               `\nOr just ask me for "calculator", "qr code", "world clock", "translate", "news", "tv", etc.`;
+    }
+    
+    // ========== Chat UI logic ==========
     function openChat() {
         chatPanel.classList.add('active');
         chatPanel.style.display = 'flex';
@@ -720,147 +919,26 @@
             chatFullscreenBtn.textContent = '⛶';
         }
     }
-
+    
     function addMessage(text, isUser) {
         const div = document.createElement('div');
         div.className = `chat-message ${isUser ? 'user' : 'bot'}`;
-        div.textContent = text;
+        if (!isUser) {
+            // allow HTML buttons
+            div.innerHTML = text;
+        } else {
+            div.textContent = text;
+        }
         chatMessages.appendChild(div);
         chatMessages.scrollTop = chatMessages.scrollHeight;
         return div;
     }
-
-    // Comprehensive tool database
-    const toolsKnowledge = [
-        { id: 'calculator', name: 'Advanced Calculator', keywords: ['calculator', 'calculate', 'math', 'sin', 'cos', 'tan', 'log', 'sqrt'], desc: 'A scientific calculator with sin, cos, tan, log, ln, sqrt, π, e, exponent (^), parentheses and history.' },
-        { id: 'password', name: 'Password Generator', keywords: ['password', 'generate secure password', 'random password', 'strong password'], desc: 'Generate strong passwords with custom length (6-64), include uppercase, lowercase, digits, symbols, and exclude ambiguous characters.' },
-        { id: 'wordcount', name: 'Word Counter', keywords: ['word count', 'character count', 'reading time', 'speaking time'], desc: 'Counts words, characters (with/without spaces), reading time, speaking time, and shows top 3 keyword density.' },
-        { id: 'caseconverter', name: 'Case Converter', keywords: ['case converter', 'uppercase', 'lowercase', 'title case', 'sentence case'], desc: 'Transform text to UPPER CASE, lower case, Title Case, Sentence case, aLtErNaTiNg, and iNVERSE cASE.' },
-        { id: 'colorpicker', name: 'Color Picker', keywords: ['color picker', 'pick color', 'hex', 'rgb', 'hsl'], desc: 'Pick any color, shows HEX, RGB, HSL, and stores recent colors. Copy any format.' },
-        { id: 'unitconverter', name: 'Unit Converter', keywords: ['unit converter', 'convert length', 'mass', 'volume', 'area', 'temperature'], desc: 'Universal Unit Converter supports Length, Mass, Volume, Area, Temperature, Speed, Time, and Digital Storage.' },
-        { id: 'stopwatch', name: 'Stopwatch', keywords: ['stopwatch', 'lap timer', 'time elapsed'], desc: 'Stopwatch with laps – start, pause, reset, and record lap times. Precision to 1/100 second.' },
-        { id: 'qrcode', name: 'QR Code Generator', keywords: ['qr code', 'generate qr', 'qr generator'], desc: 'Creates QR codes from any text/URL. Customize size, error correction, colors, and download as PNG.' },
-        { id: 'bmi', name: 'BMI Calculator', keywords: ['bmi', 'body mass index', 'weight', 'height'], desc: 'Metric (cm/kg) and imperial (ft/in/lbs). Calculates BMI, category, and healthy weight range.' },
-        { id: 'random', name: 'Random Number Generator', keywords: ['random number', 'random generator', 'pick random'], desc: 'Set min, max, count, allow duplicates, sort results, and decimal places.' },
-        { id: 'countdown', name: 'Countdown Timer', keywords: ['countdown', 'timer', 'set timer'], desc: 'Set minutes and seconds, start/pause/reset. Optional sound alert when time is up.' },
-        { id: 'datediff', name: 'Date Difference', keywords: ['date difference', 'days between dates', 'weekdays'], desc: 'Calculates exact difference between two dates (days, hours, minutes, weekdays).' },
-        { id: 'base64', name: 'Base64 Encoder/Decoder', keywords: ['base64', 'encode base64', 'decode base64'], desc: 'Encode/decode text, also supports file to Base64 and Base64 to file download.' },
-        { id: 'urlencode', name: 'URL Encode/Decode', keywords: ['url encode', 'url decode', 'encode uri'], desc: 'Encode full URI or component, decode back to original.' },
-        { id: 'jsonformat', name: 'JSON Formatter', keywords: ['json', 'json formatter', 'json validator', 'pretty print'], desc: 'Format, minify, and validate JSON data. Paste JSON and click Format.' },
-        { id: 'lorem', name: 'Lorem Ipsum Generator', keywords: ['lorem ipsum', 'placeholder text', 'dummy text'], desc: 'Generate paragraphs, sentences, or words. Optional HTML markup.' },
-        { id: 'currency', name: 'Currency Converter', keywords: ['currency converter', 'exchange rate', 'convert money'], desc: 'Live exchange rates for all world currencies. Enter amount, select from/to currencies, click Convert.' },
-        { id: 'percentcalc', name: 'Percentage Calculator', keywords: ['percentage', 'percent', 'percentage change'], desc: 'Three types: percent of a number, percentage change, and what percent of.' },
-        { id: 'agecalc', name: 'Age Calculator', keywords: ['age calculator', 'calculate age', 'birthday'], desc: 'Enter birth date, get exact years, months, days, and days until next birthday.' },
-        { id: 'binhex', name: 'Binary/Hex/Decimal/Octal Converter', keywords: ['binary', 'hex', 'octal', 'decimal', 'base conversion'], desc: 'Enter any number and see its representation in all bases (binary, hex, decimal, octal).' },
-        { id: 'roman', name: 'Roman Numeral Converter', keywords: ['roman numeral', 'convert roman', 'roman to number'], desc: 'Converts between numbers (1-3999) and Roman numerals.' },
-        { id: 'tipcalc', name: 'Tip Calculator', keywords: ['tip calculator', 'split bill', 'tip'], desc: 'Enter bill amount, tip percentage, and number of people to split. Shows tip, total, and per-person amount.' },
-        { id: 'worldclock', name: 'World Clock', keywords: ['world clock', 'time zone', 'current time'], desc: 'Shows all time zones with real-time update, search/filter, and 12/24h toggle. Refreshes every minute.' },
-        { id: 'dice', name: 'Dice Roller', keywords: ['dice', 'roll dice', 'd6', 'd20'], desc: 'Roll multiple dice (1-6) with various sides (d4, d6, d8, d10, d12, d20). Shows individual results and sum.' },
-        { id: 'coin', name: 'Coin Flip', keywords: ['coin flip', 'flip coin', 'heads tails'], desc: 'Flips a coin and tracks the streak (consecutive same results).' },
-        { id: 'joke', name: 'Joke Generator', keywords: ['joke', 'funny', 'laugh', 'humor'], desc: 'Fetches fresh jokes from JokeAPI with categories (Any, Programming, Pun, Dark) and safe mode.' },
-        { id: 'ip', name: 'IP Lookup', keywords: ['ip address', 'ip lookup', 'geolocation', 'my ip'], desc: 'Shows your public IP address, location (city, region, country), ISP, organization, AS, timezone, and a map link.' },
-        { id: 'ai_paraphraser', name: 'AI Paraphraser', keywords: ['paraphrase', 'rewrite', 'rephrase'], desc: 'Rewrites your text using a basic synonym-based AI. For better results, use longer texts.' },
-        { id: 'ai_grammar', name: 'Grammar & Spell Check', keywords: ['grammar check', 'spell check', 'fix grammar'], desc: 'Fixes common errors like "i" to "I", "wanna" to "want to", etc. Basic corrections.' },
-        { id: 'ai_summarizer', name: 'AI Summarizer', keywords: ['summarize', 'text summary', 'summarizer'], desc: 'Extracts key sentences from your text. Paste long text and click Summarize.' },
-        { id: 'ai_sentiment', name: 'Sentiment Analysis', keywords: ['sentiment', 'emotion', 'positive negative neutral'], desc: 'Detects whether your text is Positive, Negative, or Neutral based on word matching.' },
-        { id: 'ai_keywords', name: 'Keyword Extractor', keywords: ['keywords', 'extract keywords', 'important words'], desc: 'Extracts the most frequent words (excluding common stopwords) from your text.' },
-        { id: 'ai_readability', name: 'Readability Checker', keywords: ['readability', 'flesch', 'reading ease'], desc: 'Uses the Flesch Reading Ease formula to score your text and suggest grade level.' },
-        { id: 'premium_ai', name: 'AI Text Enhancer', keywords: ['enhance text', 'improve writing', 'polish', 'rewrite professional'], desc: 'Offers multiple modes: Grammar Fix, Professional, Friendly, Shorten, Expand, Simplify.' },
-        { id: 'browsers_overlay', name: 'Browsers (In‑App)', keywords: ['browser', 'web browser', 'surf web', 'open website'], desc: 'Surf the web inside the app. Enter any URL, toggle desktop/mobile view, go fullscreen, and open an internal tab.' },
-        { id: 'convert_overlay', name: 'CONVERT Tools', keywords: ['convert', 'pdf editor', 'image editor', 'file converter'], desc: '30+ online tools: PDF tools (PDFescape, Sejda), Image editors (Fotor), Word editors (Google Docs), File converters (Zamzar).' },
-        { id: 'aitranslator_overlay', name: 'All AI Translator', keywords: ['translate', 'translation', 'google translate', 'language translator'], desc: 'Access to Google Translate, Lernix AI, Reverso, Microsoft Translator, Yandex Translate, and many others.' },
-        { id: 'games_overlay', name: 'GAMES', keywords: ['games', 'gaming', 'play games', 'steam', 'roblox'], desc: 'Includes Steam, Epic Games, Roblox, Minecraft, Poki, CrazyGames, and many gaming news sites.' },
-        { id: 'money_overlay', name: 'MONEY & INVESTMENTS', keywords: ['money', 'investments', 'insurance', 'loan', 'finance'], desc: 'Insurance (Geico, State Farm), Loans (LendingTree), Investment (Robinhood, Coinbase), and budget tools (Mint, YNAB).' },
-        { id: 'remote_overlay', name: 'RDP, VPN & Web Preview', keywords: ['rdp', 'vpn', 'remote desktop', 'proxy', 'website preview'], desc: 'Free browser-based RDP, VPN proxies, and responsive preview tools.' },
-        { id: 'online_overlay', name: 'Online Tools', keywords: ['online tools', 'free tools', 'canva', 'remove bg', 'smallpdf', 'grammarly'], desc: '30+ free online utilities: Canva, Remove.bg, TinyWow, ILovePDF, Grammarly, QuillBot, DeepL, CodePen, Replit and more.' }
-    ];
-
-    // Helper: get all tool names for listing
-    function getAllToolNames() {
-        return toolsKnowledge.map(t => t.name).join(', ');
-    }
-
-    function getBestTool(query) {
-        const q = query.toLowerCase().trim();
-        let bestScore = 0;
-        let bestTool = null;
-        for (let tool of toolsKnowledge) {
-            let score = 0;
-            if (tool.name.toLowerCase().includes(q)) score += 15;
-            if (q.includes(tool.name.toLowerCase())) score += 10;
-            for (let kw of tool.keywords) {
-                if (q.includes(kw.toLowerCase())) score += 3;
-            }
-            if (score > bestScore) {
-                bestScore = score;
-                bestTool = tool;
-            }
-        }
-        return { tool: bestTool, score: bestScore };
-    }
-
-    // Main AI response generator with intent detection
-    function generateResponse(userMsg) {
-        const q = userMsg.toLowerCase().trim();
-        
-        // Intent: list all tools
-        if (q.match(/(what tools|list tools|all tools|tools available|what can you do|help|show me tools|tool list)/i)) {
-            const toolList = toolsKnowledge.map(t => `• ${t.name}`).join('\n');
-            return `🔧 **MultiTool Pro has over 50 tools!** Here are the main ones:\n${toolList}\n\n✨ You can also explore: **AI Hub**, **Browsers**, **CONVERT**, **GAMES**, **TV/RADIO**, **Online Tools**, and many more categories. Just click the big buttons on the main page or ask me about a specific tool!`;
-        }
-        
-        // Intent: about app
-        if (q.match(/(what is this app|about|features|premium)/i)) {
-            return "🌟 **MultiTool Pro** is a complete toolkit with 50+ utilities, AI Hub, world clock, jokes, translator, QR code, unit converter, and much more. It's 100% free with premium features. You'll never need another app!";
-        }
-        
-        // Intent: greeting
-        if (q.match(/^(hi|hello|hey|greetings|sup)$/i)) {
-            const greetings = [
-                "👋 Hello! How can I assist you with MultiTool Pro today?",
-                "Hey there! Ready to explore 50+ tools? Ask me anything!",
-                "Greetings! I'm your tool expert. Need help finding something?",
-                "Hi! Need a calculator? QR code? World clock? Just ask!"
-            ];
-            return greetings[Math.floor(Math.random() * greetings.length)];
-        }
-        
-        // Try to match a specific tool
-        const { tool, score } = getBestTool(q);
-        if (tool && score >= 3) {
-            const templates = [
-                `🔧 **${tool.name}** - ${tool.desc}\n\n👉 You can find it in the tools grid or search for "${tool.name}".`,
-                `✨ **${tool.name}** is perfect for that! ${tool.desc}\n\nClick on it in the main menu or use the search bar.`,
-                `✅ **${tool.name}**: ${tool.desc}\n\nJust select it from the list. Would you like a quick tip on how to use it?`,
-                `⚡ You're looking for **${tool.name}** — ${tool.desc}\n\nOpen it via the tools grid.`
-            ];
-            let resp = templates[Math.floor(Math.random() * templates.length)];
-            // Add specific tips
-            if (tool.id === 'password') resp += `\n💡 Tip: Use length >= 12 and include all character types for a "Strong" password.`;
-            if (tool.id === 'calculator') resp += `\n💡 Tip: You can type expressions using your keyboard! Try "sin(30)" or "2^10".`;
-            if (tool.id === 'qrcode') resp += `\n💡 Tip: You can change colors and download the QR as PNG.`;
-            if (tool.id === 'worldclock') resp += `\n💡 Tip: Use the search box inside the tool to filter timezones.`;
-            if (tool.id === 'browsers_overlay') resp += `\n💡 Tip: If a site doesn't load in the iframe, use the "Open Internal Tab" button.`;
-            if (tool.id === 'premium_ai') resp += `\n💡 Tip: Try the "Professional" mode to polish business emails.`;
-            return resp;
-        }
-        
-        // If low score but still a tool, recommend it
-        if (tool && score > 0) {
-            return `🤔 I'm not entirely sure about "${userMsg}", but you might find **${tool.name}** useful: ${tool.desc}\n\nOpen it from the tools grid.`;
-        }
-        
-        // No match – provide a helpful fallback that lists tools without saying "I don't recognize"
-        return `🔍 I'm here to help you find the right tool! MultiTool Pro includes: Calculator, Password Generator, Word Counter, QR Code, Unit Converter, World Clock, Joke Generator, AI Paraphraser, Currency Converter, and many more. Try asking about a specific tool like "How to use the QR code generator?" or simply type "Calculator". You can also click the big category buttons on the main page for Browsers, Games, TV/Radio, and more.`;
-    }
-
-    // Simulate thinking delay between 800ms and 2000ms
-    async function getAIResponse(userMessage) {
-        const delay = 800 + Math.random() * 1200;
-        await new Promise(r => setTimeout(r, delay));
+    
+    async function getAIResponseWithDelay(userMessage) {
+        await new Promise(r => setTimeout(r, 600 + Math.random() * 800));
         return generateResponse(userMessage);
     }
-
+    
     async function sendUserMessage() {
         let message = chatInput.value.trim();
         if (!message) return;
@@ -868,7 +946,7 @@
         chatInput.value = '';
         const thinkingDiv = addMessage('🤔 Thinking...', false);
         try {
-            const aiReply = await getAIResponse(message);
+            const aiReply = await getAIResponseWithDelay(message);
             thinkingDiv.remove();
             addMessage(aiReply, false);
         } catch (err) {
@@ -876,10 +954,10 @@
             addMessage("⚠️ Sorry, I encountered an error. Please try again.", false);
         }
     }
-
+    
     chatSendBtn.addEventListener('click', sendUserMessage);
     chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendUserMessage(); });
-
+    
     // Voice recognition
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -919,7 +997,7 @@
 </script>
 
 <script>
-// ==================== ORIGINAL SCRIPT (all existing functions preserved) ====================
+// ==================== ORIGINAL SCRIPT (all existing functions preserved – only the chatbot replaced) ====================
 (function(){
     let darkMode = localStorage.getItem('theme') === 'dark';
     if(darkMode) document.documentElement.setAttribute('data-theme','dark');
@@ -1076,7 +1154,6 @@
     window.closeMoneyOverlay = function(){ document.getElementById('moneyOverlay').classList.remove('active'); };
     function renderMoneyGrid() { const container = document.getElementById('moneyGrid'); const sites = [ { name: 'Geico', icon: '🦎', url: 'https://www.geico.com' }, { name: 'Progressive', icon: '🅿️', url: 'https://www.progressive.com' }, { name: 'State Farm', icon: '🏠', url: 'https://www.statefarm.com' }, { name: 'Allstate', icon: '🤲', url: 'https://www.allstate.com' }, { name: 'USAA', icon: '🦅', url: 'https://www.usaa.com' }, { name: 'Liberty Mutual', icon: '🗽', url: 'https://www.libertymutual.com' }, { name: 'Nationwide', icon: '🌐', url: 'https://www.nationwide.com' }, { name: 'Farmers', icon: '🌾', url: 'https://www.farmers.com' }, { name: 'Travelers', icon: '✈️', url: 'https://www.travelers.com' }, { name: 'Aflac', icon: '🦆', url: 'https://www.aflac.com' }, { name: 'LendingTree', icon: '🌳', url: 'https://www.lendingtree.com' }, { name: 'SoFi', icon: '🏦', url: 'https://www.sofi.com' }, { name: 'Marcus', icon: '💰', url: 'https://www.marcus.com' }, { name: 'Rocket Mortgage', icon: '🚀', url: 'https://www.rocketmortgage.com' }, { name: 'Upstart', icon: '📈', url: 'https://www.upstart.com' }, { name: 'Best Egg', icon: '🥚', url: 'https://www.bestegg.com' }, { name: 'Robinhood', icon: '🏹', url: 'https://robinhood.com' }, { name: 'E*TRADE', icon: '📊', url: 'https://us.etrade.com' }, { name: 'Fidelity', icon: '🏆', url: 'https://www.fidelity.com' }, { name: 'Charles Schwab', icon: '🐂', url: 'https://www.schwab.com' }, { name: 'Vanguard', icon: '🚢', url: 'https://investor.vanguard.com' }, { name: 'Acorns', icon: '🌰', url: 'https://www.acorns.com' }, { name: 'Coinbase', icon: '🪙', url: 'https://www.coinbase.com' }, { name: 'Gemini', icon: '♊', url: 'https://www.gemini.com' }, { name: 'Webull', icon: '🐃', url: 'https://www.webull.com' }, { name: 'Betterment', icon: '🌱', url: 'https://www.betterment.com' }, { name: 'Mint', icon: '🍃', url: 'https://mint.intuit.com' }, { name: 'YNAB', icon: '📝', url: 'https://www.youneedabudget.com' }, { name: 'Credit Karma', icon: '🛡️', url: 'https://www.creditkarma.com' }, { name: 'NerdWallet', icon: '🤓', url: 'https://www.nerdwallet.com' } ]; let html = ''; sites.forEach(site => { html += `<div class="games-card" onclick="window.open('${site.url}', '_blank');"><div style="font-size:2.8rem;">${site.icon}</div><div style="font-weight:700; font-size:1.2rem;">${site.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`; }); container.innerHTML = html; }
     const originalTools = [ {id:'calculator', icon:'🧮', name:'Advanced Calculator'}, {id:'password', icon:'🔐', name:'Password Generator'}, {id:'wordcount', icon:'📝', name:'Word Counter'}, {id:'caseconverter', icon:'🔤', name:'Case Converter'}, {id:'colorpicker', icon:'🎨', name:'Color Picker'}, {id:'unitconverter', icon:'📏', name:'Unit Converter'}, {id:'stopwatch', icon:'⏱️', name:'Stopwatch'}, {id:'qrcode', icon:'📱', name:'QR Code'}, {id:'bmi', icon:'⚖️', name:'BMI Calculator'}, {id:'random', icon:'🎲', name:'Random Number'}, {id:'countdown', icon:'⏳', name:'Countdown Timer'}, {id:'datediff', icon:'📅', name:'Date Difference'}, {id:'base64', icon:'🔣', name:'Base64'}, {id:'urlencode', icon:'🔗', name:'URL Encode'}, {id:'jsonformat', icon:'📋', name:'JSON Formatter'}, {id:'lorem', icon:'📄', name:'Lorem Ipsum'}, {id:'currency', icon:'💱', name:'Currency Converter'}, {id:'percentcalc', icon:'📊', name:'Percentage Calc'}, {id:'agecalc', icon:'🎂', name:'Age Calculator'}, {id:'binhex', icon:'💻', name:'Binary/Hex'}, {id:'roman', icon:'🏛️', name:'Roman Numeral'}, {id:'tipcalc', icon:'💰', name:'Tip Calculator'}, {id:'worldclock', icon:'🕐', name:'World Clock (All Zones)'}, {id:'dice', icon:'🎲', name:'Dice Roller'}, {id:'coin', icon:'🪙', name:'Coin Flip'}, {id:'joke', icon:'😂', name:'Joke Generator (Fresh)'}, {id:'ip', icon:'🌍', name:'IP Lookup'},
-        // NEW ADVANCED AI TOOLS inserted before premium_ai
         {id:'ai_paraphraser', icon:'🔄', name:'AI Paraphraser'},
         {id:'ai_grammar', icon:'✅', name:'Grammar & Spell Check'},
         {id:'ai_summarizer', icon:'📄', name:'AI Summarizer'},
@@ -1118,7 +1195,6 @@
         renderToolPanel(toolId);
         document.getElementById('toolPanel').scrollIntoView({behavior:'smooth'});
     };
-    // ************** ORIGINAL ADVANCED AI TEXT ENHANCER **************
     window.demoAIEnhanceAdvanced = function() {
         let txt = document.getElementById('aiDemoText').value;
         let mode = document.getElementById('aiMode').value;
@@ -1132,7 +1208,6 @@
         else if(mode==='simplify') result = txt.replace(/[^a-zA-Z0-9 ]/g,'').toLowerCase();
         document.getElementById('aiDemoResult').innerHTML = result;
     };
-    // ************** NEW ADVANCED AI TOOLS FUNCTIONS **************
     window.runParaphraserTool = function() {
         let txt = document.getElementById('paraphraserText').value;
         if(!txt) { document.getElementById('paraphraserOut').innerHTML = 'Please enter some text first.'; return; }
@@ -1199,8 +1274,7 @@
         document.getElementById('readabilityOut').innerHTML = `<strong>📖 Readability (Flesch Reading Ease):</strong><br>Score: ${Math.round(score)}<br>Level: ${level}<br>Words: ${words}, Sentences: ${sentenceCount}, Syllables: ${syllables}`;
     };
     function renderShortenerGrid(){ const container = document.getElementById('shortenerGrid'); const shorteners = [ { name: 'TinyURL', icon: '🔗', url: 'https://tinyurl.com/app' }, { name: 'Bitly', icon: '📎', url: 'https://bitly.com' }, { name: 'is.gd', icon: '⚡', url: 'https://is.gd' }, { name: 'Rebrandly', icon: '🔄', url: 'https://rebrandly.com' }, { name: 'Short.io', icon: '✂️', url: 'https://short.io' }, { name: 'Cutt.ly', icon: '✂️', url: 'https://cutt.ly' }, { name: 'T2M', icon: '🔗', url: 'https://t2m.io' }, { name: 'Shorte.st', icon: '📏', url: 'https://shorte.st' }, { name: '1Link', icon: '🔗', url: 'https://1link.io' }, { name: 'Linkly', icon: '🔗', url: 'https://linklyhq.com' } ]; let html = ''; shorteners.forEach(s => { html += `<div class="shortener-card" onclick="window.open('${s.url}', '_blank'); closeShortenerOverlay();"><div style="font-size:2.8rem;">${s.icon}</div><div style="font-weight:700; font-size:1.2rem;">${s.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`; }); container.innerHTML = html; }
-    function renderOnlineGrid(){ const container = document.getElementById('onlineGrid'); const onlineToolsList = [ { name: 'Canva', icon: '🎨', url: 'https://www.canva.com' }, { name: 'Remove.bg', icon: '🖼️', url: 'https://www.remove.bg' }, { name: 'TinyWow', icon: '✨', url: 'https://tinywow.com' }, { name: 'ILovePDF', icon: '📄', url: 'https://www.ilovepdf.com' }, { name: 'SmallPDF', icon: '📑', url: 'https://smallpdf.com' }, { name: 'OnlineOCR', icon: '🔍', url: 'https://www.onlineocr.net' }, { name: 'Convertio', icon: '🔄', url: 'https://convertio.co' }, { name: 'CloudConvert', icon: '☁️', url: 'https://cloudconvert.com' }, { name: 'EZGIF', icon: '🎞️', url: 'https://ezgif.com' }, { name: 'Kapwing', icon: '✂️', url: 'https://www.kapwing.com' }, { name: 'Pixlr', icon: '🎨', url: 'https://pixlr.com' }, { name: 'Photopea', icon: '🖌️', url: 'https://www.photopea.com' }, { name: 'Cleanup.pictures', icon: '🧹', url: 'https://cleanup.pictures' }, { name: 'Watermark Remover', icon: '💧', url: 'https://www.watermarkremover.io' }, { name: 'QR Code Monkey', icon: '📱', url: 'https://www.qrcode-monkey.com' }, { name: 'Grammarly', icon: '✍️', url: 'https://www.grammarly.com' }, { name: 'QuillBot', icon: '📝', url: 'https://quillbot.com' }, { name: 'Hemingway Editor', icon: '📖', url: 'https://hemingwayapp.com' }, { name: 'DeepL Translator', icon: '🌐', url: 'https://www.deepl.com' }, // Google Translate removed
-        { name: 'MyMemory', icon: '🧠', url: 'https://mymemory.translated.net' }, { name: 'Color Hunt', icon: '🎨', url: 'https://colorhunt.co' }, { name: 'Coolors', icon: '🌈', url: 'https://coolors.co' }, { name: 'UI Gradients', icon: '📊', url: 'https://uigradients.com' }, { name: 'CSS Gradient', icon: '🎨', url: 'https://cssgradient.io' }, { name: 'JsonFormatter', icon: '📋', url: 'https://jsonformatter.org' }, { name: 'CodePen', icon: '💻', url: 'https://codepen.io' }, { name: 'JSFiddle', icon: '🔧', url: 'https://jsfiddle.net' }, { name: 'Replit', icon: '🔄', url: 'https://replit.com' } ]; let html = ''; onlineToolsList.forEach(tool => { html += `<div class="online-card" onclick="window.open('${tool.url}', '_blank'); closeOnlineOverlay();"><div style="font-size:2.8rem;">${tool.icon}</div><div style="font-weight:700; font-size:1.2rem;">${tool.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`; }); container.innerHTML = html; }
+    function renderOnlineGrid(){ const container = document.getElementById('onlineGrid'); const onlineToolsList = [ { name: 'Canva', icon: '🎨', url: 'https://www.canva.com' }, { name: 'Remove.bg', icon: '🖼️', url: 'https://www.remove.bg' }, { name: 'TinyWow', icon: '✨', url: 'https://tinywow.com' }, { name: 'ILovePDF', icon: '📄', url: 'https://www.ilovepdf.com' }, { name: 'SmallPDF', icon: '📑', url: 'https://smallpdf.com' }, { name: 'OnlineOCR', icon: '🔍', url: 'https://www.onlineocr.net' }, { name: 'Convertio', icon: '🔄', url: 'https://convertio.co' }, { name: 'CloudConvert', icon: '☁️', url: 'https://cloudconvert.com' }, { name: 'EZGIF', icon: '🎞️', url: 'https://ezgif.com' }, { name: 'Kapwing', icon: '✂️', url: 'https://www.kapwing.com' }, { name: 'Pixlr', icon: '🎨', url: 'https://pixlr.com' }, { name: 'Photopea', icon: '🖌️', url: 'https://www.photopea.com' }, { name: 'Cleanup.pictures', icon: '🧹', url: 'https://cleanup.pictures' }, { name: 'Watermark Remover', icon: '💧', url: 'https://www.watermarkremover.io' }, { name: 'QR Code Monkey', icon: '📱', url: 'https://www.qrcode-monkey.com' }, { name: 'Grammarly', icon: '✍️', url: 'https://www.grammarly.com' }, { name: 'QuillBot', icon: '📝', url: 'https://quillbot.com' }, { name: 'Hemingway Editor', icon: '📖', url: 'https://hemingwayapp.com' }, { name: 'DeepL Translator', icon: '🌐', url: 'https://www.deepl.com' }, { name: 'MyMemory', icon: '🧠', url: 'https://mymemory.translated.net' }, { name: 'Color Hunt', icon: '🎨', url: 'https://colorhunt.co' }, { name: 'Coolors', icon: '🌈', url: 'https://coolors.co' }, { name: 'UI Gradients', icon: '📊', url: 'https://uigradients.com' }, { name: 'CSS Gradient', icon: '🎨', url: 'https://cssgradient.io' }, { name: 'JsonFormatter', icon: '📋', url: 'https://jsonformatter.org' }, { name: 'CodePen', icon: '💻', url: 'https://codepen.io' }, { name: 'JSFiddle', icon: '🔧', url: 'https://jsfiddle.net' }, { name: 'Replit', icon: '🔄', url: 'https://replit.com' } ]; let html = ''; onlineToolsList.forEach(tool => { html += `<div class="online-card" onclick="window.open('${tool.url}', '_blank'); closeOnlineOverlay();"><div style="font-size:2.8rem;">${tool.icon}</div><div style="font-weight:700; font-size:1.2rem;">${tool.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`; }); container.innerHTML = html; }
     function renderAiToolsFull(){ const container = document.getElementById('aiToolsContainer'); const aiSites = [ { name: 'ChatGPT', icon: '🤖', url: 'https://chat.openai.com', category: 'chat' }, { name: 'Google Gemini', icon: '🧠', url: 'https://gemini.google.com', category: 'chat' }, { name: 'Claude', icon: '🧬', url: 'https://claude.ai', category: 'chat' }, { name: 'DeepSeek', icon: '🐋', url: 'https://chat.deepseek.com', category: 'chat' }, { name: 'Microsoft Copilot', icon: '💻', url: 'https://copilot.microsoft.com', category: 'chat' }, { name: 'Poe', icon: '💡', url: 'https://poe.com', category: 'chat' }, { name: 'Pi AI', icon: '😊', url: 'https://pi.ai/talk', category: 'chat' }, { name: 'Character.AI', icon: '🎭', url: 'https://character.ai', category: 'chat' }, { name: 'Perplexity', icon: '🔎', url: 'https://www.perplexity.ai', category: 'search' }, { name: 'You.com', icon: '🔍', url: 'https://you.com', category: 'search' }, { name: 'DALL·E 3', icon: '🖼️', url: 'https://openai.com/dall-e-3', category: 'image' }, { name: 'Midjourney', icon: '🌸', url: 'https://www.midjourney.com', category: 'image' }, { name: 'Stable Diffusion', icon: '🌀', url: 'https://stability.ai', category: 'image' }, { name: 'Leonardo AI', icon: '🦁', url: 'https://leonardo.ai', category: 'image' }, { name: 'DreamStudio', icon: '🌟', url: 'https://beta.dreamstudio.ai', category: 'image' }, { name: 'Bing Image Creator', icon: '🌄', url: 'https://www.bing.com/images/create', category: 'image' }, { name: 'Craiyon', icon: '🎠', url: 'https://www.craiyon.com', category: 'image' }, { name: 'NightCafe', icon: '🌌', url: 'https://creator.nightcafe.studio', category: 'image' }, { name: 'Artbreeder', icon: '🧬', url: 'https://www.artbreeder.com', category: 'image' }, { name: 'Playground AI', icon: '🎮', url: 'https://playgroundai.com', category: 'image' }, { name: 'Runway ML', icon: '🎥', url: 'https://runwayml.com', category: 'video' }, { name: 'Pika', icon: '🎞️', url: 'https://pika.art', category: 'video' }, { name: 'Synthesia', icon: '🎙️', url: 'https://www.synthesia.io', category: 'video' }, { name: 'HeyGen', icon: '👤', url: 'https://www.heygen.com', category: 'video' }, { name: 'Invideo', icon: '📹', url: 'https://invideo.io', category: 'video' }, { name: 'Kapwing', icon: '🎬', url: 'https://www.kapwing.com', category: 'video' }, { name: 'Lumen5', icon: '📽️', url: 'https://www.lumen5.com', category: 'video' }, { name: 'Suno AI', icon: '🎤', url: 'https://suno.ai', category: 'music' }, { name: 'Udio', icon: '🎧', url: 'https://www.udio.com', category: 'music' }, { name: 'AIVA', icon: '🎼', url: 'https://www.aiva.ai', category: 'music' }, { name: 'Boomy', icon: '🎹', url: 'https://boomy.com', category: 'music' }, { name: 'Soundraw', icon: '🎛️', url: 'https://soundraw.io', category: 'music' }, { name: 'Mubert', icon: '🎚️', url: 'https://mubert.com', category: 'music' }, { name: 'GitHub Copilot', icon: '🐙', url: 'https://github.com/features/copilot', category: 'code' }, { name: 'Codeium', icon: '⚡', url: 'https://codeium.com', category: 'code' }, { name: 'Tabnine', icon: '🦊', url: 'https://www.tabnine.com', category: 'code' }, { name: 'Replit Ghostwriter', icon: '👻', url: 'https://replit.com/ghostwriter', category: 'code' }, { name: 'Cody', icon: '🤖', url: 'https://sourcegraph.com/cody', category: 'code' }, { name: 'Jasper', icon: '✍️', url: 'https://www.jasper.ai', category: 'writing' }, { name: 'Writesonic', icon: '📝', url: 'https://writesonic.com', category: 'writing' }, { name: 'Notion AI', icon: '📓', url: 'https://www.notion.so/product/ai', category: 'writing' } ]; const categoryNames = { chat: 'AI Chat & Assistants', search: 'AI Search & Research', image: 'AI Image Generation', video: 'AI Video & Animation', music: 'AI Music & Audio', code: 'AI Code & Development', writing: 'AI Writing & Content' }; const grouped = {}; aiSites.forEach(tool => { if (!grouped[tool.category]) grouped[tool.category] = []; grouped[tool.category].push(tool); }); let html = '<h2 style="font-size:2rem;text-align:center;">🤖 AI Hub · 40+ AI Tools</h2>'; for (const [catKey, catLabel] of Object.entries(categoryNames)) { if (grouped[catKey] && grouped[catKey].length > 0) { html += `<h3 style="margin-top:36px;text-align:center;border-bottom:2px solid var(--border);padding-bottom:12px;font-size:1.6rem;">${catLabel}</h3><div class="ai-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:24px;margin-top:24px;">`; grouped[catKey].forEach(ai => { html += `<div class="ai-card" onclick="window.open('${ai.url}', '_blank'); closeAiOverlay();"><div style="font-size:2.8rem;">${ai.icon}</div><div style="font-weight:700; font-size:1.2rem;">${ai.name}</div><div style="font-size:0.9rem;">Click to open</div></div>`; }); html += '</div>'; } } html += '<div style="text-align:center;margin-top:40px;"><button class="tool-btn" onclick="closeAiOverlay()">← Back to main tools</button></div>'; container.innerHTML = html; }
     function renderImagineTools(){ const container = document.getElementById('imagineToolsGrid'); const imagineTools = [ { name: '🖼️ Image to Text (OCR)', icon: '📸', action: 'ocr' }, { name: '🎨 Random Color Palette', icon: '🌈', action: 'randomColor' }, { name: '📻 Morse Code Converter', icon: '📡', action: 'morse' }, { name: '📝 Text Summarizer', icon: '📄', action: 'summarize' }, { name: '🔢 Number Base Converter', icon: '🔢', action: 'baseAny' }, { name: '🧬 UUID Generator', icon: '🆔', action: 'uuid' }, { name: '🔐 Hash Generator', icon: '🔑', action: 'hashGen' }, { name: '📅 Unix Timestamp', icon: '⏲️', action: 'unixTime' }, { name: '🌍 IP Geolocation', icon: '🗺️', action: 'ipGeo' }, { name: '📧 Email Validator', icon: '📨', action: 'emailValidate' }, { name: '📊 CSV to JSON', icon: '📑', action: 'csvToJson' }, { name: '🧮 Quadratic Solver', icon: '📐', action: 'quadratic' }, { name: '⚖️ Weight Converter', icon: '⚖️', action: 'weightConv' }, { name: '🌡️ Temperature Converter', icon: '🌡️', action: 'tempConv' }, { name: '📏 Area Converter', icon: '📐', action: 'areaConv' }, { name: '💾 Data Size Converter', icon: '💾', action: 'dataConv' }, { name: '⏱️ Epoch Time Now', icon: '⏰', action: 'epochNow' }, { name: '🔍 Reverse Text', icon: '🔄', action: 'reverseText' }, { name: '✏️ Leet Speak', icon: '👾', action: 'leetSpeak' }, { name: '🎯 Palindrome Checker', icon: '🔄', action: 'palindrome' }, { name: '🔠 Strong Password', icon: '🔐', action: 'strongPwd' }, { name: '📇 QR Reader (camera)', icon: '📷', action: 'qrReader' }, { name: '🎲 Custom Dice Roll', icon: '🎲', action: 'customDice' }, { name: '💬 Random Advice', icon: '💡', action: 'advice' }, { name: '🔗 URL Shortener', icon: '🔗', action: 'shortener' } ]; let html = ''; imagineTools.forEach(tool => { html += `<div class="imagine-tool-card" onclick="executeImagineTool('${tool.action}')"><div style="font-size:2.8rem;">${tool.icon}</div><div style="font-weight:700; font-size:1.2rem;">${tool.name}</div></div>`; }); container.innerHTML = html; }
     window.executeImagineTool = function(action){ if(action === 'shortener') { openShortenerOverlay(); return; } let output = ''; switch(action){ case 'ocr': output = '📸 OCR Demo: Upload image<br><input type="file" id="ocrFile" accept="image/*"><button class="tool-btn" onclick="simulateOCR()">Extract Text</button><div id="ocrResult"></div>'; break;
@@ -1462,7 +1536,6 @@
                 content = `<button class="tool-btn" onclick="getIPAdvanced()">Get My IP Info</button>
                 <div id="ipOut" class="tool-output"></div>`;
                 break;
-            // NEW ADVANCED AI TOOLS CASES
             case 'ai_paraphraser':
                 title = '🔄 AI Paraphraser';
                 content = `<textarea id="paraphraserText" rows="4" class="search-input" placeholder="Enter text to paraphrase..."></textarea>
@@ -1510,7 +1583,6 @@
         }
         document.getElementById('toolPanelTitle').innerHTML = title;
         document.getElementById('toolContent').innerHTML = content;
-        // Initialize event listeners for each tool
         if(tid=='wordcount') document.getElementById('wcText')?.addEventListener('input',updateWordCount);
         if(tid=='password') document.getElementById('passLen')?.addEventListener('input',(e)=>document.getElementById('lenVal').innerText=e.target.value);
         if(tid=='colorpicker') document.getElementById('colorPick')?.addEventListener('input',updateColorFromPicker);
@@ -1518,8 +1590,7 @@
         if(tid=='currency') loadCurrencyList();
         if(tid=='worldclock') { refreshWorldClock(); setInterval(refreshWorldClock, 60000); }
     }
-    // ==================== Enhanced functions definitions ====================
-    // Calculator history
+    // Enhanced functions definitions (same as original, kept for compatibility)
     let calcHistory = [];
     window.appendCalc = function(v) {
         if (v === 'C') { calcExpr = ''; }
@@ -1551,7 +1622,6 @@
             if (display) display.textContent = result;
         } catch(e) { document.getElementById('calcResult').innerHTML = 'Error'; }
     };
-    // Password advanced
     window.genPassAdvanced = function() {
         let len = parseInt(document.getElementById('passLen').value);
         let upper = document.getElementById('useUpper').checked;
@@ -1574,7 +1644,6 @@
         else if(len>=8 && ((upper && lower) || (digits && symbols))) strength = 'Medium';
         document.getElementById('strengthMeter').innerHTML = strength;
     };
-    // Word counter advanced
     function updateWordCount() {
         let t = document.getElementById('wcText').value;
         let words = t.trim().split(/\s+/).filter(w=>w.length>0);
@@ -1592,7 +1661,6 @@
         let sorted = Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,3);
         document.getElementById('keywordDensity').innerHTML = sorted.map(([k,v])=>`${k} (${v})`).join(', ') || '—';
     }
-    // Case converter extra
     window.toUpper = function(){ document.getElementById('caseOut').innerText = document.getElementById('caseText').value.toUpperCase(); };
     window.toLower = function(){ document.getElementById('caseOut').innerText = document.getElementById('caseText').value.toLowerCase(); };
     window.toTitleCase = function() {
@@ -1615,7 +1683,6 @@
         for(let c of txt) result += c===c.toUpperCase() ? c.toLowerCase() : c.toUpperCase();
         document.getElementById('caseOut').innerHTML = result;
     };
-    // Color picker advanced
     let recentColors = JSON.parse(localStorage.getItem('recentColors')||'[]');
     function updateColorFromPicker() {
         let col = document.getElementById('colorPick').value;
@@ -1637,7 +1704,6 @@
         navigator.clipboard.writeText(copyText);
         showToast(`Copied ${copyText}`);
     };
-    // Unit converter advanced
     const unitDefs = {
         length: { units: ['mm','cm','m','km','in','ft','yd','mi'], conv: { mm:0.001, cm:0.01, m:1, km:1000, in:0.0254, ft:0.3048, yd:0.9144, mi:1609.344 } },
         mass: { units: ['mg','g','kg','oz','lb','t'], conv: { mg:0.000001, g:0.001, kg:1, oz:0.0283495, lb:0.453592, t:1000 } },
@@ -1682,14 +1748,12 @@
             document.getElementById('unitOut').innerHTML = `${val} ${from} = ${result.toFixed(6)} ${to}`;
         }
     };
-    // Stopwatch with laps
     let swRunning=false, swStartTime=0, swElapsed=0, swInterval=null;
     let laps=[];
     window.startSW = function() { if(swRunning) return; swRunning=true; swStartTime=Date.now()-swElapsed; swInterval=setInterval(()=>{ swElapsed=Date.now()-swStartTime; let ms=swElapsed%1000; let sec=Math.floor(swElapsed/1000)%60; let min=Math.floor(swElapsed/60000)%60; let hr=Math.floor(swElapsed/3600000); document.getElementById('swTime').innerText = `${hr.toString().padStart(2,'0')}:${min.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}.${Math.floor(ms/10).toString().padStart(2,'0')}`; },10); };
     window.pauseSW = function() { if(swRunning) { clearInterval(swInterval); swRunning=false; } };
     window.resetSW = function() { clearInterval(swInterval); swRunning=false; swElapsed=0; laps=[]; document.getElementById('swTime').innerText='00:00:00.00'; document.getElementById('lapList').innerHTML=''; };
     window.recordLap = function() { if(!swRunning && swElapsed===0) return; let lapTime = document.getElementById('swTime').innerText; laps.push(lapTime); let ul = document.getElementById('lapList'); ul.innerHTML = laps.map((l,i)=>`<li>Lap ${i+1}: ${l}</li>`).join(''); };
-    // QR advanced
     window.genQRAdvanced = function() {
         let text = document.getElementById('qrText').value;
         if(!text) { showToast('Enter text or URL'); return; }
@@ -1700,7 +1764,6 @@
         let url = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}&ecc=${ec}&color=${fg}&bgcolor=${bg}`;
         document.getElementById('qrImg').innerHTML = `<img src="${url}" style="max-width:100%"> <br><a href="${url}" download="qrcode.png" class="tool-btn">Download PNG</a>`;
     };
-    // BMI advanced
     window.toggleBMIUnits = function() {
         let unit = document.getElementById('bmiUnit').value;
         document.getElementById('bmiMetricDiv').style.display = unit==='metric'?'block':'none';
@@ -1726,7 +1789,6 @@
         let category = bmi<18.5?'Underweight':bmi<25?'Normal':bmi<30?'Overweight':'Obese';
         document.getElementById('bmiOut').innerHTML = `BMI: ${bmi.toFixed(1)} (${category})<br>Healthy weight range: ${(18.5*heightM*heightM).toFixed(1)} - ${(24.9*heightM*heightM).toFixed(1)} kg`;
     };
-    // Random advanced
     window.genRandomAdvanced = function() {
         let min = parseFloat(document.getElementById('randMin').value);
         let max = parseFloat(document.getElementById('randMax').value);
@@ -1755,13 +1817,12 @@
         if(sort) results.sort((a,b)=>parseFloat(a)-parseFloat(b));
         document.getElementById('randOut').innerHTML = results.join(', ');
     };
-    // Countdown advanced
-    let cdTotalSeconds=0, cdIntervalObj=null, cdRunning=false;
     window.pauseCD = function() { if(cdIntervalObj) { clearInterval(cdIntervalObj); cdRunning=false; } };
     window.setPresetCD = function(seconds) {
         document.getElementById('cdMinutes').value = Math.floor(seconds/60);
         document.getElementById('cdSecondsInput').value = seconds%60;
     };
+    let cdTotalSeconds=0, cdIntervalObj=null, cdRunning=false;
     window.startCDAdvanced = function() {
         if(cdRunning) return;
         let min = parseInt(document.getElementById('cdMinutes').value)||0;
@@ -1790,7 +1851,6 @@
         document.getElementById('cdMinutes').value='0';
         document.getElementById('cdSecondsInput').value='60';
     };
-    // Date diff advanced
     window.diffDatesAdvanced = function() {
         let d1 = new Date(document.getElementById('date1').value);
         let d2 = new Date(document.getElementById('date2').value);
@@ -1801,7 +1861,6 @@
         let diffMinutes = Math.floor((diffMs%3600000)/60000);
         document.getElementById('dateOut').innerHTML = `${diffDays} days, ${diffHours} hours, ${diffMinutes} minutes. Weekdays: ${Math.floor(diffDays/7)} weeks + ${diffDays%7} days`;
     };
-    // Base64 functions
     window.b64Encode = function() { let txt = document.getElementById('b64Text').value; document.getElementById('b64Out').innerHTML = btoa(txt); };
     window.b64Decode = function() { let txt = document.getElementById('b64Text').value; try { document.getElementById('b64Out').innerHTML = atob(txt); } catch(e) { document.getElementById('b64Out').innerHTML = 'Invalid Base64'; } };
     window.fileToBase64 = function() {
@@ -1822,11 +1881,9 @@
         link.download = 'decoded_file.bin';
         link.click();
     };
-    // URL encode advanced
     window.urlEnc = function() { document.getElementById('urlOut').innerText = encodeURIComponent(document.getElementById('urlText').value); };
     window.urlDec = function() { document.getElementById('urlOut').innerText = decodeURIComponent(document.getElementById('urlText').value); };
     window.urlEncFull = function() { document.getElementById('urlOut').innerText = encodeURI(document.getElementById('urlText').value); };
-    // JSON minify & validate
     window.formatJSON = function() {
         try { let obj = JSON.parse(document.getElementById('jsonIn').value); document.getElementById('jsonOut').innerHTML = JSON.stringify(obj, null, 2); } catch(e) { document.getElementById('jsonOut').innerHTML = 'Invalid JSON'; }
     };
@@ -1836,7 +1893,6 @@
     window.validateJSON = function() {
         try { JSON.parse(document.getElementById('jsonIn').value); document.getElementById('jsonOut').innerHTML = '✅ Valid JSON'; } catch(e) { document.getElementById('jsonOut').innerHTML = '❌ Invalid JSON: '+e.message; }
     };
-    // Lorem advanced
     window.genLoremAdvanced = function() {
         let type = document.getElementById('loremType').value;
         let count = parseInt(document.getElementById('loremCount').value);
@@ -1850,7 +1906,6 @@
         if(html) result = `<p>${result.replace(/\n/g,'</p><p>')}</p>`;
         document.getElementById('loremOut').innerHTML = result;
     };
-    // Currency live rates - ALL WORLD CURRENCIES (UPDATED with rate display)
     const currencyList = [
         "AED","AFN","ALL","AMD","ANG","AOA","ARS","AUD","AWG","AZN","BAM","BBD","BDT","BGN","BHD","BIF","BMD","BND","BOB","BRL","BSD","BTN","BWP","BYN","BZD","CAD","CDF","CHF","CLP","CNY","COP","CRC","CUP","CVE","CZK","DJF","DKK","DOP","DZD","EGP","ERN","ETB","EUR","FJD","FKP","FOK","GBP","GEL","GGP","GHS","GIP","GMD","GNF","GTQ","GYD","HKD","HNL","HRK","HTG","HUF","IDR","ILS","IMP","INR","IQD","IRR","ISK","JEP","JMD","JOD","JPY","KES","KGS","KHR","KID","KMF","KRW","KWD","KYD","KZT","LAK","LBP","LKR","LRD","LSL","LYD","MAD","MDL","MGA","MKD","MMK","MNT","MOP","MRU","MUR","MVR","MWK","MXN","MYR","MZN","NAD","NGN","NIO","NOK","NPR","NZD","OMR","PAB","PEN","PGK","PHP","PKR","PLN","PYG","QAR","RON","RSD","RUB","RWF","SAR","SBD","SCR","SDG","SEK","SGD","SHP","SLE","SLL","SOS","SRD","SSP","STN","SYP","SZL","THB","TJS","TMT","TND","TOP","TRY","TTD","TVD","TWD","TZS","UAH","UGX","USD","UYU","UZS","VES","VND","VUV","WST","XAF","XCD","XDR","XOF","XPF","YER","ZAR","ZMW","ZWL"
     ];
@@ -1862,7 +1917,6 @@
         fromSel.value = 'USD';
         toSel.value = 'EUR';
     }
-    // UPDATED: Currency converter showing both amount and exchange rate
     window.convCurrencyAdvanced = async function() {
         let amt = parseFloat(document.getElementById('currAmt').value);
         let from = document.getElementById('currFrom').value;
@@ -1880,7 +1934,6 @@
             }
         } catch(e) { document.getElementById('currOut').innerHTML = 'Error fetching rates'; }
     };
-    // Percentage advanced
     window.calcPercent = function() {
         let val = parseFloat(document.getElementById('percVal').value);
         let per = parseFloat(document.getElementById('percPer').value);
@@ -1906,7 +1959,6 @@
         if(isNaN(part)||isNaN(whole)||whole===0) { showToast('Invalid input'); return; }
         document.getElementById('percOut').innerHTML = `${(part/whole*100).toFixed(2)}%`;
     };
-    // Age advanced
     window.calcAgeAdvanced = function() {
         let dob = new Date(document.getElementById('dob').value);
         let today = new Date();
@@ -1920,7 +1972,6 @@
         let daysToNext = Math.ceil((nextBD-today)/86400000);
         document.getElementById('ageOut').innerHTML = `${years} years, ${months} months, ${days} days.<br>Next birthday in ${daysToNext} days.`;
     };
-    // Bases converter
     window.convertAllBases = function() {
         let input = document.getElementById('binVal').value.trim();
         let num = parseInt(input);
@@ -1929,7 +1980,6 @@
         if(isNaN(num)) { showToast('Invalid number'); return; }
         document.getElementById('binhexOut').innerHTML = `Decimal: ${num}<br>Binary: ${num.toString(2)}<br>Hex: ${num.toString(16).toUpperCase()}<br>Octal: ${num.toString(8)}`;
     };
-    // Roman advanced
     window.convertRomanAdvanced = function() {
         let input = document.getElementById('romanNum').value.trim().toUpperCase();
         let romanRegex = /^[IVXLCDM]+$/;
@@ -1945,7 +1995,6 @@
     };
     function intToRoman(num) { const map = { M:1000, CM:900, D:500, CD:400, C:100, XC:90, L:50, XL:40, X:10, IX:9, V:5, IV:4, I:1 }; let res=''; for(let key in map) { while(num>=map[key]) { res+=key; num-=map[key]; } } return res; }
     function romanToInt(s) { const map = { I:1, V:5, X:10, L:50, C:100, D:500, M:1000 }; let total=0; for(let i=0;i<s.length;i++) { let curr=map[s[i]], next=map[s[i+1]]; if(next && curr<next) total-=curr; else total+=curr; } return total; }
-    // Tip advanced
     window.calcTipAdvanced = function() {
         let bill = parseFloat(document.getElementById('billAmt').value);
         let tipP = parseFloat(document.getElementById('tipPct').value);
@@ -1956,7 +2005,6 @@
         let perPerson = total/split;
         document.getElementById('tipOut').innerHTML = `Tip: $${tip.toFixed(2)}<br>Total: $${total.toFixed(2)}<br>Each person (${split}): $${perPerson.toFixed(2)}`;
     };
-    // World clock with filter
     let worldClock24h = true;
     window.toggleWorldClockFormat = function() { worldClock24h = !worldClock24h; refreshWorldClock(); };
     window.refreshWorldClock = function() {
@@ -1979,7 +2027,6 @@
         container.innerHTML = html;
     };
     window.filterWorldClock = function() { refreshWorldClock(); };
-    // Dice multiple
     window.rollMultipleDice = function() {
         let count = parseInt(document.getElementById('diceCount').value);
         let sides = parseInt(document.getElementById('diceSidesSelect').value);
@@ -1988,7 +2035,6 @@
         for(let i=0;i<count;i++) { let r = Math.floor(Math.random()*sides)+1; results.push(r); sum+=r; }
         document.getElementById('diceOut').innerHTML = `🎲 ${results.join(', ')}  (Sum: ${sum})`;
     };
-    // Coin flip streak
     let streak=0, lastResult='';
     window.flipCoinAdvanced = function() {
         let result = Math.random()<0.5?'Heads':'Tails';
@@ -1998,7 +2044,6 @@
         document.getElementById('coinOut').innerHTML = `🪙 ${result}`;
         document.getElementById('coinStreak').innerHTML = streak;
     };
-    // Joke with categories
     window.fetchNewJokeAdvanced = async function() {
         let category = document.getElementById('jokeCategory').value;
         let safe = document.getElementById('safeMode').checked?'&safe-mode': '';
@@ -2012,16 +2057,13 @@
             outDiv.innerHTML = joke;
         } catch(e) { outDiv.innerHTML = 'Failed to fetch joke'; }
     };
-    // IP advanced - FIXED AND FULLY WORKING (real data)
     window.getIPAdvanced = async function() {
         let out = document.getElementById('ipOut');
         out.innerHTML = '<span>🔍 Fetching your IP and location...</span>';
         try {
-            // Fetch public IP using ipify (HTTPS)
             let ipRes = await fetch('https://api.ipify.org?format=json');
             let ipData = await ipRes.json();
             let ip = ipData.ip;
-            // Fetch detailed geolocation via ip-api.com (HTTPS, CORS enabled)
             let geoRes = await fetch(`https://ip-api.com/json/${ip}?fields=status,country,regionName,city,zip,lat,lon,isp,org,as,timezone,query`);
             let geo = await geoRes.json();
             if(geo.status === 'success') {
@@ -2045,7 +2087,6 @@
             console.error(err);
         }
     };
-    // ==================== End of enhanced functions ====================
     document.getElementById('globalSearch').addEventListener('input',function(e){ let q=e.target.value.trim().toLowerCase(); if(q===''){ document.getElementById('searchResults').style.display='none'; return; } let filtered = fullToolsList.filter(t=>t.name.toLowerCase().includes(q)); let html = filtered.map(t=>`<div style="padding:16px;border-bottom:1px solid var(--border);cursor:pointer;font-size:1rem;" onclick="selectTool('${t.id}');document.getElementById('globalSearch').value='';document.getElementById('searchResults').style.display='none';">${t.icon} ${t.name}</div>`).join(''); if(!html){ html = `<div style="padding:20px;text-align:center;"><div>No tools found for "<strong>${q}</strong>"</div><button class="tool-btn" style="margin-top:16px;" onclick="searchGoogle('${q}')">🔍 Search Google for "${q} free online"</button></div>`; } document.getElementById('searchResults').innerHTML=html; document.getElementById('searchResults').style.display='block'; });
     window.searchGoogle = function(query){ window.open(`https://www.google.com/search?q=${encodeURIComponent(query + ' free online')}`, '_blank'); document.getElementById('globalSearch').value = ''; document.getElementById('searchResults').style.display = 'none'; };
     document.addEventListener('click',(e)=>{ if(!e.target.closest('.search-container')) document.getElementById('searchResults').style.display='none'; });
