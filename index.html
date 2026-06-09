@@ -448,61 +448,6 @@
 </div>
 
 <style>
-/* ===== NEWS TICKER – BRIGHT WHITE TEXT ===== */
-.ultra-ticker-wrapper {
-    width: 100%;
-    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-    border-top: 3px solid #ffd966;
-    border-bottom: 3px solid #ff884d;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 -8px 30px rgba(0,0,0,0.3);
-    margin-top: 0;
-    z-index: 9999;
-}
-.ticker-container {
-    width: 100%;
-    overflow: hidden;
-    white-space: nowrap;
-    background: rgba(0,0,0,0.5);
-    backdrop-filter: blur(4px);
-    padding: 14px 0;
-}
-.ticker-content {
-    display: inline-block;
-    animation: smoothScroll 60s linear infinite;
-    font-size: 1.3rem;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-.ticker-content span {
-    display: inline-block;
-    vertical-align: middle;
-}
-.ticker-icon {
-    font-size: 1.8rem;
-    margin: 0 15px;
-    filter: drop-shadow(0 0 5px gold);
-}
-.ticker-text {
-    color: #ffffff !important;
-    background: none !important;
-    -webkit-background-clip: unset !important;
-    background-clip: unset !important;
-    text-shadow: 0 0 8px rgba(0,0,0,0.8), 0 0 4px #ffffff, 0 0 2px #000000;
-    font-weight: 800;
-    margin-right: 40px;
-    white-space: nowrap;
-    font-size: 1.4rem;
-}
-@keyframes smoothScroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-}
-.ticker-content:hover {
-    animation-play-state: paused;
-}
-
 /* ===== CHAT WIDGET (left side) ===== */
 .chat-widget {
     position: fixed;
