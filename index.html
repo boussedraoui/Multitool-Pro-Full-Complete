@@ -1593,6 +1593,8 @@
         document.getElementById('keywordDensity').innerHTML = sorted.map(([k,v])=>`${k} (${v})`).join(', ') || '—';
     }
     // Case converter extra
+    window.toUpper = function(){ document.getElementById('caseOut').innerText = document.getElementById('caseText').value.toUpperCase(); };
+    window.toLower = function(){ document.getElementById('caseOut').innerText = document.getElementById('caseText').value.toLowerCase(); };
     window.toTitleCase = function() {
         let txt = document.getElementById('caseText').value;
         document.getElementById('caseOut').innerText = txt.replace(/\w\S*/g, w=>w.charAt(0).toUpperCase()+w.substr(1).toLowerCase());
@@ -1755,6 +1757,7 @@
     };
     // Countdown advanced
     let cdTotalSeconds=0, cdIntervalObj=null, cdRunning=false;
+    window.pauseCD = function() { if(cdIntervalObj) { clearInterval(cdIntervalObj); cdRunning=false; } };
     window.setPresetCD = function(seconds) {
         document.getElementById('cdMinutes').value = Math.floor(seconds/60);
         document.getElementById('cdSecondsInput').value = seconds%60;
@@ -1798,7 +1801,9 @@
         let diffMinutes = Math.floor((diffMs%3600000)/60000);
         document.getElementById('dateOut').innerHTML = `${diffDays} days, ${diffHours} hours, ${diffMinutes} minutes. Weekdays: ${Math.floor(diffDays/7)} weeks + ${diffDays%7} days`;
     };
-    // Base64 file
+    // Base64 functions
+    window.b64Encode = function() { let txt = document.getElementById('b64Text').value; document.getElementById('b64Out').innerHTML = btoa(txt); };
+    window.b64Decode = function() { let txt = document.getElementById('b64Text').value; try { document.getElementById('b64Out').innerHTML = atob(txt); } catch(e) { document.getElementById('b64Out').innerHTML = 'Invalid Base64'; } };
     window.fileToBase64 = function() {
         let file = document.getElementById('b64File').files[0];
         if(!file) { showToast('Select a file'); return; }
@@ -1818,8 +1823,13 @@
         link.click();
     };
     // URL encode advanced
+    window.urlEnc = function() { document.getElementById('urlOut').innerText = encodeURIComponent(document.getElementById('urlText').value); };
+    window.urlDec = function() { document.getElementById('urlOut').innerText = decodeURIComponent(document.getElementById('urlText').value); };
     window.urlEncFull = function() { document.getElementById('urlOut').innerText = encodeURI(document.getElementById('urlText').value); };
     // JSON minify & validate
+    window.formatJSON = function() {
+        try { let obj = JSON.parse(document.getElementById('jsonIn').value); document.getElementById('jsonOut').innerHTML = JSON.stringify(obj, null, 2); } catch(e) { document.getElementById('jsonOut').innerHTML = 'Invalid JSON'; }
+    };
     window.minifyJSON = function() {
         try { let obj = JSON.parse(document.getElementById('jsonIn').value); document.getElementById('jsonOut').innerText = JSON.stringify(obj); } catch(e) { document.getElementById('jsonOut').innerHTML = 'Invalid JSON'; }
     };
@@ -1840,7 +1850,7 @@
         if(html) result = `<p>${result.replace(/\n/g,'</p><p>')}</p>`;
         document.getElementById('loremOut').innerHTML = result;
     };
-    // Currency live rates - ALL WORLD CURRENCIES
+    // Currency live rates - ALL WORLD CURRENCIES (UPDATED with rate display)
     const currencyList = [
         "AED","AFN","ALL","AMD","ANG","AOA","ARS","AUD","AWG","AZN","BAM","BBD","BDT","BGN","BHD","BIF","BMD","BND","BOB","BRL","BSD","BTN","BWP","BYN","BZD","CAD","CDF","CHF","CLP","CNY","COP","CRC","CUP","CVE","CZK","DJF","DKK","DOP","DZD","EGP","ERN","ETB","EUR","FJD","FKP","FOK","GBP","GEL","GGP","GHS","GIP","GMD","GNF","GTQ","GYD","HKD","HNL","HRK","HTG","HUF","IDR","ILS","IMP","INR","IQD","IRR","ISK","JEP","JMD","JOD","JPY","KES","KGS","KHR","KID","KMF","KRW","KWD","KYD","KZT","LAK","LBP","LKR","LRD","LSL","LYD","MAD","MDL","MGA","MKD","MMK","MNT","MOP","MRU","MUR","MVR","MWK","MXN","MYR","MZN","NAD","NGN","NIO","NOK","NPR","NZD","OMR","PAB","PEN","PGK","PHP","PKR","PLN","PYG","QAR","RON","RSD","RUB","RWF","SAR","SBD","SCR","SDG","SEK","SGD","SHP","SLE","SLL","SOS","SRD","SSP","STN","SYP","SZL","THB","TJS","TMT","TND","TOP","TRY","TTD","TVD","TWD","TZS","UAH","UGX","USD","UYU","UZS","VES","VND","VUV","WST","XAF","XCD","XDR","XOF","XPF","YER","ZAR","ZMW","ZWL"
     ];
@@ -1852,6 +1862,7 @@
         fromSel.value = 'USD';
         toSel.value = 'EUR';
     }
+    // UPDATED: Currency converter showing both amount and exchange rate
     window.convCurrencyAdvanced = async function() {
         let amt = parseFloat(document.getElementById('currAmt').value);
         let from = document.getElementById('currFrom').value;
@@ -1861,11 +1872,21 @@
             let res = await fetch(`https://api.exchangerate-api.com/v4/latest/${from}`);
             let data = await res.json();
             let rate = data.rates[to];
-            if(rate) document.getElementById('currOut').innerHTML = `${amt} ${from} = ${(amt*rate).toFixed(2)} ${to}`;
-            else document.getElementById('currOut').innerHTML = 'Rate not available';
+            if(rate) {
+                let converted = (amt * rate).toFixed(2);
+                document.getElementById('currOut').innerHTML = `${amt} ${from} = ${converted} ${to}<br><strong>Exchange Rate:</strong> 1 ${from} = ${rate.toFixed(4)} ${to}`;
+            } else {
+                document.getElementById('currOut').innerHTML = 'Rate not available';
+            }
         } catch(e) { document.getElementById('currOut').innerHTML = 'Error fetching rates'; }
     };
     // Percentage advanced
+    window.calcPercent = function() {
+        let val = parseFloat(document.getElementById('percVal').value);
+        let per = parseFloat(document.getElementById('percPer').value);
+        if(isNaN(val)||isNaN(per)) { showToast('Enter numbers'); return; }
+        document.getElementById('percOut').innerHTML = `${per}% of ${val} = ${(val*per/100).toFixed(2)}`;
+    };
     window.showPercentType = function(type) {
         let panel = document.getElementById('percentPanel');
         if(type==='percent') panel.innerHTML = `<input id="percVal" placeholder="Value" class="search-input"><input id="percPer" placeholder="Percent" class="search-input"><button class="tool-btn" onclick="calcPercent()">Calculate</button>`;
