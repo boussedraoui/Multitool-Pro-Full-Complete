@@ -1,0 +1,27 @@
+{
+  "background_color": "#ffffff",
+  "description": "MultiTool Pro - All tools, AI Hub, Premium Free. 50+ utilities, world clock, fresh jokes, translator, and more.",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "MultiTool Pro",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "MultiTool Pro",
+  "start_url": "/",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "https://lh3.googleusercontent.com/pik7zbGQG-Szd44vuAkkWxVCrl6LIJk4e_r8RrmjU7CAVcvtHVgNlB39QMD7xcPfvQS1GtTZLJ-UE8zfjLlTvqI=h180",
+      "type": "image/png",
+      "sizes": "180x180",
+      "isSquare": true,
+      "isPng": true,
+      "isWebp": false,
+      "isJpg": false,
+      "width": 180,
+      "is512x512": false,
+      "is256x256": false,
+      "is192x192": false
+    }
+  ]
+}
