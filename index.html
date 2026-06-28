@@ -439,7 +439,7 @@
 <footer class="footer-widget">
     <div class="footer-controls"><button class="footer-btn" onclick="toggleTheme()">🌓</button><button class="footer-btn" onclick="toggleSidebar()">☰</button><button class="footer-btn" id="muteBtn">🔊</button></div>
     <div class="translation-toolbar"><span>🌍 Translate App:</span><select id="targetLangSelect"><option value="ar">العربية</option><option value="zh">中文</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="es">Español</option><option value="hi">हिन्दी</option><option value="it">Italiano</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="pt">Português</option><option value="ru">Русский</option><option value="tr">Türkçe</option><option value="nl">Nederlands</option><option value="pl">Polski</option><option value="sv">Svenska</option><option value="th">ไทย</option><option value="vi">Tiếng Việt</option><option value="id">Bahasa Indonesia</option><option value="ms">Bahasa Melayu</option><option value="fa">فارسی</option><option value="ur">اردو</option><option value="bn">বাংলা</option><option value="uk">Українська</option><option value="ro">Română</option><option value="cs">Čeština</option><option value="el">Ελληνικά</option><option value="he">עברית</option><option value="hu">Magyar</option><option value="no">Norsk</option><option value="fi">Suomi</option><option value="da">Dansk</option><option value="en">English</option></select><button class="tool-btn" id="translatePageBtn">🌐 Translate & Open</button></div>
-    <p style="font-size:1rem;">© 2026 MultiTool Pro · Ultimate toolkit</p>
+    <p style="text-align:center; font-size:1rem;">© 2026 MultiTool Pro · Ultimate toolkit | <a href="https://sites.google.com/view/multitool-pro/" target="_blank" style="color:var(--primary); font-weight:600;">Privacy Policy</a></p>
     <div class="footer-love-line"><span id="scrollUpArrow" class="scroll-up-arrow" onclick="scrollToTop()" title="Go to top">↑</span><span>Made with <span class="heart-beat">💕</span></span><span class="footer-arrow-down" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})" title="Go to bottom">↓</span></div>
     <div class="random-trigger"><button id="randomToolBtn" class="random-btn">🎲 Random Tool <span class="arrow-down">⬇️</span></button></div>
     <div id="toolRecoBanner" class="tool-reco-banner" style="display:none;"><span class="reco-text" id="recoMessage">🧮 Try the Advanced Calculator</span><button class="reco-try-btn" id="recoTryBtn">Try it <span class="arrow-down-different">▼</span></button><button class="reco-close" id="recoCloseBtn">✕</button></div>
@@ -2254,6 +2254,5 @@ const news = [
 ];
 document.getElementById('newsGrid').innerHTML = news.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
 </script>
-    <a href="https://sites.google.com/view/multitool-pro/" target="_blank" style="color: var(--primary); font-weight: 600; font-size: 1rem;">Privacy Policy</a>
 </body>
 </html>
