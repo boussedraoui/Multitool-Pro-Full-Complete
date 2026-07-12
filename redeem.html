@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redeem MultiTool Pro</title>
+    <style>
+        body { font-family: Arial; text-align: center; padding: 50px; background: #f4f6fc; }
+        .box { background: white; padding: 30px; border-radius: 20px; max-width: 400px; margin: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        input { padding: 12px; width: 80%; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; }
+        button { padding: 12px 24px; background: #6c5ce7; color: white; border: none; border-radius: 8px; cursor: pointer; }
+        #msg { margin-top: 15px; font-weight: bold; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>Redeem Your Premium Code</h2>
+        <input type="text" id="codeInput" placeholder="Enter your code">
+        <button onclick="verifyCode()">Activate</button>
+        <div id="msg"></div>
+    </div>
+    <script>
+        function verifyCode() {
+            const input = document.getElementById('codeInput').value.trim();
+            const msg = document.getElementById('msg');
+            if (input === 'AS-MULT-30ZIG-BPPCL') {
+                msg.className = 'success';
+                msg.innerHTML = '✅ Success! Premium unlocked. <a href="https://boussedraoui.github.io/Multitool-Pro-Full-Complete/">Go to App</a>';
+            } else {
+                msg.className = 'error';
+                msg.innerHTML = '❌ Invalid code. Please try again.';
+            }
+        }
+    </script>
+</body>
+</html>
