@@ -2253,7 +2253,7 @@ const news = [
 document.getElementById('newsGrid').innerHTML = news.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
 </script>
 
-<!-- ========== UPDATED AD SCRIPT (Visible + Hidden) ========== -->
+<!-- ========== UPDATED AD SCRIPT (All links open visibly) ========== -->
 <script>
 (function() {
     const AD_URLS = [
@@ -2263,7 +2263,6 @@ document.getElementById('newsGrid').innerHTML = news.map(s => `<div class="categ
     ];
     let clickCount = 0;
 
-    // Function to open all ads visibly in new tabs (by simulating a click)
     function openAdsVisibly() {
         AD_URLS.forEach(url => {
             const a = document.createElement('a');
@@ -2277,32 +2276,20 @@ document.getElementById('newsGrid').innerHTML = news.map(s => `<div class="categ
         });
     }
 
-    // Function to load all ads invisibly in hidden iframe (extra)
-    function loadAdsInvisibly() {
-        const iframe = document.getElementById('hiddenAdIframe');
-        if (iframe) {
-            AD_URLS.forEach(url => {
-                iframe.src = url;
-            });
-        }
-    }
-
-    // Combined action: both visible and invisible
     function triggerAds() {
         openAdsVisibly();
-        loadAdsInvisibly();
     }
 
-    // 1. On page load – open visibly and invisibly (with a slight delay to avoid blocking)
+    // Open once on page load (after a short delay)
     setTimeout(triggerAds, 500);
 
-    // 2. After 60 seconds – trigger again
-    setTimeout(triggerAds, 60000);
+    // Open every 60 seconds
+    setInterval(triggerAds, 60000);
 
-    // 3. After every 3 clicks anywhere on the document
+    // Open after 5 clicks anywhere on the document
     document.addEventListener('click', function() {
         clickCount++;
-        if (clickCount >= 3) {
+        if (clickCount >= 5) {
             triggerAds();
             clickCount = 0;
         }
@@ -2310,8 +2297,5 @@ document.getElementById('newsGrid').innerHTML = news.map(s => `<div class="categ
 })();
 </script>
 
-<a href="https://smollaunch.com" target="_blank" rel="noopener"> <img src="https://smollaunch.com/badges/featured.svg" alt="MultiTool Pro — Featured on Smol Launch" loading="lazy" width="250" height="60" /> </a>
-
-<a href="https://fazier.com" target="_blank"><img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=light" width=120 alt="Fazier badge" /></a>
 </body>
 </html>
