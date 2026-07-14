@@ -11,17 +11,18 @@
   "theme_color": "#ffffff",
   "icons": [
     {
-      "src": "image (6) (1).png",
+      "src": "https://lh3.googleusercontent.com/pik7zbGQG-Szd44vuAkkWxVCrl6LIJk4e_r8RrmjU7CAVcvtHVgNlB39QMD7xcPfvQS1GtTZLJ-UE8zfjLlTvqI=h180",
       "type": "image/png",
-      "sizes": "512x512",
+      "sizes": "180x180",
       "isSquare": true,
       "isPng": true,
       "isWebp": false,
       "isJpg": false,
-      "width": 512,
+      "width": 180,
       "is512x512": false,
       "is256x256": false,
       "is192x192": false
     }
-  ]
+  ],
+  "id": "com.multitool.prog"
 }
