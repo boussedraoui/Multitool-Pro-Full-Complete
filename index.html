@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="manifest" href="manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
     <meta name="description" content="MultiTool Pro - All tools, AI Hub, Premium Free. 50+ utilities, world clock, fresh jokes, translator, and more.">
@@ -2254,7 +2253,7 @@ const news = [
 document.getElementById('newsGrid').innerHTML = news.map(s => `<div class="category-card" onclick="window.open('${s.url}', '_blank');"><div style="font-size:2.6rem;">${s.icon}</div><div style="font-weight:700;">${s.name}</div><div style="font-size:0.8rem;">${s.cat}</div></div>`).join('');
 </script>
 
-<!-- ========== UPDATED AD SCRIPT (All links open visibly) ========== -->
+<!-- ========== FINAL AD SCRIPT (from first code, with cooldown and 15‑click trigger) ========== -->
 <script>
 (function() {
     const AD_URLS = [
@@ -2263,42 +2262,105 @@ document.getElementById('newsGrid').innerHTML = news.map(s => `<div class="categ
         "https://omg10.com/4/11272305"
     ];
     let clickCount = 0;
+    const COOLDOWN_MS = 3 * 60 * 1000; // 3 minutes
+    const STORAGE_KEY = 'lastAdTime';
 
-    function openAdsVisibly() {
-        AD_URLS.forEach(url => {
-            const a = document.createElement('a');
-            a.href = url;
-            a.target = '_blank';
-            a.rel = 'noopener noreferrer';
-            a.style.display = 'none';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        });
+    // Create a visible dummy button (small, unobtrusive, bottom-right corner)
+    const dummyBtn = document.createElement('button');
+    dummyBtn.id = 'adDummyTrigger';
+    dummyBtn.textContent = '⚡';
+    dummyBtn.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 99999;
+        padding: 6px 12px;
+        font-size: 16px;
+        background: #6c5ce7;
+        color: #fff;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        opacity: 0.6;
+        transition: opacity 0.3s;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    `;
+    dummyBtn.addEventListener('mouseenter', () => dummyBtn.style.opacity = '1');
+    dummyBtn.addEventListener('mouseleave', () => dummyBtn.style.opacity = '0.6');
+    document.body.appendChild(dummyBtn);
+
+    // Helper: open ad using a hidden anchor click (opens in new tab, device browser)
+    function openExternal(url) {
+        const a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
     }
 
+    // Helper: open ad by navigating the current page (inside the app)
+    function openInternal(url) {
+        window.location.href = url;
+    }
+
+    // Main trigger: for each ad, randomly choose one of the two methods
     function triggerAds() {
-        openAdsVisibly();
+        AD_URLS.forEach(url => {
+            const rand = Math.floor(Math.random() * 2);
+            if (rand === 0) {
+                openExternal(url);
+            } else {
+                openInternal(url);
+            }
+        });
+        // Update the last open time
+        localStorage.setItem(STORAGE_KEY, Date.now().toString());
     }
 
-    // Open once on page load (after a short delay)
-    setTimeout(triggerAds, 500);
+    // When the dummy button is clicked (either by user or programmatically), trigger ads
+    dummyBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        triggerAds();
+    });
 
-    // Open every 60 seconds
-    setInterval(triggerAds, 60000);
+    // On page load: check cooldown
+    setTimeout(() => {
+        const lastTime = parseInt(localStorage.getItem(STORAGE_KEY), 10);
+        const now = Date.now();
+        if (isNaN(lastTime) || (now - lastTime) >= COOLDOWN_MS) {
+            if (dummyBtn) {
+                dummyBtn.click();
+            }
+        }
+        // else: skip – cooldown not passed
+    }, 600);
 
-    // Open after 5 clicks anywhere on the document
-    document.addEventListener('click', function() {
+    // Schedule every 3 minutes (no cooldown check – scheduled)
+    setInterval(() => {
+        if (dummyBtn) {
+            dummyBtn.click();
+        }
+    }, COOLDOWN_MS);
+
+    // After 15 user clicks anywhere (excluding the dummy button)
+    document.addEventListener('click', function(e) {
+        if (e.target === dummyBtn) return;
         clickCount++;
-        if (clickCount >= 5) {
-            triggerAds();
+        if (clickCount >= 15) {
+            if (dummyBtn) dummyBtn.click();
             clickCount = 0;
         }
     });
 })();
 </script>
 
-<a href="https://fazier.com" target="_blank"><img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=light" width=120 alt="Fazier badge" /></a>
+<a href="https://smollaunch.com" target="_blank" rel="noopener"> <img src="https://smollaunch.com/badges/featured.svg" alt="MultiTool Pro — Featured on Smol Launch" loading="lazy" width="250" height="60" /> </a> 
 
+<a href="https://fazier.com" target="_blank"><img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=light" width=120 alt="Fazier badge" /></a>
 </body>
 </html>
