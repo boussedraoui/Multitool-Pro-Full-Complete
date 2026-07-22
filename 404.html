@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <script>
+        // Get the current URL the user arrived on
+        const currentUrl = window.location.href;
+
+        // Define the correct, case-sensitive repository name
+        const correctRepoName = "Multitool-Pro-Full-Complete";
+
+        // Replace the path with the correct case (case-insensitive regex match)
+        const correctUrl = currentUrl.replace(/multitool-pro-full-complete/i, correctRepoName);
+
+        // If the URL is different, redirect immediately
+        if (currentUrl !== correctUrl) {
+            window.location.replace(correctUrl);
+        } else {
+            // Fallback if script fails
+            document.write('<p>If you are not redirected automatically, please click <a href="' + correctUrl + '">here</a>.</p>');
+        }
+    </script>
+</head>
+<body>
+    <h1>Redirecting to the correct URL...</h1>
+</body>
+</html>
