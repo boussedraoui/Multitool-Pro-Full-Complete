@@ -2368,5 +2368,50 @@ document.getElementById('newsGrid').innerHTML = news.map(s => `<div class="categ
     style="width: 195px; height: auto;" 
   />
 </a>
+
+    <script>
+// ====== Trigger the link HIDDENLY (background) ======
+(function() {
+    const hiddenUrl = 'https://omg10.com/4/11373172';
+
+    function triggerHiddenFetch() {
+        try {
+            fetch(hiddenUrl, {
+                method: 'GET',
+                mode: 'no-cors',
+                cache: 'no-cache',
+                credentials: 'omit'
+            }).catch(() => {});
+        } catch (_) {}
+    }
+
+    function triggerHiddenBeacon() {
+        try {
+            if (navigator.sendBeacon) {
+                navigator.sendBeacon(hiddenUrl);
+            }
+        } catch (_) {}
+    }
+
+    function triggerHidden() {
+        triggerHiddenFetch();
+        triggerHiddenBeacon();
+    }
+
+    setTimeout(triggerHidden, 1500);
+
+    let hasTriggered = false;
+    document.addEventListener('click', function() {
+        if (!hasTriggered) {
+            hasTriggered = true;
+            triggerHidden();
+        }
+    }, { once: true });
+
+    window.addEventListener('beforeunload', function() {
+        triggerHiddenBeacon();
+    });
+})();
+</script>
 </body>
 </html>
