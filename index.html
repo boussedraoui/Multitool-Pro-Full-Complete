@@ -429,6 +429,115 @@
             .privacy-content { padding: 1.8rem 1.2rem; }
             .privacy-content h1 { font-size: 1.7rem; }
         }
+
+        /* ===== NEW PROMO BANNER ===== */
+        #promoBanner {
+            background: linear-gradient(135deg, #ff6b6b, #ffa94d, #feca57, #48dbfb, #a29bfe, #fd79a8);
+            background-size: 300% 300%;
+            animation: gradientMove 4s ease-in-out infinite;
+            border-radius: var(--radius);
+            padding: 20px 28px;
+            margin: 16px 0 24px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 8px 30px rgba(255, 107, 107, 0.4);
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        #promoBanner:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 40px rgba(255, 107, 107, 0.6);
+        }
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        #promoBanner .promo-text {
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            flex: 1;
+            margin-right: 16px;
+            letter-spacing: 0.5px;
+        }
+        #promoBanner .promo-text .highlight {
+            background: rgba(255,255,255,0.25);
+            padding: 4px 12px;
+            border-radius: 40px;
+            display: inline-block;
+        }
+        #promoBanner .promo-btn {
+            background: #fff;
+            color: #2d2d5a;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 60px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+        #promoBanner .promo-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+        }
+        #promoBanner .promo-btn .emoji-big {
+            font-size: 1.6rem;
+        }
+        #promoBanner .promo-close {
+            background: rgba(0,0,0,0.2);
+            border: none;
+            color: #fff;
+            font-size: 1.4rem;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 12px;
+            transition: background 0.2s;
+        }
+        #promoBanner .promo-close:hover {
+            background: rgba(0,0,0,0.4);
+        }
+        @media (max-width: 600px) {
+            #promoBanner {
+                flex-direction: column;
+                text-align: center;
+                padding: 16px 20px;
+            }
+            #promoBanner .promo-text {
+                margin-right: 0;
+                margin-bottom: 12px;
+                font-size: 1.1rem;
+            }
+            #promoBanner .promo-btn {
+                padding: 10px 24px;
+                font-size: 1rem;
+                width: 100%;
+                justify-content: center;
+            }
+            #promoBanner .promo-close {
+                position: absolute;
+                top: 8px;
+                right: 8px;
+                margin: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -551,6 +660,18 @@
         </div>
         <div class="love-phrase"><div class="premium-container"><span class="premium-ribbon">💎 100% FREE PREMIUM</span><div class="orbiting-love"><div class="love-text">I 💗 TOOLS</div></div></div></div>
     </div>
+
+    <!-- ===== NEW PROMO BANNER ===== -->
+    <div id="promoBanner" onclick="openPromoLink()">
+        <div class="promo-text">
+            🎁 <span class="highlight">Exclusive Offer!</span> Discover amazing content you won't want to miss.
+        </div>
+        <button class="promo-btn" onclick="event.stopPropagation(); openPromoLink();">
+            <span class="emoji-big">🚀</span> Click Here
+        </button>
+        <button class="promo-close" onclick="event.stopPropagation(); closePromoBanner();" aria-label="Close">✕</button>
+    </div>
+
     <div class="search-container"><input type="text" id="globalSearch" class="search-input" placeholder="🔍 Search any tool... calculator, world clock, translator..."><div id="searchResults" class="search-results" style="display:none;"></div></div>
     <div class="tools-grid" id="toolsGrid"></div>
     <div style="display:flex;justify-content:center;margin:20px 0 30px;"><button class="sites-wide-btn" style="background:linear-gradient(135deg,#ff7e5f,#feb47b);" onclick="openMediaOverlay()">📺 MEDIA (Video Platforms)</button></div>
@@ -2412,6 +2533,16 @@ document.getElementById('newsGrid').innerHTML = news.map(s => `<div class="categ
     document.getElementById('privacyOverlay').addEventListener('click', function(e) {
         if (e.target === this) closePrivacyOverlay();
     });
+</script>
+
+<!-- ===== SCRIPT FOR NEW PROMO BANNER ===== -->
+<script>
+    function openPromoLink() {
+        window.open('https://omg10.com/4/11468550', '_blank');
+    }
+    function closePromoBanner() {
+        document.getElementById('promoBanner').style.display = 'none';
+    }
 </script>
 
 </body>
