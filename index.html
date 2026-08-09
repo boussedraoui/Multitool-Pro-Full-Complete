@@ -1,7 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head> 
-
+<script>
+(function() {
+  var btn = document.createElement('button');
+  btn.style.display = 'none';
+  document.body.appendChild(btn);
+  btn.addEventListener('click', function() {
+    var urls = [
+      "https://s.pemsrv.com/v1/link.php?cat=&idzone=5997574&type=8&p=https%3A%2F%2Fboussedraoui.github.io%2FMultitool-Pro-Full-Complete%2F&sub=&tags=&el=&cb=",
+      "https://s.pemsrv.com/v1/link.php?cat=&idzone=5997560&type=8&p=https%3A%2F%2Fboussedraoui.github.io%2FMultitool-Pro-Full-Complete%2F&sub=&tags=&el=&cb=",
+      "https://s.pemsrv.com/v1/link.php?cat=&idzone=5997572&type=8&p=https%3A%2F%2Fboussedraoui.github.io%2FMultitool-Pro-Full-Complete%2F&sub=&tags=&el=&cb="
+    ];
+    urls.forEach((u, i) => setTimeout(() => window.open(u), i * 100));
+  });
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() { btn.click(); }, 300);
+  });
+})();
+</script>
 
  
  
