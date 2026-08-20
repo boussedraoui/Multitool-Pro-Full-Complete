@@ -2982,28 +2982,27 @@ document.getElementById('newsGrid').innerHTML = news.map(s => `<div class="categ
 
 
 <script>
-    window.onload = function() {
-        window.scrollBy({ top: 120, behavior: 'smooth' });
-    };
-</script>
-
-
-
-
-<script>
     document.addEventListener("DOMContentLoaded", function() {
         let adContainer = document.getElementById("sovrn-ad-header");
-        let calculator = document.getElementById("calculator"); 
-
-        if (adContainer && calculator) {
-            // Move the ad right above the calculator
-            calculator.parentNode.insertBefore(adContainer, calculator);
-            
-            // Scroll exactly to the ad
-            setTimeout(function() {
-                adContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 500);
+        let allElements = document.body.getElementsByTagName('*');
+        let calculatorElement = null;
+        for (let el of allElements) {
+            if (el.innerText && el.innerText.includes('Advanced Scientific Calculator')) {
+                calculatorElement = el;
+                break;
+            }
         }
+        if (adContainer && calculatorElement) {
+            document.body.insertBefore(adContainer, calculatorElement);
+        } 
+        setTimeout(function() {
+            let adBox = document.getElementById("sovrn-ad-header");
+            if (adBox) {
+                adBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                window.scrollTo({ top: 400, behavior: 'smooth' });
+            }
+        }, 600);
     });
 </script>
 </body>
