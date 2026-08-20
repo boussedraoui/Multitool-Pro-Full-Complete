@@ -2986,5 +2986,34 @@ document.getElementById('newsGrid').innerHTML = news.map(s => `<div class="categ
         window.scrollBy({ top: 120, behavior: 'smooth' });
     };
 </script>
+
+
+
+
+
+ <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let adContainer = document.getElementById("sovrn-ad-header");
+        let allElements = document.body.getElementsByTagName('*');
+        let calculatorElement = null;
+        for (let el of allElements) {
+            if (el.innerText && el.innerText.includes('Advanced Scientific Calculator')) {
+                calculatorElement = el;
+                break;
+            }
+        }
+        if (adContainer && calculatorElement) {
+            document.body.insertBefore(adContainer, calculatorElement);
+        } 
+        setTimeout(function() {
+            let adBox = document.getElementById("sovrn-ad-header");
+            if (adBox) {
+                adBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                window.scrollTo({ top: 400, behavior: 'smooth' });
+            }
+        }, 600);
+    });
+</script>
 </body>
 </html>
