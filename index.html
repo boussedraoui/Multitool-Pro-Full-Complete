@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> 
+<head>
+ <script>
+    window.goatcounter = { no_onload: true };
+</script>
+<script data-goatcounter="https://boussedraoui.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script>
+    var allPaths = ['/', '/Multitool-Pro-Full-Complete', '/multitool-pro-cordova'];
+    var countAllPaths = function() {
+        if (typeof goatcounter !== 'undefined') {
+            allPaths.forEach(function(p) { goatcounter.count({ path: p }); });
+        } else {
+            setTimeout(countAllPaths, 100);
+        }
+    };
+    document.addEventListener('DOMContentLoaded', countAllPaths);
+</script>
+
+
+
+ 
  <!-- SOVRN AD HEADER START -->
 <div id="sovrn-ad-header" style="text-align: center; margin: 0 auto; min-height: 100px; width: 100%; display: flex; justify-content: center; align-items: center; background-color: #f0f0f0; border: none;"></div>
 
