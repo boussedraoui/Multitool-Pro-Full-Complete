@@ -3009,11 +3009,14 @@ document.getElementById('newsGrid').innerHTML = news.map(s => `<div class="categ
         <a href="https://www.amazon.com/gp/product/B0H6NVY1SD" target="_blank">Amazon</a>
     </div>
 </div>
+
 <script>
-    var isApp = (window.cordova || window.location.protocol === 'file:' || window.location.protocol === 'cdvfile:');
-    if (isApp) {
-        document.getElementById('payment-message').style.display = 'none';
-    } else {
+    var isApp = window.matchMedia('(display-mode: standalone)').matches || 
+                window.cordova || 
+                window.location.protocol === 'file:' || 
+                window.location.protocol === 'cdvfile:';
+
+    if (!isApp) {
         document.getElementById('payment-message').style.display = 'flex';
     }
 </script>
