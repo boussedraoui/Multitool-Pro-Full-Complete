@@ -2967,12 +2967,8 @@ document.getElementById('newsGrid').innerHTML = news.map(s => `<div class="categ
 
 
 
-
-
-
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        let adContainer = document.getElementById("sovrn-ad-header");
         let allElements = document.body.getElementsByTagName('*');
         let calculatorElement = null;
         for (let el of allElements) {
@@ -2981,19 +2977,22 @@ document.getElementById('newsGrid').innerHTML = news.map(s => `<div class="categ
                 break;
             }
         }
-        if (adContainer && calculatorElement) {
-            document.body.insertBefore(adContainer, calculatorElement);
-        } 
-        setTimeout(function() {
-            let adBox = document.getElementById("sovrn-ad-header");
-            if (adBox) {
-                adBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            } else {
+
+        if (calculatorElement) {
+            calculatorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 100);
+        } else {
+            setTimeout(function() {
                 window.scrollTo({ top: 400, behavior: 'smooth' });
-            }
-        }, 600);
+            }, 100);
+        }
     });
 </script>
+
+
+
 
 
 
